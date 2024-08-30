@@ -1,0 +1,1532 @@
+<!DOCTYPE html>
+<html lang="en" class="js csstransforms3d">
+  <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="Hugo 0.128.0">
+    <meta name="description" content="">
+<meta name="author" content="journeyoftheaverageguy@gmail.com">
+
+    <link rel="icon" href="/images/favicon.png" type="image/png">
+
+    <title>Security Scan và Performance Test :: AWS System Manager</title>
+
+    
+    <link href="/css/nucleus.css?1725036911" rel="stylesheet">
+    <link href="/css/fontawesome-all.min.css?1725036911" rel="stylesheet">
+    <link href="/css/hybrid.css?1725036911" rel="stylesheet">
+    <link href="/css/featherlight.min.css?1725036911" rel="stylesheet">
+    <link href="/css/perfect-scrollbar.min.css?1725036911" rel="stylesheet">
+    <link href="/css/auto-complete.css?1725036911" rel="stylesheet">
+    <link href="/css/atom-one-dark-reasonable.css?1725036911" rel="stylesheet">
+    <link href="/css/theme.css?1725036911" rel="stylesheet">
+    <link href="/css/hugo-theme.css?1725036911" rel="stylesheet">
+    
+    <link href="/css/theme-workshop.css?1725036911" rel="stylesheet">
+    
+    
+
+    <script src="/js/jquery-3.3.1.min.js?1725036911"></script>
+
+    <style>
+      :root #header + #content > #left > #rlblock_left{
+          display:none !important;
+      }
+      
+    </style>
+    
+  </head>
+  <body class="" data-url="/3-pipeline/3.3-security-performance/">
+    <nav id="sidebar" class="showVisitedLinks">
+
+
+
+  <div id="header-wrapper">
+    <div id="header">
+      <a id="logo" href="/">
+
+<svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 60 30" width="30%"><defs><style>.cls-1{fill:#fff;}.cls-2{fill:#f90;fill-rule:evenodd;}</style></defs><title>AWS-Logo_White-Color</title><path class="cls-1" d="M14.09,10.85a4.7,4.7,0,0,0,.19,1.48,7.73,7.73,0,0,0,.54,1.19.77.77,0,0,1,.12.38.64.64,0,0,1-.32.49l-1,.7a.83.83,0,0,1-.44.15.69.69,0,0,1-.49-.23,3.8,3.8,0,0,1-.6-.77q-.25-.42-.51-1a6.14,6.14,0,0,1-4.89,2.3,4.54,4.54,0,0,1-3.32-1.19,4.27,4.27,0,0,1-1.22-3.2A4.28,4.28,0,0,1,3.61,7.75,6.06,6.06,0,0,1,7.69,6.46a12.47,12.47,0,0,1,1.76.13q.92.13,1.91.36V5.73a3.65,3.65,0,0,0-.79-2.66A3.81,3.81,0,0,0,7.86,2.3a7.71,7.71,0,0,0-1.79.22,12.78,12.78,0,0,0-1.79.57,4.55,4.55,0,0,1-.58.22l-.26,0q-.35,0-.35-.52V2a1.09,1.09,0,0,1,.12-.58,1.2,1.2,0,0,1,.47-.35A10.88,10.88,0,0,1,5.77.32,10.19,10.19,0,0,1,8.36,0a6,6,0,0,1,4.35,1.35,5.49,5.49,0,0,1,1.38,4.09ZM7.34,13.38a5.36,5.36,0,0,0,1.72-.31A3.63,3.63,0,0,0,10.63,12,2.62,2.62,0,0,0,11.19,11a5.63,5.63,0,0,0,.16-1.44v-.7a14.35,14.35,0,0,0-1.53-.28,12.37,12.37,0,0,0-1.56-.1,3.84,3.84,0,0,0-2.47.67A2.34,2.34,0,0,0,5,11a2.35,2.35,0,0,0,.61,1.76A2.4,2.4,0,0,0,7.34,13.38Zm13.35,1.8a1,1,0,0,1-.64-.16,1.3,1.3,0,0,1-.35-.65L15.81,1.51a3,3,0,0,1-.15-.67.36.36,0,0,1,.41-.41H17.7a1,1,0,0,1,.65.16,1.4,1.4,0,0,1,.33.65l2.79,11,2.59-11A1.17,1.17,0,0,1,24.39.6a1.1,1.1,0,0,1,.67-.16H26.4a1.1,1.1,0,0,1,.67.16,1.17,1.17,0,0,1,.32.65L30,12.39,32.88,1.25A1.39,1.39,0,0,1,33.22.6a1,1,0,0,1,.65-.16h1.54a.36.36,0,0,1,.41.41,1.36,1.36,0,0,1,0,.26,3.64,3.64,0,0,1-.12.41l-4,12.86a1.3,1.3,0,0,1-.35.65,1,1,0,0,1-.64.16H29.25a1,1,0,0,1-.67-.17,1.26,1.26,0,0,1-.32-.67L25.67,3.64,23.11,14.34a1.26,1.26,0,0,1-.32.67,1,1,0,0,1-.67.17Zm21.36.44a11.28,11.28,0,0,1-2.56-.29,7.44,7.44,0,0,1-1.92-.67,1,1,0,0,1-.61-.93v-.84q0-.52.38-.52a.9.9,0,0,1,.31.06l.42.17a8.77,8.77,0,0,0,1.83.58,9.78,9.78,0,0,0,2,.2,4.48,4.48,0,0,0,2.43-.55,1.76,1.76,0,0,0,.86-1.57,1.61,1.61,0,0,0-.45-1.16A4.29,4.29,0,0,0,43,9.22l-2.41-.76A5.15,5.15,0,0,1,38,6.78a3.94,3.94,0,0,1-.83-2.41,3.7,3.7,0,0,1,.45-1.85,4.47,4.47,0,0,1,1.19-1.37A5.27,5.27,0,0,1,40.51.29,7.4,7.4,0,0,1,42.6,0a8.87,8.87,0,0,1,1.12.07q.57.07,1.08.19t.95.26a4.27,4.27,0,0,1,.7.29,1.59,1.59,0,0,1,.49.41.94.94,0,0,1,.15.55v.79q0,.52-.38.52a1.76,1.76,0,0,1-.64-.2,7.74,7.74,0,0,0-3.2-.64,4.37,4.37,0,0,0-2.21.47,1.6,1.6,0,0,0-.79,1.48,1.58,1.58,0,0,0,.49,1.18,4.94,4.94,0,0,0,1.83.92L44.55,7a5.08,5.08,0,0,1,2.57,1.6A3.76,3.76,0,0,1,47.9,11a4.21,4.21,0,0,1-.44,1.93,4.4,4.4,0,0,1-1.21,1.47,5.43,5.43,0,0,1-1.85.93A8.25,8.25,0,0,1,42.05,15.62Z"></path><path class="cls-2" d="M45.19,23.81C39.72,27.85,31.78,30,25,30A36.64,36.64,0,0,1,.22,20.57c-.51-.46-.06-1.09.56-.74A49.78,49.78,0,0,0,25.53,26.4,49.23,49.23,0,0,0,44.4,22.53C45.32,22.14,46.1,23.14,45.19,23.81Z"></path><path class="cls-2" d="M47.47,21.21c-.7-.9-4.63-.42-6.39-.21-.53.06-.62-.4-.14-.74,3.13-2.2,8.27-1.57,8.86-.83s-.16,5.89-3.09,8.35c-.45.38-.88.18-.68-.32C46.69,25.8,48.17,22.11,47.47,21.21Z"></path></svg>
+
+</a>
+
+    </div>
+    
+        <div class="searchbox">
+    <label for="search-by"><i class="fas fa-search"></i></label>
+    <input data-search-input id="search-by" type="search" placeholder="Search...">
+    <span data-search-clear=""><i class="fas fa-times"></i></span>
+</div>
+
+<script type="text/javascript" src="/js/lunr.min.js?1725036911"></script>
+<script type="text/javascript" src="/js/auto-complete.js?1725036911"></script>
+<script type="text/javascript">
+    
+        var baseurl = "\/\/localhost:1313\/";
+    
+</script>
+<script type="text/javascript" src="/js/search.js?1725036911"></script>
+
+    
+  </div>
+
+    <div class="highlightable">
+    <ul class="topics">
+
+        
+          
+          
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/1-introduce/" title="Giới thiệu" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/1-introduce/">
+           <b> 1. </b> Giới thiệu
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+      
+        <ul>
+          
+          
+            
+          
+          
+          
+        
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/1-introduce/1.1-implementationprocess/" title="Quy trình DevSecOps" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/1-introduce/1.1-implementationprocess/">
+           <b> 1.1 </b> Quy trình DevSecOps
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/1-introduce/1.2-gitlabcicd/" title="Gitlab CI/CD" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/1-introduce/1.2-gitlabcicd/">
+           <b> 1.2 </b> Gitlab CI/CD
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/1-introduce/1.3-tools/" title="DevSecOps Tools" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/1-introduce/1.3-tools/">
+           <b> 1.3 </b> DevSecOps Tools
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+        
+        </ul>
+              
+    </li>
+  
+ 
+
+          
+          
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/2-preparation/" title="Thiết lập dự án" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/2-preparation/">
+           <b> 2. </b> Thiết lập dự án
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+      
+        <ul>
+          
+          
+            
+          
+          
+          
+        
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/2-preparation/2.1-setupservers/" title="Thiết lập các Server cho dự án" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/2-preparation/2.1-setupservers/">
+           <b> 2.1 </b> Thiết lập các Server cho dự án
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/2-preparation/2.2-containerregistry/" title="Private Container Registry - Portus" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/2-preparation/2.2-containerregistry/">
+           <b> 2.2 </b> Private Container Registry - Portus
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/2-preparation/2.3-gitlabserver/" title="Gitlab Server" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/2-preparation/2.3-gitlabserver/">
+           <b> 2.3 </b> Gitlab Server
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/2-preparation/2.4-database/" title="Database Server" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/2-preparation/2.4-database/">
+           <b> 2.4 </b> Database Server
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/2-preparation/2.5-snyk/" title="Source Code Security - Snyk" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/2-preparation/2.5-snyk/">
+           <b> 2.5 </b> Source Code Security - Snyk
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/2-preparation/2.6-trivy/" title="Trivy Security Scan Image" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/2-preparation/2.6-trivy/">
+           <b> 2.6 </b> Trivy Security Scan Image
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/2-preparation/2.7-arachni/" title="Web Application Security Scan" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/2-preparation/2.7-arachni/">
+           <b> 2.7 </b> Web Application Security Scan
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/2-preparation/2.8-k6/" title="Performance Testing - k6" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/2-preparation/2.8-k6/">
+           <b> 2.8 </b> Performance Testing - k6
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+        
+        </ul>
+              
+    </li>
+  
+ 
+
+          
+          
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/3-pipeline/" title="Thiết lập CI/CD Pipeline" class="dd-item 
+        parent
+        
+        
+        ">
+      <a href="/3-pipeline/">
+           <b> 3. </b> Thiết lập CI/CD Pipeline
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+      
+        <ul>
+          
+          
+            
+          
+          
+          
+        
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/3-pipeline/3.1-gitlab-runner/" title="Thiết lập Gitlab Runner" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/3-pipeline/3.1-gitlab-runner/">
+           <b> 3.1 </b> Thiết lập Gitlab Runner
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/3-pipeline/3.2-build-and-push-image/" title="Build và Push Docker Image" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/3-pipeline/3.2-build-and-push-image/">
+           <b> 3.2 </b> Build và Push Docker Image
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/3-pipeline/3.3-security-performance/" title="Security Scan và Performance Test" class="dd-item 
+        
+        active
+        
+        ">
+      <a href="/3-pipeline/3.3-security-performance/">
+           <b> 3.3 </b> Security Scan và Performance Test
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/3-pipeline/3.4-send-report/" title="Gửi Report vào Telegram" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/3-pipeline/3.4-send-report/">
+           <b> 3.4 </b> Gửi Report vào Telegram
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+        
+        </ul>
+              
+    </li>
+  
+ 
+
+          
+          
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/4-deployk8s/" title="" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/4-deployk8s/">
+          
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+          
+          
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/5-gitops/" title="" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/5-gitops/">
+          
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+          
+         
+    </ul>
+
+    
+    
+      <section id="shortcuts">
+        <h3>More</h3>
+        <ul>
+          
+              <li> 
+                  <a class="padding" href="https://www.facebook.com/groups/awsstudygroupfcj/"><i class='fab fa-facebook'></i> AWS Study Group</a>
+              </li>
+          
+        </ul>
+      </section>
+    
+
+    
+    <section id="prefooter">
+      <hr/>
+      <ul>
+      
+        <li>
+          <a class="padding">
+            <i class="fas fa-language fa-fw"></i>
+          <div class="select-style">
+            <select id="select-language" onchange="location = this.value;">
+          
+          
+          
+              
+              
+                  
+                    
+                    
+                      <option id="en" value="//localhost:1313/3-pipeline/3.3-security-performance/" selected>English</option>
+                    
+                  
+              
+                  
+              
+          
+        </select>
+        <svg version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+          width="255px" height="255px" viewBox="0 0 255 255" style="enable-background:new 0 0 255 255;" xml:space="preserve">
+          <g>
+            <g id="arrow-drop-down">
+              <polygon points="0,63.75 127.5,191.25 255,63.75 		" />
+            </g>
+          </g>
+        </svg>
+        </div>
+        </a>
+        </li>
+      
+      
+      
+        <li><a class="padding" href="#" data-clear-history-toggle=""><i class="fas fa-history fa-fw"></i> Clear History</a></li>
+      
+      </ul>
+    </section>
+    
+    <section id="footer">
+      <left>
+    
+     <b> Workshop</b> <br>
+    <img src="https://hitwebcounter.com/counter/counter.php?page=7920860&style=0038&nbdigits=9&type=page&initCount=0" title="Migrate" Alt="web counter"   border="0" /></a>  <br>
+     <b> <a href="https://cloudjourney.awsstudygroup.com/">Cloud Journey</a></b> <br>
+    <img src="https://hitwebcounter.com/counter/counter.php?page=7830807&style=0038&nbdigits=9&type=page&initCount=0" title="Total CLoud Journey" Alt="web counter"   border="0"   />
+     
+</left>
+<left>
+    <br>
+    <br>
+        <b> Last Updated </b> <br>
+        <i><font color=orange>09-08-2024</font></i>
+    </left>
+    <left>
+        <br>
+        <br>
+            <b> Team </b> <br>
+           
+            <i> <a href="https://www.linkedin.com/in/sutrinh/"  style="color:orange">Đại Vĩ  </a> <br>
+               
+        </i>
+        </left>
+
+<script async defer src="https://buttons.github.io/buttons.js"></script>
+
+    </section>
+  </div>
+</nav>
+
+
+
+
+        <section id="body">
+        <div id="overlay"></div>
+        <div class="padding highlightable">
+              
+              <div>
+                <div id="top-bar">
+                
+                
+                <div id="breadcrumbs" itemscope="" itemtype="http://data-vocabulary.org/Breadcrumb">
+                    <span id="sidebar-toggle-span">
+                        <a href="#" id="sidebar-toggle" data-sidebar-toggle="">
+                          <i class="fas fa-bars"></i>
+                        </a>
+                    </span>
+                  
+                  <span id="toc-menu"><i class="fas fa-list-alt"></i></span>
+                  
+                  <span class="links">
+                 
+                 
+                    
+          
+          
+            
+            
+          
+          
+            
+            
+          
+          
+            <a href='/'>DevSecOps Pipeline</a> > <a href='/3-pipeline/'>Thiết lập CI/CD Pipeline</a> > Security Scan và Performance Test
+          
+        
+          
+        
+          
+        
+                 
+                  </span>
+                </div>
+                
+                    <div class="progress">
+    <div class="wrapper">
+<nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+    </div>
+</div>
+
+                
+              </div>
+            </div>
+            
+        <div id="head-tags">
+        
+        </div>
+        
+        <div id="body-inner">
+          
+            <h1>
+              
+              Security Scan và Performance Test
+            </h1>
+          
+
+        
+
+
+
+	<h4 id="code-security-scan-stage">Code Security Scan Stage</h4>
+<p>Sau khi thiết lập build và push image chúng ta sẽ tiến hành thêm một Stage để quét bảo mật Source Code.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yml" data-lang="yml"><span style="display:flex;"><span><span style="color:#f92672">snykscan</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">stage</span>: <span style="color:#ae81ff">snykscan</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">variables</span>: 
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">GIT_STRATEGY</span>: <span style="color:#ae81ff">clone</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">before_script</span>:
+</span></span><span style="display:flex;"><span>        - <span style="color:#ae81ff">snyk auth ${SNYK_API_TOKEN}</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">script</span>:
+</span></span><span style="display:flex;"><span>        - <span style="color:#ae81ff">snyk test --json | snyk-to-html -do ${SNYKSCAN_FILE}.html || true</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">tags</span>:
+</span></span><span style="display:flex;"><span>        - <span style="color:#ae81ff">wineapp-build-shell</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">artifacts</span>:
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">paths</span>: 
+</span></span><span style="display:flex;"><span>            - <span style="color:#ae81ff">${SNYKSCAN_FILE}.html</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">expire_in</span>: <span style="color:#ae81ff">1</span> <span style="color:#ae81ff">day</span>
+</span></span></code></pre></div><p>Trong GitLab CI/CD, <code>artifacts</code> là các tệp hoặc thư mục được lưu lại từ một job sau khi job đó hoàn tất thực thi.</p>
+<p>Các artifacts thường được sử dụng để lưu trữ kết quả của quá trình build, kiểm tra, hoặc các thông tin quan trọng khác mà bạn muốn giữ lại và sử dụng trong các job khác trong pipeline.</p>
+<p><strong>paths</strong>:</p>
+<ul>
+<li><code>${SNYKSCAN_FILE}.html</code></li>
+<li>Định nghĩa các file artifact mà job sẽ lưu lại sau khi thực thi. Trong trường hợp này, file HTML chứa kết quả quét bảo mật.</li>
+</ul>
+<p><strong>expire_in: 1 day</strong></p>
+<ul>
+<li>Đặt thời gian tồn tại của artifact là 1 ngày. Sau thời gian này, artifact sẽ bị xóa.</li>
+</ul>
+<p>Chúng ta sẽ tiến hành thêm Stage này vào <code>.gitlab-ci.yml</code>.</p>
+<p><img alt="alt text" src="/3-pipeline/3.3-security-performance/image.png"></p>
+<p>Chú ý tạo các Variables như SNYKSCAN_FILE và SNYK_API_TOKEN.</p>
+<pre tabindex="0"><code>SNYKSCAN_FILE: &#34;SNYK_SECURITY_SCAN_${CI_PROJECT_NAME}_${CI_COMMIT_TAG}_${CI_COMMIT_SHORT_SHA}&#34;
+</code></pre><p><img alt="alt text" src="/3-pipeline/3.3-security-performance/image-1.png"></p>
+<p>Chúng ta sẽ tạo tag và pipeline sẽ được khởi động.</p>
+<p><img alt="alt text" src="/3-pipeline/3.3-security-performance/image-2.png"></p>
+<p>Sau khi chạy pipeline thành công sẽ có thêm 1 stage là Code Security Scan và có thêm một file chứa báo cáo chi tiết về quá trình Test, có thể tải ở đây:</p>
+<p><img alt="alt text" src="/3-pipeline/3.3-security-performance/image-3.png"></p>
+<p>Hoặc chúng ta có thể truy cập vào mục <code>Artifacts</code>:</p>
+<p><img alt="alt text" src="/3-pipeline/3.3-security-performance/image-4.png"></p>
+<p>Sau khi tải về tiến hành giải nén file và kiểm tra file report dưới dạng HTML.</p>
+<p><img alt="alt text" src="/3-pipeline/3.3-security-performance/image-5.png"></p>
+<h4 id="scan-image-stage">Scan Image Stage</h4>
+<p>Việc quét bảo mật của Image chúng ta sẽ thực hiện ngay sau khi chúng ta Build Image thành công.</p>
+<p>Chúng ta sẽ thêm một stage để quét bảo mật Image:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yml" data-lang="yml"><span style="display:flex;"><span><span style="color:#f92672">trivy scan image</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">stage</span>: <span style="color:#ae81ff">trivy scan image</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">variables</span>:
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">GIT_STRATEGY</span>: <span style="color:#ae81ff">none</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">script</span>:
+</span></span><span style="display:flex;"><span>        - <span style="color:#ae81ff">docker run --rm -v $(pwd):/wineapp-frontend -v /var/run/docker.sock:/var/run/docker.sock aquasec/trivy clean --all</span>
+</span></span><span style="display:flex;"><span>        - <span style="color:#ae81ff">docker run --rm -v $(pwd):/${CI_PROJECT_NAME} -v /var/run/docker.sock:/var/run/docker.sock aquasec/trivy image --format template --template &#34;@contrib/html.tpl&#34; --output /${CI_PROJECT_NAME}/${TRIVY_IMAGE_REPORT}.html ${IMAGE_VERSION}</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">tags</span>:
+</span></span><span style="display:flex;"><span>        - <span style="color:#ae81ff">wineapp-build-shell</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">only</span>:
+</span></span><span style="display:flex;"><span>        - <span style="color:#ae81ff">tags</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">artifacts</span>:
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">paths</span>:
+</span></span><span style="display:flex;"><span>        - <span style="color:#ae81ff">${TRIVYFS_REPORT}.html</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">expire_in</span>: <span style="color:#ae81ff">1</span> <span style="color:#ae81ff">day</span>
+</span></span></code></pre></div><p>Tạo một Variable để định nghĩa tên file report.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yml" data-lang="yml"><span style="display:flex;"><span><span style="color:#f92672">TRIVY_IMAGE_REPORT</span>: <span style="color:#e6db74">&#34;TRIVYFS_SCAN_IMAGE_REPORT_${CI_PROJECT_NAME}_${CI_COMMIT_TAG}_${CI_COMMIT_SHORT_SHA}&#34;</span>
+</span></span></code></pre></div><p>Ở stage này chúng ta có 2 phần , cả hai đều sử dụng công cụ Trivy để quét các lỗ hổng bảo mật trong một Docker Image.</p>
+<ul>
+<li>
+<p><strong>Phần 1</strong>: Xóa tất cả dữ liệu tạm thời của Trivy để chuẩn bị cho lần quét mới.</p>
+<ul>
+<li>
+<p><code>docker run --rm</code>: Chạy một container Docker và tự động xóa container sau khi hoàn thành công việc.</p>
+</li>
+<li>
+<p><code>-v $(pwd):/wineapp-frontend</code>: Gắn thư mục hiện tại ($(pwd)) vào đường dẫn /wineapp-frontend trong container.</p>
+</li>
+<li>
+<p><code>-v /var/run/docker.sock:/var/run/docker.sock</code>: Gắn Docker socket từ máy chủ vào container, cho phép container thực hiện các thao tác liên quan đến Docker.</p>
+</li>
+<li>
+<p><code>aquasec/trivy clean --all</code>: Sử dụng lệnh clean của Trivy để xóa tất cả dữ liệu tạm thời hoặc dữ liệu cũ mà Trivy đã tạo trong quá trình quét trước đó.</p>
+</li>
+</ul>
+</li>
+<li>
+<p><strong>Phần 2</strong>: Quét lỗ hổng bảo mật trong một Docker Image, tạo report dưới dạng HTML và lưu nó vào mục Artifacts.</p>
+<ul>
+<li>
+<p><code>aquasec/trivy image</code>: Sử dụng lệnh image của Trivy để quét lỗ hổng bảo mật trên Docker Image chúng ta vừa tạo.</p>
+</li>
+<li>
+<p><code>--format template</code>: Chỉ định định dạng đầu ra là template.</p>
+</li>
+<li>
+<p><code>--template &quot;@contrib/html.tpl&quot;</code>: Sử dụng tệp mẫu HTML (html.tpl) để định dạng kết quả quét.</p>
+</li>
+<li>
+<p><code>--output /${CI_PROJECT_NAME}/${TRIVY_IMAGE_REPORT}.html</code>: Chỉ định đường dẫn và tên tệp đầu ra cho báo cáo HTML. Báo cáo này sẽ được lưu trong thư mục của dự án với tên tệp phụ thuộc vào giá trị của biến ${TRIVY_IMAGE_REPORT}.</p>
+</li>
+</ul>
+</li>
+</ul>
+<p>Thêm Stage vào file cấu hình và tạo tag, chúng ta sẽ kiểm tra Pipeline:</p>
+<p><img alt="alt text" src="/3-pipeline/3.3-security-performance/image-6.png"></p>
+<p>Sau khi chạy Pipeline thành công, kiểm tra mục Aritfacts để tải file Report từ Stage quét bảo mật Image.</p>
+<p><img alt="alt text" src="/3-pipeline/3.3-security-performance/image-7.png"></p>
+<p><img alt="alt text" src="/3-pipeline/3.3-security-performance/image-8.png"></p>
+<p>Kiểm tra file Report:</p>
+<p><img alt="alt text" src="/3-pipeline/3.3-security-performance/image-9.png"></p>
+<h4 id="deploy-dự-án">Deploy Dự Án</h4>
+<p>Như vậy chúng ta đã thực hiện xong các bước test và kiểm tra trước khi chúng ta Deploy dự án, trong mục này chúng ta sẽ tiến hành Deploy dự án Front-End.</p>
+<p>Chúng ta sẽ Deploy dự án ở Server Development.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yml" data-lang="yml"><span style="display:flex;"><span><span style="color:#f92672">deploy</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">stage</span>: <span style="color:#ae81ff">deploy</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">variables</span>:
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">GIT_STRATEGY</span>: <span style="color:#ae81ff">none</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">before_script</span>:
+</span></span><span style="display:flex;"><span>        - <span style="color:#ae81ff">docker login -u ${PORTUS_USER} -p ${PORTUS_PASSWORD} ${PORTUS_URL}</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">script</span>:
+</span></span><span style="display:flex;"><span>        - <span style="color:#ae81ff">sudo su ${PROJECT_USER} -c &#34;docker pull ${IMAGE_VERSION}; docker rm -f ${CI_PROJECT_NAME}; docker run --name ${CI_PROJECT_NAME} -dp ${FE_PORT} ${IMAGE_VERSION}&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">after_script</span>:
+</span></span><span style="display:flex;"><span>        - <span style="color:#ae81ff">docker logout ${PORTUS_URL}</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">tags</span>:
+</span></span><span style="display:flex;"><span>        - <span style="color:#ae81ff">wineapp-dev-shell</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">only</span>:
+</span></span><span style="display:flex;"><span>        - <span style="color:#ae81ff">tags</span>
+</span></span></code></pre></div><p>Ở phần <code>tags</code> chúng ta sẽ để là <code>wineapp-dev-shell</code> do đây là tag của Gitlab-Runner được thiết lập ở Server Development.</p>
+<p>Chúng ta sẽ tạo biến <code>FE_PORT</code> với giá trị là <code>3000:80</code> có nghĩa là khi bạn truy cập <code>http://&lt;ip_server_dev&gt;:3000</code>, yêu cầu này sẽ được chuyển tới cổng 80 của container, nơi ứng dụng bên trong container sẽ xử lý yêu cầu đó.</p>
+<p>Job <code>deploy</code> này là một bước triển khai tự động trong pipeline CI/CD của GitLab.</p>
+<p>Nó thực hiện các thao tác liên quan đến Docker để Pull một Docker Image mà chúng ta đã Push lên, dừng container hiện tại, và khởi động lại container với phiên bản mới của ứng dụng.</p>
+<p>Mọi việc được thực hiện dưới quyền của một người dùng cụ thể (PROJECT_USER) để đảm bảo bảo mật và phân quyền.</p>
+<p><strong>Chú ý</strong>:</p>
+<ul>
+<li>
+<p>Trong phần <code>script</code>, chúng ta sử dụng lệnh <code>sudo su</code> để chuyển đổi người dùng. Thông thường, khi sử dụng lệnh này, bạn sẽ cần nhập mật khẩu. Tuy nhiên, trong quá trình chạy Pipeline, không có cách nào để nhập mật khẩu theo cách thủ công.</p>
+</li>
+<li>
+<p>Do đó, để tránh tình huống này, chúng ta sẽ cấu hình để người dùng GitLab Runner có thể chạy lệnh <code>sudo su</code> mà không cần nhập mật khẩu.</p>
+</li>
+<li>
+<p>Trên giao diện dòng lệnh, bạn cần nhập lệnh <code>sudo visudo</code> và cung cấp mật khẩu. Sau đó, thêm dòng sau vào tệp cấu hình để hoàn tất việc thiết lập:</p>
+</li>
+</ul>
+<pre tabindex="0"><code>gitlab-runner ALL=(ALL) NOPASSWD: /bin/su
+</code></pre><p><img alt="alt text" src="/3-pipeline/3.3-security-performance/image-10.png"></p>
+<p>Để lưu file chúng ta nhấn <code>F2 + Y + Enter</code>.</p>
+
+<div class="notices note" ><p>Thực hiện thay đổi ở Server Development.</p>
+</div>
+
+<p>Sau khi cấu hình, chúng ta sẽ thêm Stage vào Pipeline và tạo Tag.</p>
+<p><img alt="alt text" src="/3-pipeline/3.3-security-performance/image-11.png"></p>
+<p>Như vậy chúng ta đã chạy Pipeline thành công, tiến hành kiểm tra ở địa chỉ sau:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>192.168.181.102:3000
+</span></span></code></pre></div><ul>
+<li>
+<p><code>192.168.181.102</code> là IP của Server Dev nơi chúng ta Deploy ứng dung.</p>
+</li>
+<li>
+<p><code>3000</code> là Port dùng để chạy ứng dụng được khai báo khi chúng ta Run Container.</p>
+</li>
+</ul>
+<p><img alt="alt text" src="/3-pipeline/3.3-security-performance/image-12.png"></p>
+<p>Như vậy Web đã được Deploy thành công, chúng ta có thể kiểm tra Container bằng lệnh:</p>
+<pre tabindex="0"><code>docker container ps
+</code></pre><p><img alt="alt text" src="/3-pipeline/3.3-security-performance/image-13.png"></p>
+<h4 id="security-scan-website---arachni">Security Scan Website - Arachni</h4>
+<p>Sau bước Deploy chúng ta sẽ tiến hành test bảo mật của trang Web chúng ta vừa triển khai.</p>
+<p>Chúng ta đã thực hiện tạo một Docker Image Arachni ở mục 2.7 nên ở bước này chúng ta chỉ cần Pull Image về là có thể dùng Arachni.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yml" data-lang="yml"><span style="display:flex;"><span><span style="color:#f92672">security scan website</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">stage</span>: <span style="color:#ae81ff">security scan website</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">variables</span>:
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">GIT_STRATEGY</span>: <span style="color:#ae81ff">none</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">script</span>:
+</span></span><span style="display:flex;"><span>        - <span style="color:#ae81ff">docker run --rm -v /tmp/:/tmp/ tranvix0910/arachni:v1.5.1-0.5.12 bin/arachni --output-verbose --scope-include-subdomains ${ADDRESS_FRONTEND} --report-save-path=/tmp/${ARACHNI_WEBSITE_REPORT}.afr &gt; /dev/null 2&gt;&amp;1</span>
+</span></span><span style="display:flex;"><span>        - <span style="color:#ae81ff">docker run --rm -v /tmp/:/tmp/ tranvix0910/arachni:v1.5.1-0.5.12 bin/arachni_reporter /tmp/${ARACHNI_WEBSITE_REPORT}.afr --reporter=html:outfile=/tmp/${ARACHNI_WEBSITE_REPORT}.html.zip</span>
+</span></span><span style="display:flex;"><span>        - <span style="color:#ae81ff">sudo chmod 777 /tmp/${ARACHNI_WEBSITE_REPORT}.html.zip</span>
+</span></span><span style="display:flex;"><span>        - <span style="color:#ae81ff">cp /tmp/${ARACHNI_WEBSITE_REPORT}.html.zip .</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">tags</span>:
+</span></span><span style="display:flex;"><span>        - <span style="color:#ae81ff">wineapp-dev-shell</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">only</span>:
+</span></span><span style="display:flex;"><span>        - <span style="color:#ae81ff">tags</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">artifacts</span>:
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">paths</span>:
+</span></span><span style="display:flex;"><span>            - <span style="color:#ae81ff">${ARACHNI_WEBSITE_REPORT}.html.zip</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">expire_in</span>: <span style="color:#ae81ff">1</span> <span style="color:#ae81ff">day</span>
+</span></span></code></pre></div><p>Job <code>security scan website</code> này thực hiện quét bảo mật trên một website, tạo ra báo cáo bảo mật và lưu báo cáo đó dưới dạng một file .zip để bạn có thể tải về sau khi pipeline hoàn tất.</p>
+<p><code>ADDRESS_FRONTEND</code> là địa chỉ của web chúng ta <code>192.168.181.102:3000</code>.</p>
+<p><code>ARACHNI_WEBSITE_REPORT</code> là tên của file report.</p>
+<p>Khi thực hiện lệnh <code>sudo chmod</code> cũng yêu cầu nhập mật khẩu nên chúng ta cũng cần cấu hình như ở trên.</p>
+<pre tabindex="0"><code>gitlab-runner ALL=(ALL) NOPASSWD: /bin/chmod
+</code></pre><p>Tiến hành thêm Stage vào Pipeline và tạo các Variable cần thiết, sau đó tạo tag và kiểm tra Pipeline.</p>
+<p>Chúng ta sẽ có Report như sau:
+<img alt="alt text" src="/3-pipeline/3.3-security-performance/image-14.png"></p>
+<h4 id="performance-test---k6">Performance Test - k6</h4>
+<p>Để kiểm tra hiệu năng của Website bằng k6 chúng ta sẽ tạo ra một file test được viết bằng JavaScript.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-js" data-lang="js"><span style="display:flex;"><span><span style="color:#66d9ef">import</span> <span style="color:#a6e22e">http</span> <span style="color:#a6e22e">from</span> <span style="color:#e6db74">&#39;k6/http&#39;</span>;
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">import</span> { <span style="color:#a6e22e">check</span>, <span style="color:#a6e22e">sleep</span> } <span style="color:#a6e22e">from</span> <span style="color:#e6db74">&#39;k6&#39;</span>;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">export</span> <span style="color:#66d9ef">let</span> <span style="color:#a6e22e">options</span> <span style="color:#f92672">=</span> {
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">vus</span><span style="color:#f92672">:</span> <span style="color:#ae81ff">1</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">duration</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#39;10s&#39;</span>,
+</span></span><span style="display:flex;"><span>};
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">export</span> <span style="color:#66d9ef">default</span> <span style="color:#66d9ef">function</span> () {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">const</span> <span style="color:#a6e22e">BASE_URL</span> <span style="color:#f92672">=</span> <span style="color:#e6db74">`</span><span style="color:#e6db74">${</span><span style="color:#a6e22e">__ENV</span>.<span style="color:#a6e22e">FE_HOST</span><span style="color:#e6db74">}</span><span style="color:#e6db74">`</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">let</span> <span style="color:#a6e22e">res</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">http</span>.<span style="color:#a6e22e">get</span>(<span style="color:#a6e22e">BASE_URL</span>);
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">check</span>(<span style="color:#a6e22e">res</span>, {
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#39;homepage status is 200&#39;</span><span style="color:#f92672">:</span> (<span style="color:#a6e22e">r</span>) =&gt; <span style="color:#a6e22e">r</span>.<span style="color:#a6e22e">status</span> <span style="color:#f92672">===</span> <span style="color:#ae81ff">200</span>,
+</span></span><span style="display:flex;"><span>    });
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">sleep</span>(<span style="color:#ae81ff">1</span>);
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>Sau đó chúng ta sẽ thêm file test vào repository chứa code.</p>
+<p><img alt="alt text" src="/3-pipeline/3.3-security-performance/image-15.png"></p>
+<p>Thêm Stage vào Pipeline:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yml" data-lang="yml"><span style="display:flex;"><span><span style="color:#f92672">performance testing</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">stage</span>: <span style="color:#ae81ff">performance testing</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">variables</span>:
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">GIT_STRATEGY</span>: <span style="color:#ae81ff">none</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">SCRIPT_PATH</span>: <span style="color:#ae81ff">performance_testing_script</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">script</span>:
+</span></span><span style="display:flex;"><span>        - <span style="color:#ae81ff">sudo chmod -R 754 ./${SCRIPT_PATH}</span>
+</span></span><span style="display:flex;"><span>        - <span style="color:#ae81ff">docker run --user ${ID_USER_GITLAB_RUNNER}:${ID_GROUP_GITLAB_RUNNER} --rm -v $(pwd)/${SCRIPT_PATH}:/${SCRIPT_PATH} grafana/k6 run -e RESULTS_PATH=/${SCRIPT_PATH} -e FE_HOST=${FE_HOST} --summary-export=/${SCRIPT_PATH}/summary_perf.json /${SCRIPT_PATH}/smoke-test.js</span>
+</span></span><span style="display:flex;"><span>        - <span style="color:#ae81ff">docker run --user ${ID_USER_GITLAB_RUNNER}:${ID_GROUP_GITLAB_RUNNER} --rm -v $(pwd)/${SCRIPT_PATH}:/${SCRIPT_PATH} grafana/k6 run -e FE_HOST=${FE_HOST} /${SCRIPT_PATH}/smoke-test.js</span>
+</span></span><span style="display:flex;"><span>        - <span style="color:#ae81ff">mv ./${SCRIPT_PATH}/summary.html $(pwd)/${K6_PERFORMANCE_TEST_REPORT}.html</span>
+</span></span><span style="display:flex;"><span>        - <span style="color:#ae81ff">cat ./${SCRIPT_PATH}/summary_perf.json | jq -r &#39;[&#34;metric&#34;, &#34;avg&#34;, &#34;min&#34;, &#34;med&#34;, &#34;max&#34;, &#34;p(90)&#34;, &#34;p(95)&#34;], (.metrics | to_entries[] | [.key, .value.avg, .value.min, .value.med, .value.max, .value[&#34;p(90)&#34;], .value[&#34;p(95)&#34;]]) | @csv&#39; &gt; ${K6_PERFORMANCE_TEST_REPORT}.csv</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">after_script</span>:
+</span></span><span style="display:flex;"><span>        - <span style="color:#ae81ff">sudo chown -R gitlab-runner $(pwd)</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">tags</span>:
+</span></span><span style="display:flex;"><span>        - <span style="color:#ae81ff">wineapp-dev-shell</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">only</span>:
+</span></span><span style="display:flex;"><span>        - <span style="color:#ae81ff">tags</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">artifacts</span>:
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">paths</span>:
+</span></span><span style="display:flex;"><span>            - <span style="color:#ae81ff">${K6_PERFORMANCE_TEST_REPORT}.html</span>
+</span></span><span style="display:flex;"><span>            - <span style="color:#ae81ff">${K6_PERFORMANCE_TEST_REPORT}.csv</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">expire_in</span>: <span style="color:#ae81ff">1</span> <span style="color:#ae81ff">day</span>
+</span></span></code></pre></div><p>Các lệnh bên trong <code>script</code>: bao gồm việc thay đổi quyền truy cập tệp trong thư mục kịch bản, chạy Docker container với Grafana k6 dưới quyền của người dùng GitLab Runner để thực hiện kiểm tra hiệu suất, xuất kết quả tóm tắt dưới dạng JSON và CSV, sau đó di chuyển và đổi tên tệp kết quả HTML.</p>
+<p>Các lệnh trong <code>after_script</code>: sẽ thay đổi quyền sở hữu của các tệp về người dùng gitlab-runner sau khi công việc hoàn thành. Job chỉ chạy khi có tag trên commit hoặc merge request, và kết quả kiểm tra được lưu trữ như artifacts, có hiệu lực trong 1 ngày.</p>
+<p>Job này trong CI/CD pipeline của GitLab thực hiện việc kiểm tra hiệu suất bằng Docker và Grafana k6, sử dụng các biến để điều chỉnh đường dẫn và thông số môi trường, đảm bảo các quyền truy cập phù hợp bằng cách chạy container với người dùng GitLab Runner, xuất kết quả kiểm tra hiệu suất dưới dạng HTML và CSV, và lưu trữ chúng làm artifacts.</p>
+<p>Sau khi hoàn tất, job thay đổi quyền sở hữu của các tệp để đảm bảo quyền truy cập chính xác, chỉ chạy khi có các commit hoặc merge request được gắn tag cụ thể, và các artifacts sẽ tự động bị xóa sau 1 ngày.</p>
+<p>Sau khi Pipeline chạy thành công chúng ta sẽ có file Report dưới dạng HTML.</p>
+<p><img alt="alt text" src="/3-pipeline/3.3-security-performance/image-16.png"></p>
+<pre tabindex="0"><code>
+          /\      |‾‾| /‾‾/   /‾‾/
+     /\  /  \     |  |/  /   /  /
+    /  \/    \    |     (   /   ‾‾\
+   /          \   |  |\  \ |  (‾)  |
+  / __________ \  |__| \__\ \_____/ .io
+
+     execution: local
+        script: performance_testing_script/smoke_test.js
+        output: -
+
+     scenarios: (100.00%) 1 scenario, 1 max VUs, 40s max duration (incl. graceful stop):
+              * default: 1 looping VUs for 10s (gracefulStop: 30s)
+
+
+     ✓ homepage status is 200
+
+     checks.........................: 100.00% ✓ 10       ✗ 0
+     data_received..................: 8.1 kB  808 B/s
+     data_sent......................: 860 B   86 B/s
+     http_req_blocked...............: avg=240.69µs min=3.15µs   med=4.21µs   max=2.36ms   p(90)=241.93µs p(95)=1.3ms
+     http_req_connecting............: avg=124.41µs min=0s       med=0s       max=1.24ms   p(90)=124.41µs p(95)=684.3µs
+     http_req_duration..............: avg=512.44µs min=318.21µs med=491.68µs max=679.04µs p(90)=652.66µs p(95)=665.85µs
+       { expected_response:true }...: avg=512.44µs min=318.21µs med=491.68µs max=679.04µs p(90)=652.66µs p(95)=665.85µs
+     http_req_failed................: 0.00%   ✓ 0        ✗ 10
+     http_req_receiving.............: avg=90.44µs  min=38.49µs  med=87.98µs  max=129.07µs p(90)=128.62µs p(95)=128.84µs
+     http_req_sending...............: avg=47.97µs  min=15.66µs  med=17.02µs  max=305.24µs p(90)=64.64µs  p(95)=184.94µs
+     http_req_tls_handshaking.......: avg=0s       min=0s       med=0s       max=0s       p(90)=0s       p(95)=0s
+     http_req_waiting...............: avg=374.02µs min=229.34µs med=365.44µs max=529.58µs p(90)=519.81µs p(95)=524.69µs
+     http_reqs......................: 10      0.998173/s
+     iteration_duration.............: avg=1s       min=1s       med=1s       max=1s       p(90)=1s       p(95)=1s
+     iterations.....................: 10      0.998173/s
+     vus............................: 1       min=1      max=1
+     vus_max........................: 1       min=1      max=1
+
+
+running (10.0s), 0/1 VUs, 10 complete and 0 interrupted iterations
+default ✓ [======================================] 1 VUs  10s
+</code></pre>
+
+
+
+
+<footer class=" footline" >
+	
+</footer>
+
+        
+        </div> 
+        
+
+      </div>
+
+    <div id="navigation">
+        
+        
+        
+        
+            
+            
+                
+                    
+                    
+                
+                
+
+                    
+                    
+                        
+                    
+                    
+
+                    
+                        
+            
+            
+                
+                    
+                        
+                        
+                    
+                
+                
+
+                    
+                    
+                        
+                    
+                    
+
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                        
+                    
+                    
+
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                    
+                
+                
+
+                    
+                    
+                        
+                    
+                    
+
+                    
+                        
+            
+            
+                
+                    
+                        
+                        
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                        
+                        
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+            
+        
+        
+        
+
+
+	 
+	 
+		
+			<a class="nav nav-prev" href="/3-pipeline/3.2-build-and-push-image/" title="Build và Push Docker Image"> <i class="fa fa-chevron-left"></i></a>
+		
+		
+			<a class="nav nav-next" href="/3-pipeline/3.4-send-report/" title="Gửi Report vào Telegram" style="margin-right: 0px;"><i class="fa fa-chevron-right"></i></a>
+		
+	
+    </div>
+
+    </section>
+    
+    <div style="left: -1000px; overflow: scroll; position: absolute; top: -1000px; border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;">
+      <div style="border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;"></div>
+    </div>
+    <script src="/js/clipboard.min.js?1725036911"></script>
+    <script src="/js/perfect-scrollbar.min.js?1725036911"></script>
+    <script src="/js/perfect-scrollbar.jquery.min.js?1725036911"></script>
+    <script src="/js/jquery.sticky.js?1725036911"></script>
+    <script src="/js/featherlight.min.js?1725036911"></script>
+    <script src="/js/highlight.pack.js?1725036911"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+    <script src="/js/modernizr.custom-3.6.0.js?1725036911"></script>
+    <script src="/js/learn.js?1725036911"></script>
+    <script src="/js/hugo-learn.js?1725036911"></script>
+
+    <link href="/mermaid/mermaid.css?1725036911" rel="stylesheet" />
+    <script src="/mermaid/mermaid.js?1725036911"></script>
+    <script>
+        mermaid.initialize({ startOnLoad: true });
+    </script>
+    <script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-158079754-2', 'auto');
+  ga('send', 'pageview');
+
+</script>
+  </body>
+</html>
