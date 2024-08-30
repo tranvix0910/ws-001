@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en" class="js csstransforms3d">
-  <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+  <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=64030&amp;path=livereload" data-no-instant defer></script>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="generator" content="Hugo 0.128.0">
@@ -12,21 +12,21 @@
     <title>Build và Push Docker Image :: AWS System Manager</title>
 
     
-    <link href="/css/nucleus.css?1725036911" rel="stylesheet">
-    <link href="/css/fontawesome-all.min.css?1725036911" rel="stylesheet">
-    <link href="/css/hybrid.css?1725036911" rel="stylesheet">
-    <link href="/css/featherlight.min.css?1725036911" rel="stylesheet">
-    <link href="/css/perfect-scrollbar.min.css?1725036911" rel="stylesheet">
-    <link href="/css/auto-complete.css?1725036911" rel="stylesheet">
-    <link href="/css/atom-one-dark-reasonable.css?1725036911" rel="stylesheet">
-    <link href="/css/theme.css?1725036911" rel="stylesheet">
-    <link href="/css/hugo-theme.css?1725036911" rel="stylesheet">
+    <link href="/css/nucleus.css?1725038072" rel="stylesheet">
+    <link href="/css/fontawesome-all.min.css?1725038072" rel="stylesheet">
+    <link href="/css/hybrid.css?1725038072" rel="stylesheet">
+    <link href="/css/featherlight.min.css?1725038072" rel="stylesheet">
+    <link href="/css/perfect-scrollbar.min.css?1725038072" rel="stylesheet">
+    <link href="/css/auto-complete.css?1725038072" rel="stylesheet">
+    <link href="/css/atom-one-dark-reasonable.css?1725038072" rel="stylesheet">
+    <link href="/css/theme.css?1725038072" rel="stylesheet">
+    <link href="/css/hugo-theme.css?1725038072" rel="stylesheet">
     
-    <link href="/css/theme-workshop.css?1725036911" rel="stylesheet">
+    <link href="/css/theme-workshop.css?1725038072" rel="stylesheet">
     
     
 
-    <script src="/js/jquery-3.3.1.min.js?1725036911"></script>
+    <script src="/js/jquery-3.3.1.min.js?1725038072"></script>
 
     <style>
       :root #header + #content > #left > #rlblock_left{
@@ -57,14 +57,14 @@
     <span data-search-clear=""><i class="fas fa-times"></i></span>
 </div>
 
-<script type="text/javascript" src="/js/lunr.min.js?1725036911"></script>
-<script type="text/javascript" src="/js/auto-complete.js?1725036911"></script>
+<script type="text/javascript" src="/js/lunr.min.js?1725038072"></script>
+<script type="text/javascript" src="/js/auto-complete.js?1725038072"></script>
 <script type="text/javascript">
     
-        var baseurl = "\/\/localhost:1313\/";
+        var baseurl = "\/\/localhost:64030\/";
     
 </script>
-<script type="text/javascript" src="/js/search.js?1725036911"></script>
+<script type="text/javascript" src="/js/search.js?1725038072"></script>
 
     
   </div>
@@ -695,7 +695,7 @@
                   
                     
                     
-                      <option id="en" value="//localhost:1313/3-pipeline/3.2-build-and-push-image/" selected>English</option>
+                      <option id="en" value="//localhost:64030/3-pipeline/3.2-build-and-push-image/" selected>English</option>
                     
                   
               
@@ -741,8 +741,7 @@
         <br>
         <br>
             <b> Team </b> <br>
-           
-            <i> <a href="https://www.linkedin.com/in/sutrinh/"  style="color:orange">Đại Vĩ  </a> <br>
+            <i> <a href="https://www.linkedin.com/in/tranvix0910/"  style="color:orange">Đại Vĩ  </a> <br>
                
         </i>
         </left>
@@ -844,20 +843,20 @@
 <p>Thay đổi giá trị <code>BASE_URL</code> để trỏ tới server deploy backend hiện tại.</p>
 </li>
 </ul>
-<p><img alt="alt text" src="/3-pipeline/3.2-build-and-push-image/image.png"></p>
+<p><img alt="alt text" src="/images/3-pipeline/3.2-build-and-push-image/3-2-1.png"></p>
 <p>Tiếp theo chúng ta sẽ thực hiện tạo một nhánh ( branch ) mới.</p>
 <p>Để đảm bảo tính ổn định của nhánh chính (Main), hãy tạo một nhánh mới để thực hiện các thay đổi. Điều này giúp giữ cho nhánh Main không bị ảnh hưởng trong quá trình phát triển.</p>
 <p>Truy cập vào dấu <code>+</code> và chọn <code>New Branch</code>.
-<img alt="alt text" src="/3-pipeline/3.2-build-and-push-image/image-1.png"></p>
+<img alt="alt text" src="/images/3-pipeline/3.2-build-and-push-image/3-2-2.png"></p>
 <p>Chúng ta sẽ đặt tên và tạo Branch.</p>
-<p><img alt="alt text" src="/3-pipeline/3.2-build-and-push-image/image-2.png"></p>
+<p><img alt="alt text" src="/images/3-pipeline/3.2-build-and-push-image/3-2-3.png"></p>
 <p>Chúng ta sẽ thực hiện thêm một số cấu hình sau để đảm bảo tính bảo mật.</p>
 <p>Truy cập vào <code>Settings</code> -&gt; <code>Repository</code></p>
-<p><img alt="alt text" src="/3-pipeline/3.2-build-and-push-image/image-4.png"></p>
+<p><img alt="alt text" src="/images/3-pipeline/3.2-build-and-push-image/3-2-4.png"></p>
 <p>Thay đổi nhánh mặc định thành nhánh vừa tạo, việc này nhầm mục địch khi chúng ta truy cập vào Project, Source code của nhánh Develop sẽ xuất hiện đầu tiên.</p>
-<p><img alt="alt text" src="/3-pipeline/3.2-build-and-push-image/image-3.png"></p>
+<p><img alt="alt text" src="/images/3-pipeline/3.2-build-and-push-image/3-2-5.png"></p>
 <p>Tiếp theo chúng ta sẽ thực hiện Protect Branch, khi bảo vệ nhánh có thể giữ an toàn cho nhánh tránh các tình huống Push và Merge.</p>
-<p><img alt="alt text" src="/3-pipeline/3.2-build-and-push-image/image-5.png"></p>
+<p><img alt="alt text" src="/images/3-pipeline/3.2-build-and-push-image/3-2-6.png"></p>
 <h4 id="thêm-user-gitlab-runner-vào-group-docker">Thêm User Gitlab-Runner vào Group Docker</h4>
 <p>Trong quá trình chạy Pipeline, User gitlab-runner sẽ được dùng để chạy dự án.</p>
 <p>Việc thêm gitlab-runner vào Group Docker giúp cho User có thể thực hiện các câu lệnh Docker như : Login, Logout Build và Push Image.</p>
@@ -878,8 +877,8 @@
 </ul>
 <h4 id="tạo-dockerfile">Tạo Dockerfile</h4>
 <p>Truy cập vào Web IDE để tiện cho việc thao tác.</p>
-<p><img alt="alt text" src="/3-pipeline/3.2-build-and-push-image/image-6.png">
-<img alt="alt text" src="/3-pipeline/3.2-build-and-push-image/image-7.png"></p>
+<p><img alt="alt text" src="/images/3-pipeline/3.2-build-and-push-image/3-2-7.png">
+<img alt="alt text" src="/images/3-pipeline/3.2-build-and-push-image/3-2-8.png"></p>
 <p>Tạo Dockerfile cho Frontend:</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-Dockerfile" data-lang="Dockerfile"><span style="display:flex;"><span><span style="color:#75715e">##### Dockerfile #####</span><span style="color:#960050;background-color:#1e0010">
 </span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#75715e">## build stage ##</span><span style="color:#960050;background-color:#1e0010">
@@ -1054,10 +1053,10 @@
 <h4 id="tạo-variables">Tạo Variables</h4>
 <p>Sau khi tạo file thành công chúng ta sẽ Commit và tạo các Variables.</p>
 <p>Truy cập <code>Project Settings &gt; CI/CD &gt; Variables</code>:</p>
-<p><img alt="alt text" src="/3-pipeline/3.2-build-and-push-image/image-8.png"></p>
-<p><img alt="alt text" src="/3-pipeline/3.2-build-and-push-image/image-9.png"></p>
+<p><img alt="alt text" src="/images/3-pipeline/3.2-build-and-push-image/3-2-9.png"></p>
+<p><img alt="alt text" src="/images/3-pipeline/3.2-build-and-push-image/3-2-10.png"></p>
 <p>Tiến hành tạo một số biến chúng ta đã định nghĩa tại Pipeline ( trừ một số biến mặc định của Gitlab CI/CD ).</p>
-<p><img alt="alt text" src="/3-pipeline/3.2-build-and-push-image/image-10.png"></p>
+<p><img alt="alt text" src="/images/3-pipeline/3.2-build-and-push-image/3-2-11.png"></p>
 <p><strong>Protect variable</strong> : Các biến chỉ chạy trên các Branch và Tag được Protect.</p>
 <p><strong>Expand variable reference</strong>: Bất kỳ ký tự $ nào trong giá trị của biến sẽ được xử lý như một tham chiếu đến một biến khác.</p>
 <ul>
@@ -1072,26 +1071,26 @@
 </ul>
 </li>
 </ul>
-<p><img alt="alt text" src="/3-pipeline/3.2-build-and-push-image/image-11.png"></p>
-<p><img alt="alt text" src="/3-pipeline/3.2-build-and-push-image/image-12.png"></p>
+<p><img alt="alt text" src="/images/3-pipeline/3.2-build-and-push-image/3-2-12.png"></p>
+<p><img alt="alt text" src="/images/3-pipeline/3.2-build-and-push-image/3-2-13.png"></p>
 <p>Như vậy đã thêm các biến thành công.</p>
 <h4 id="khởi-tạo-pipeline">Khởi tạo Pipeline</h4>
 <p>Chúng ta sẽ tiến hành tạo Tag:</p>
-<p><img alt="alt text" src="/3-pipeline/3.2-build-and-push-image/image-13.png"></p>
-<p><img alt="alt text" src="/3-pipeline/3.2-build-and-push-image/image-14.png"></p>
+<p><img alt="alt text" src="/images/3-pipeline/3.2-build-and-push-image/3-2-14.png"></p>
+<p><img alt="alt text" src="/images/3-pipeline/3.2-build-and-push-image/3-2-15.png"></p>
 <p>Đặt tên Tag và chú ý chọn đúng Branch.</p>
-<p><img alt="alt text" src="/3-pipeline/3.2-build-and-push-image/image-15.png"></p>
+<p><img alt="alt text" src="/images/3-pipeline/3.2-build-and-push-image/3-2-16.png"></p>
 <p>Sau khi tạo Tag, Pipeline sẽ được khởi động.</p>
-<p><img alt="alt text" src="/3-pipeline/3.2-build-and-push-image/image-16.png"></p>
-<p><img alt="alt text" src="/3-pipeline/3.2-build-and-push-image/image-17.png"></p>
-<p><img alt="alt text" src="/3-pipeline/3.2-build-and-push-image/image-18.png"></p>
+<p><img alt="alt text" src="/images/3-pipeline/3.2-build-and-push-image/3-2-17.png"></p>
+<p><img alt="alt text" src="/images/3-pipeline/3.2-build-and-push-image/3-2-18.png"></p>
+<p><img alt="alt text" src="/images/3-pipeline/3.2-build-and-push-image/3-2-19.png"></p>
 <p><strong>Job Build</strong> Thành công.</p>
-<p><img alt="alt text" src="/3-pipeline/3.2-build-and-push-image/image-19.png"></p>
+<p><img alt="alt text" src="/images/3-pipeline/3.2-build-and-push-image/3-2-20.png"></p>
 <p><strong>Job Push</strong> Thành công.</p>
-<p><img alt="alt text" src="/3-pipeline/3.2-build-and-push-image/image-20.png"></p>
+<p><img alt="alt text" src="/images/3-pipeline/3.2-build-and-push-image/3-2-21.png"></p>
 <p>Khi truy cập vào Portus, Repository đã được Push thành công.</p>
-<p><img alt="alt text" src="/3-pipeline/3.2-build-and-push-image/image-21.png"></p>
-<p><img alt="alt text" src="/3-pipeline/3.2-build-and-push-image/image-22.png"></p>
+<p><img alt="alt text" src="/images/3-pipeline/3.2-build-and-push-image/3-2-22.png"></p>
+<p><img alt="alt text" src="/images/3-pipeline/3.2-build-and-push-image/3-2-23.png"></p>
 
 
 
@@ -1486,19 +1485,19 @@
     <div style="left: -1000px; overflow: scroll; position: absolute; top: -1000px; border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;">
       <div style="border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;"></div>
     </div>
-    <script src="/js/clipboard.min.js?1725036911"></script>
-    <script src="/js/perfect-scrollbar.min.js?1725036911"></script>
-    <script src="/js/perfect-scrollbar.jquery.min.js?1725036911"></script>
-    <script src="/js/jquery.sticky.js?1725036911"></script>
-    <script src="/js/featherlight.min.js?1725036911"></script>
-    <script src="/js/highlight.pack.js?1725036911"></script>
+    <script src="/js/clipboard.min.js?1725038072"></script>
+    <script src="/js/perfect-scrollbar.min.js?1725038072"></script>
+    <script src="/js/perfect-scrollbar.jquery.min.js?1725038072"></script>
+    <script src="/js/jquery.sticky.js?1725038072"></script>
+    <script src="/js/featherlight.min.js?1725038072"></script>
+    <script src="/js/highlight.pack.js?1725038072"></script>
     <script>hljs.initHighlightingOnLoad();</script>
-    <script src="/js/modernizr.custom-3.6.0.js?1725036911"></script>
-    <script src="/js/learn.js?1725036911"></script>
-    <script src="/js/hugo-learn.js?1725036911"></script>
+    <script src="/js/modernizr.custom-3.6.0.js?1725038072"></script>
+    <script src="/js/learn.js?1725038072"></script>
+    <script src="/js/hugo-learn.js?1725038072"></script>
 
-    <link href="/mermaid/mermaid.css?1725036911" rel="stylesheet" />
-    <script src="/mermaid/mermaid.js?1725036911"></script>
+    <link href="/mermaid/mermaid.css?1725038072" rel="stylesheet" />
+    <script src="/mermaid/mermaid.js?1725038072"></script>
     <script>
         mermaid.initialize({ startOnLoad: true });
     </script>

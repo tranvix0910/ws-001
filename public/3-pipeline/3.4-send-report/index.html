@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en" class="js csstransforms3d">
-  <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+  <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=64030&amp;path=livereload" data-no-instant defer></script>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="generator" content="Hugo 0.128.0">
@@ -12,21 +12,21 @@
     <title>Gửi Report vào Telegram :: AWS System Manager</title>
 
     
-    <link href="/css/nucleus.css?1725036911" rel="stylesheet">
-    <link href="/css/fontawesome-all.min.css?1725036911" rel="stylesheet">
-    <link href="/css/hybrid.css?1725036911" rel="stylesheet">
-    <link href="/css/featherlight.min.css?1725036911" rel="stylesheet">
-    <link href="/css/perfect-scrollbar.min.css?1725036911" rel="stylesheet">
-    <link href="/css/auto-complete.css?1725036911" rel="stylesheet">
-    <link href="/css/atom-one-dark-reasonable.css?1725036911" rel="stylesheet">
-    <link href="/css/theme.css?1725036911" rel="stylesheet">
-    <link href="/css/hugo-theme.css?1725036911" rel="stylesheet">
+    <link href="/css/nucleus.css?1725038072" rel="stylesheet">
+    <link href="/css/fontawesome-all.min.css?1725038072" rel="stylesheet">
+    <link href="/css/hybrid.css?1725038072" rel="stylesheet">
+    <link href="/css/featherlight.min.css?1725038072" rel="stylesheet">
+    <link href="/css/perfect-scrollbar.min.css?1725038072" rel="stylesheet">
+    <link href="/css/auto-complete.css?1725038072" rel="stylesheet">
+    <link href="/css/atom-one-dark-reasonable.css?1725038072" rel="stylesheet">
+    <link href="/css/theme.css?1725038072" rel="stylesheet">
+    <link href="/css/hugo-theme.css?1725038072" rel="stylesheet">
     
-    <link href="/css/theme-workshop.css?1725036911" rel="stylesheet">
+    <link href="/css/theme-workshop.css?1725038072" rel="stylesheet">
     
     
 
-    <script src="/js/jquery-3.3.1.min.js?1725036911"></script>
+    <script src="/js/jquery-3.3.1.min.js?1725038072"></script>
 
     <style>
       :root #header + #content > #left > #rlblock_left{
@@ -57,14 +57,14 @@
     <span data-search-clear=""><i class="fas fa-times"></i></span>
 </div>
 
-<script type="text/javascript" src="/js/lunr.min.js?1725036911"></script>
-<script type="text/javascript" src="/js/auto-complete.js?1725036911"></script>
+<script type="text/javascript" src="/js/lunr.min.js?1725038072"></script>
+<script type="text/javascript" src="/js/auto-complete.js?1725038072"></script>
 <script type="text/javascript">
     
-        var baseurl = "\/\/localhost:1313\/";
+        var baseurl = "\/\/localhost:64030\/";
     
 </script>
-<script type="text/javascript" src="/js/search.js?1725036911"></script>
+<script type="text/javascript" src="/js/search.js?1725038072"></script>
 
     
   </div>
@@ -695,7 +695,7 @@
                   
                     
                     
-                      <option id="en" value="//localhost:1313/3-pipeline/3.4-send-report/" selected>English</option>
+                      <option id="en" value="//localhost:64030/3-pipeline/3.4-send-report/" selected>English</option>
                     
                   
               
@@ -741,8 +741,7 @@
         <br>
         <br>
             <b> Team </b> <br>
-           
-            <i> <a href="https://www.linkedin.com/in/sutrinh/"  style="color:orange">Đại Vĩ  </a> <br>
+            <i> <a href="https://www.linkedin.com/in/tranvix0910/"  style="color:orange">Đại Vĩ  </a> <br>
                
         </i>
         </left>
@@ -835,21 +834,21 @@
 	<h4 id="chuẩn-bị">Chuẩn Bị</h4>
 <p>Để có thể gửi Report vào Telegram chúng ta cần tạo một tài khoản Telegram.</p>
 <p>Sau khi tạo thành công chúng ta sẽ tìm kiếm <code>BotFather</code> để tiến hành tạo Bot.</p>
-<p><img alt="alt text" src="/3-pipeline/3.4-send-report/image.png"></p>
-<p><img alt="alt text" src="/3-pipeline/3.4-send-report/image-1.png"></p>
+<p><img alt="alt text" src="/images/3-pipeline/3.4-send-report/3-4-1.png"></p>
+<p><img alt="alt text" src="/images/3-pipeline/3.4-send-report/3-4-2.png"></p>
 <p>Sau khi Start chúng ta sẽ tiến hành tạo Bot mới bằng cách nhập <code>/newbot</code>.</p>
-<p><img alt="alt text" src="/3-pipeline/3.4-send-report/image-2.png"></p>
+<p><img alt="alt text" src="/images/3-pipeline/3.4-send-report/3-4-3.png"></p>
 <p>Khi thực hiện xong các yêu cầu chúng ta sẽ được cung cấp 1 con Bot có thể truy cập thông qua đường link và một Token.</p>
-<p><img alt="alt text" src="/3-pipeline/3.4-send-report/image-3.png"></p>
+<p><img alt="alt text" src="/images/3-pipeline/3.4-send-report/3-4-4.png"></p>
 <p>Để Bot có thể thông báo, chúng ta sẽ tiến hành tạo Group và thêm Bot vào.</p>
-<p><img alt="alt text" src="/3-pipeline/3.4-send-report/image-fotor-20240830232842.png"></p>
-<p><img alt="alt text" src="/3-pipeline/3.4-send-report/image-4.png"></p>
+<p><img alt="alt text" src="/images/3-pipeline/3.4-send-report/3-4-5.png"></p>
+<p><img alt="alt text" src="/images/3-pipeline/3.4-send-report/3-4-6.png"></p>
 <p>Chúng ta cần biết ID của Group để có thể gửi tin nhắn vào, nên chúng ta cần thêm Bot <code>RawDataBot</code> để cung cập ID.</p>
-<p><img alt="alt text" src="/3-pipeline/3.4-send-report/image-5.png"></p>
+<p><img alt="alt text" src="/images/3-pipeline/3.4-send-report/3-4-7.png"></p>
 <p>Chúng ta có thể test gửi một Message thông qua Server bằng lệnh sau:</p>
 <pre tabindex="0"><code>curl -X POST &#34;https://api.telegram.org/bot&lt;Bot_Token&gt;/sendMessage&#34; -d &#34;chat_id=&lt;chat_id&gt;&#34; -d &#34;text=test&#34;
 </code></pre><pre tabindex="0"><code>curl -X POST &#34;https://api.telegram.org/bot7538065344:AAEpk4atmTnmbl7knIbdQohOxrAfiG5tKi4/sendMessage&#34; -d &#34;chat_id=-4515541652&#34; -d &#34;text=test&#34;
-</code></pre><p><img alt="alt text" src="/3-pipeline/3.4-send-report/image-6.png"></p>
+</code></pre><p><img alt="alt text" src="/images/3-pipeline/3.4-send-report/3-4-8.png"></p>
 <h4 id="send-report-stage">Send Report Stage</h4>
 <p>Chúng ta sẽ thêm một Stage để có thể gửi Report ngay sau khi cúng ta Test hoàn tất.</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yml" data-lang="yml"><span style="display:flex;"><span><span style="color:#f92672">send report</span>:
@@ -863,7 +862,7 @@
 </span></span><span style="display:flex;"><span>    <span style="color:#f92672">only</span>:
 </span></span><span style="display:flex;"><span>        - <span style="color:#ae81ff">tags</span>
 </span></span></code></pre></div><p>Sau khi chạy pipeline Bot sẽ gửi cho chúng ta những file report ở các Stage trước.</p>
-<p><img alt="alt text" src="/3-pipeline/3.4-send-report/image-7.png"></p>
+<p><img alt="alt text" src="/images/3-pipeline/3.4-send-report/3-4-9.png"></p>
 
 
 
@@ -1258,19 +1257,19 @@
     <div style="left: -1000px; overflow: scroll; position: absolute; top: -1000px; border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;">
       <div style="border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;"></div>
     </div>
-    <script src="/js/clipboard.min.js?1725036911"></script>
-    <script src="/js/perfect-scrollbar.min.js?1725036911"></script>
-    <script src="/js/perfect-scrollbar.jquery.min.js?1725036911"></script>
-    <script src="/js/jquery.sticky.js?1725036911"></script>
-    <script src="/js/featherlight.min.js?1725036911"></script>
-    <script src="/js/highlight.pack.js?1725036911"></script>
+    <script src="/js/clipboard.min.js?1725038072"></script>
+    <script src="/js/perfect-scrollbar.min.js?1725038072"></script>
+    <script src="/js/perfect-scrollbar.jquery.min.js?1725038072"></script>
+    <script src="/js/jquery.sticky.js?1725038072"></script>
+    <script src="/js/featherlight.min.js?1725038072"></script>
+    <script src="/js/highlight.pack.js?1725038072"></script>
     <script>hljs.initHighlightingOnLoad();</script>
-    <script src="/js/modernizr.custom-3.6.0.js?1725036911"></script>
-    <script src="/js/learn.js?1725036911"></script>
-    <script src="/js/hugo-learn.js?1725036911"></script>
+    <script src="/js/modernizr.custom-3.6.0.js?1725038072"></script>
+    <script src="/js/learn.js?1725038072"></script>
+    <script src="/js/hugo-learn.js?1725038072"></script>
 
-    <link href="/mermaid/mermaid.css?1725036911" rel="stylesheet" />
-    <script src="/mermaid/mermaid.js?1725036911"></script>
+    <link href="/mermaid/mermaid.css?1725038072" rel="stylesheet" />
+    <script src="/mermaid/mermaid.js?1725038072"></script>
     <script>
         mermaid.initialize({ startOnLoad: true });
     </script>

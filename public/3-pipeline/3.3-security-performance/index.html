@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en" class="js csstransforms3d">
-  <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+  <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=64030&amp;path=livereload" data-no-instant defer></script>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="generator" content="Hugo 0.128.0">
@@ -12,21 +12,21 @@
     <title>Security Scan và Performance Test :: AWS System Manager</title>
 
     
-    <link href="/css/nucleus.css?1725036911" rel="stylesheet">
-    <link href="/css/fontawesome-all.min.css?1725036911" rel="stylesheet">
-    <link href="/css/hybrid.css?1725036911" rel="stylesheet">
-    <link href="/css/featherlight.min.css?1725036911" rel="stylesheet">
-    <link href="/css/perfect-scrollbar.min.css?1725036911" rel="stylesheet">
-    <link href="/css/auto-complete.css?1725036911" rel="stylesheet">
-    <link href="/css/atom-one-dark-reasonable.css?1725036911" rel="stylesheet">
-    <link href="/css/theme.css?1725036911" rel="stylesheet">
-    <link href="/css/hugo-theme.css?1725036911" rel="stylesheet">
+    <link href="/css/nucleus.css?1725038072" rel="stylesheet">
+    <link href="/css/fontawesome-all.min.css?1725038072" rel="stylesheet">
+    <link href="/css/hybrid.css?1725038072" rel="stylesheet">
+    <link href="/css/featherlight.min.css?1725038072" rel="stylesheet">
+    <link href="/css/perfect-scrollbar.min.css?1725038072" rel="stylesheet">
+    <link href="/css/auto-complete.css?1725038072" rel="stylesheet">
+    <link href="/css/atom-one-dark-reasonable.css?1725038072" rel="stylesheet">
+    <link href="/css/theme.css?1725038072" rel="stylesheet">
+    <link href="/css/hugo-theme.css?1725038072" rel="stylesheet">
     
-    <link href="/css/theme-workshop.css?1725036911" rel="stylesheet">
+    <link href="/css/theme-workshop.css?1725038072" rel="stylesheet">
     
     
 
-    <script src="/js/jquery-3.3.1.min.js?1725036911"></script>
+    <script src="/js/jquery-3.3.1.min.js?1725038072"></script>
 
     <style>
       :root #header + #content > #left > #rlblock_left{
@@ -57,14 +57,14 @@
     <span data-search-clear=""><i class="fas fa-times"></i></span>
 </div>
 
-<script type="text/javascript" src="/js/lunr.min.js?1725036911"></script>
-<script type="text/javascript" src="/js/auto-complete.js?1725036911"></script>
+<script type="text/javascript" src="/js/lunr.min.js?1725038072"></script>
+<script type="text/javascript" src="/js/auto-complete.js?1725038072"></script>
 <script type="text/javascript">
     
-        var baseurl = "\/\/localhost:1313\/";
+        var baseurl = "\/\/localhost:64030\/";
     
 </script>
-<script type="text/javascript" src="/js/search.js?1725036911"></script>
+<script type="text/javascript" src="/js/search.js?1725038072"></script>
 
     
   </div>
@@ -695,7 +695,7 @@
                   
                     
                     
-                      <option id="en" value="//localhost:1313/3-pipeline/3.3-security-performance/" selected>English</option>
+                      <option id="en" value="//localhost:64030/3-pipeline/3.3-security-performance/" selected>English</option>
                     
                   
               
@@ -741,8 +741,7 @@
         <br>
         <br>
             <b> Team </b> <br>
-           
-            <i> <a href="https://www.linkedin.com/in/sutrinh/"  style="color:orange">Đại Vĩ  </a> <br>
+            <i> <a href="https://www.linkedin.com/in/tranvix0910/"  style="color:orange">Đại Vĩ  </a> <br>
                
         </i>
         </left>
@@ -860,18 +859,18 @@
 <li>Đặt thời gian tồn tại của artifact là 1 ngày. Sau thời gian này, artifact sẽ bị xóa.</li>
 </ul>
 <p>Chúng ta sẽ tiến hành thêm Stage này vào <code>.gitlab-ci.yml</code>.</p>
-<p><img alt="alt text" src="/3-pipeline/3.3-security-performance/image.png"></p>
+<p><img alt="alt text" src="/images/3-pipeline/3.3-security-performance/3-3-1.png"></p>
 <p>Chú ý tạo các Variables như SNYKSCAN_FILE và SNYK_API_TOKEN.</p>
 <pre tabindex="0"><code>SNYKSCAN_FILE: &#34;SNYK_SECURITY_SCAN_${CI_PROJECT_NAME}_${CI_COMMIT_TAG}_${CI_COMMIT_SHORT_SHA}&#34;
-</code></pre><p><img alt="alt text" src="/3-pipeline/3.3-security-performance/image-1.png"></p>
+</code></pre><p><img alt="alt text" src="/images/3-pipeline/3.3-security-performance/3-3-2.png"></p>
 <p>Chúng ta sẽ tạo tag và pipeline sẽ được khởi động.</p>
-<p><img alt="alt text" src="/3-pipeline/3.3-security-performance/image-2.png"></p>
+<p><img alt="alt text" src="/images/3-pipeline/3.3-security-performance/3-3-3.png"></p>
 <p>Sau khi chạy pipeline thành công sẽ có thêm 1 stage là Code Security Scan và có thêm một file chứa báo cáo chi tiết về quá trình Test, có thể tải ở đây:</p>
-<p><img alt="alt text" src="/3-pipeline/3.3-security-performance/image-3.png"></p>
+<p><img alt="alt text" src="/images/3-pipeline/3.3-security-performance/3-3-4.png"></p>
 <p>Hoặc chúng ta có thể truy cập vào mục <code>Artifacts</code>:</p>
-<p><img alt="alt text" src="/3-pipeline/3.3-security-performance/image-4.png"></p>
+<p><img alt="alt text" src="/images/3-pipeline/3.3-security-performance/3-3-5.png"></p>
 <p>Sau khi tải về tiến hành giải nén file và kiểm tra file report dưới dạng HTML.</p>
-<p><img alt="alt text" src="/3-pipeline/3.3-security-performance/image-5.png"></p>
+<p><img alt="alt text" src="/images/3-pipeline/3.3-security-performance/3-3-6.png"></p>
 <h4 id="scan-image-stage">Scan Image Stage</h4>
 <p>Việc quét bảo mật của Image chúng ta sẽ thực hiện ngay sau khi chúng ta Build Image thành công.</p>
 <p>Chúng ta sẽ thêm một stage để quét bảo mật Image:</p>
@@ -930,12 +929,12 @@
 </li>
 </ul>
 <p>Thêm Stage vào file cấu hình và tạo tag, chúng ta sẽ kiểm tra Pipeline:</p>
-<p><img alt="alt text" src="/3-pipeline/3.3-security-performance/image-6.png"></p>
+<p><img alt="alt text" src="/images/3-pipeline/3.3-security-performance/3-3-7.png"></p>
 <p>Sau khi chạy Pipeline thành công, kiểm tra mục Aritfacts để tải file Report từ Stage quét bảo mật Image.</p>
-<p><img alt="alt text" src="/3-pipeline/3.3-security-performance/image-7.png"></p>
-<p><img alt="alt text" src="/3-pipeline/3.3-security-performance/image-8.png"></p>
+<p><img alt="alt text" src="/images/3-pipeline/3.3-security-performance/3-3-8.png"></p>
+<p><img alt="alt text" src="/images/3-pipeline/3.3-security-performance/3-3-9.png"></p>
 <p>Kiểm tra file Report:</p>
-<p><img alt="alt text" src="/3-pipeline/3.3-security-performance/image-9.png"></p>
+<p><img alt="alt text" src="/images/3-pipeline/3.3-security-performance/3-3-10.png"></p>
 <h4 id="deploy-dự-án">Deploy Dự Án</h4>
 <p>Như vậy chúng ta đã thực hiện xong các bước test và kiểm tra trước khi chúng ta Deploy dự án, trong mục này chúng ta sẽ tiến hành Deploy dự án Front-End.</p>
 <p>Chúng ta sẽ Deploy dự án ở Server Development.</p>
@@ -971,14 +970,14 @@
 </li>
 </ul>
 <pre tabindex="0"><code>gitlab-runner ALL=(ALL) NOPASSWD: /bin/su
-</code></pre><p><img alt="alt text" src="/3-pipeline/3.3-security-performance/image-10.png"></p>
+</code></pre><p><img alt="alt text" src="/images/3-pipeline/3.3-security-performance/3-3-11.png"></p>
 <p>Để lưu file chúng ta nhấn <code>F2 + Y + Enter</code>.</p>
 
 <div class="notices note" ><p>Thực hiện thay đổi ở Server Development.</p>
 </div>
 
 <p>Sau khi cấu hình, chúng ta sẽ thêm Stage vào Pipeline và tạo Tag.</p>
-<p><img alt="alt text" src="/3-pipeline/3.3-security-performance/image-11.png"></p>
+<p><img alt="alt text" src="/images/3-pipeline/3.3-security-performance/3-3-12.png"></p>
 <p>Như vậy chúng ta đã chạy Pipeline thành công, tiến hành kiểm tra ở địa chỉ sau:</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>192.168.181.102:3000
 </span></span></code></pre></div><ul>
@@ -989,10 +988,10 @@
 <p><code>3000</code> là Port dùng để chạy ứng dụng được khai báo khi chúng ta Run Container.</p>
 </li>
 </ul>
-<p><img alt="alt text" src="/3-pipeline/3.3-security-performance/image-12.png"></p>
+<p><img alt="alt text" src="/images/3-pipeline/3.3-security-performance/3-3-13.png"></p>
 <p>Như vậy Web đã được Deploy thành công, chúng ta có thể kiểm tra Container bằng lệnh:</p>
 <pre tabindex="0"><code>docker container ps
-</code></pre><p><img alt="alt text" src="/3-pipeline/3.3-security-performance/image-13.png"></p>
+</code></pre><p><img alt="alt text" src="/images/3-pipeline/3.3-security-performance/3-3-14.png"></p>
 <h4 id="security-scan-website---arachni">Security Scan Website - Arachni</h4>
 <p>Sau bước Deploy chúng ta sẽ tiến hành test bảo mật của trang Web chúng ta vừa triển khai.</p>
 <p>Chúng ta đã thực hiện tạo một Docker Image Arachni ở mục 2.7 nên ở bước này chúng ta chỉ cần Pull Image về là có thể dùng Arachni.</p>
@@ -1020,7 +1019,7 @@
 <pre tabindex="0"><code>gitlab-runner ALL=(ALL) NOPASSWD: /bin/chmod
 </code></pre><p>Tiến hành thêm Stage vào Pipeline và tạo các Variable cần thiết, sau đó tạo tag và kiểm tra Pipeline.</p>
 <p>Chúng ta sẽ có Report như sau:
-<img alt="alt text" src="/3-pipeline/3.3-security-performance/image-14.png"></p>
+<img alt="alt text" src="/images/3-pipeline/3.3-security-performance/3-3-15.png"></p>
 <h4 id="performance-test---k6">Performance Test - k6</h4>
 <p>Để kiểm tra hiệu năng của Website bằng k6 chúng ta sẽ tạo ra một file test được viết bằng JavaScript.</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-js" data-lang="js"><span style="display:flex;"><span><span style="color:#66d9ef">import</span> <span style="color:#a6e22e">http</span> <span style="color:#a6e22e">from</span> <span style="color:#e6db74">&#39;k6/http&#39;</span>;
@@ -1040,7 +1039,7 @@
 </span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">sleep</span>(<span style="color:#ae81ff">1</span>);
 </span></span><span style="display:flex;"><span>}
 </span></span></code></pre></div><p>Sau đó chúng ta sẽ thêm file test vào repository chứa code.</p>
-<p><img alt="alt text" src="/3-pipeline/3.3-security-performance/image-15.png"></p>
+<p><img alt="alt text" src="/images/3-pipeline/3.3-security-performance/3-3-16.png"></p>
 <p>Thêm Stage vào Pipeline:</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yml" data-lang="yml"><span style="display:flex;"><span><span style="color:#f92672">performance testing</span>:
 </span></span><span style="display:flex;"><span>    <span style="color:#f92672">stage</span>: <span style="color:#ae81ff">performance testing</span>
@@ -1069,7 +1068,7 @@
 <p>Job này trong CI/CD pipeline của GitLab thực hiện việc kiểm tra hiệu suất bằng Docker và Grafana k6, sử dụng các biến để điều chỉnh đường dẫn và thông số môi trường, đảm bảo các quyền truy cập phù hợp bằng cách chạy container với người dùng GitLab Runner, xuất kết quả kiểm tra hiệu suất dưới dạng HTML và CSV, và lưu trữ chúng làm artifacts.</p>
 <p>Sau khi hoàn tất, job thay đổi quyền sở hữu của các tệp để đảm bảo quyền truy cập chính xác, chỉ chạy khi có các commit hoặc merge request được gắn tag cụ thể, và các artifacts sẽ tự động bị xóa sau 1 ngày.</p>
 <p>Sau khi Pipeline chạy thành công chúng ta sẽ có file Report dưới dạng HTML.</p>
-<p><img alt="alt text" src="/3-pipeline/3.3-security-performance/image-16.png"></p>
+<p><img alt="alt text" src="/images/3-pipeline/3.3-security-performance/3-3-17.png"></p>
 <pre tabindex="0"><code>
           /\      |‾‾| /‾‾/   /‾‾/
      /\  /  \     |  |/  /   /  /
@@ -1502,19 +1501,19 @@ default ✓ [======================================] 1 VUs  10s
     <div style="left: -1000px; overflow: scroll; position: absolute; top: -1000px; border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;">
       <div style="border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;"></div>
     </div>
-    <script src="/js/clipboard.min.js?1725036911"></script>
-    <script src="/js/perfect-scrollbar.min.js?1725036911"></script>
-    <script src="/js/perfect-scrollbar.jquery.min.js?1725036911"></script>
-    <script src="/js/jquery.sticky.js?1725036911"></script>
-    <script src="/js/featherlight.min.js?1725036911"></script>
-    <script src="/js/highlight.pack.js?1725036911"></script>
+    <script src="/js/clipboard.min.js?1725038072"></script>
+    <script src="/js/perfect-scrollbar.min.js?1725038072"></script>
+    <script src="/js/perfect-scrollbar.jquery.min.js?1725038072"></script>
+    <script src="/js/jquery.sticky.js?1725038072"></script>
+    <script src="/js/featherlight.min.js?1725038072"></script>
+    <script src="/js/highlight.pack.js?1725038072"></script>
     <script>hljs.initHighlightingOnLoad();</script>
-    <script src="/js/modernizr.custom-3.6.0.js?1725036911"></script>
-    <script src="/js/learn.js?1725036911"></script>
-    <script src="/js/hugo-learn.js?1725036911"></script>
+    <script src="/js/modernizr.custom-3.6.0.js?1725038072"></script>
+    <script src="/js/learn.js?1725038072"></script>
+    <script src="/js/hugo-learn.js?1725038072"></script>
 
-    <link href="/mermaid/mermaid.css?1725036911" rel="stylesheet" />
-    <script src="/mermaid/mermaid.js?1725036911"></script>
+    <link href="/mermaid/mermaid.css?1725038072" rel="stylesheet" />
+    <script src="/mermaid/mermaid.js?1725038072"></script>
     <script>
         mermaid.initialize({ startOnLoad: true });
     </script>
