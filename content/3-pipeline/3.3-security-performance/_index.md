@@ -207,31 +207,35 @@ docker container ps
 
 Sau bước Deploy chúng ta sẽ tiến hành test bảo mật của trang Web chúng ta vừa triển khai.
 
-Chúng ta đã thực hiện tạo một Docker Image Arachni ở mục 2.7 nên ở bước này chúng ta chỉ cần Pull Image về là có thể dùng Arachni.
+Chúng ta sẽ thiết lập Arachni như ở **Mục 2.7**.
+
+- [Web Application Security Scan](https://ws-001.tranvix.online/2-preparation/2.7-arachni/)
 
 ```yml
 security scan website:
     stage: security scan website
     variables:
+        ARACHNI_USER: "arachni"
+        PATH_TO_ARACHNI_VERSION: "/home/arachni/arachni-1.6.1.3-0.6.1.1/"
         GIT_STRATEGY: none
     script:
-        - docker run --rm -v /tmp/:/tmp/ tranvix0910/arachni:v1.5.1-0.5.12 bin/arachni --output-verbose --scope-include-subdomains ${ADDRESS_FRONTEND} --report-save-path=/tmp/${ARACHNI_WEBSITE_REPORT}.afr > /dev/null 2>&1
-        - docker run --rm -v /tmp/:/tmp/ tranvix0910/arachni:v1.5.1-0.5.12 bin/arachni_reporter /tmp/${ARACHNI_WEBSITE_REPORT}.afr --reporter=html:outfile=/tmp/${ARACHNI_WEBSITE_REPORT}.html.zip
+        - sudo su ${ARACHNI_USER} -c "cd ${PATH_TO_ARACHNI_VERSION}; bin/arachni --output-verbose --scope-include-subdomains ${ADDRESS_FRONTEND} --report-save-path=/tmp/${ARACHNI_WEBSITE_REPORT}.afr > /dev/null 2>&1"
+        - sudo su ${ARACHNI_USER} -c "cd ${PATH_TO_ARACHNI_VERSION}; bin/arachni_reporter /tmp/${ARACHNI_WEBSITE_REPORT}.afr --reporter=html:outfile=/tmp/${ARACHNI_WEBSITE_REPORT}.html.zip"
         - sudo chmod 777 /tmp/${ARACHNI_WEBSITE_REPORT}.html.zip
         - cp /tmp/${ARACHNI_WEBSITE_REPORT}.html.zip .
     tags:
         - wineapp-dev-shell
-    only:
-        - tags
     artifacts:
         paths:
             - ${ARACHNI_WEBSITE_REPORT}.html.zip
         expire_in: 1 day
+    only:
+        - tags
 ```
 
-Job `security scan website` này thực hiện quét bảo mật trên một website, tạo ra báo cáo bảo mật và lưu báo cáo đó dưới dạng một file .zip để bạn có thể tải về sau khi pipeline hoàn tất. 
+Job **security scan website** này thực hiện quét bảo mật trên một website, tạo ra báo cáo bảo mật và lưu báo cáo đó dưới dạng một file .zip để bạn có thể tải về sau khi pipeline hoàn tất. 
 
-`ADDRESS_FRONTEND` là địa chỉ của web chúng ta `192.168.181.102:3000`.
+`ADDRESS_FRONTEND` là địa chỉ của web chúng ta **192.168.181.102:3000**.
 
 `ARACHNI_WEBSITE_REPORT` là tên của file report.
 
@@ -240,6 +244,8 @@ Khi thực hiện lệnh `sudo chmod` cũng yêu cầu nhập mật khẩu nên 
 gitlab-runner ALL=(ALL) NOPASSWD: /bin/chmod
 ```
 Tiến hành thêm Stage vào Pipeline và tạo các Variable cần thiết, sau đó tạo tag và kiểm tra Pipeline.
+
+![alt text](/images/3-pipeline/3.3-security-performance/3-3-18.png)
 
 Chúng ta sẽ có Report như sau:
 ![alt text](/images/3-pipeline/3.3-security-performance/3-3-15.png)
@@ -278,32 +284,32 @@ performance testing:
         SCRIPT_PATH: performance_testing_script
     script:
         - sudo chmod -R 754 ./${SCRIPT_PATH}
-        - docker run --user ${ID_USER_GITLAB_RUNNER}:${ID_GROUP_GITLAB_RUNNER} --rm -v $(pwd)/${SCRIPT_PATH}:/${SCRIPT_PATH} grafana/k6 run -e RESULTS_PATH=/${SCRIPT_PATH} -e FE_HOST=${FE_HOST} --summary-export=/${SCRIPT_PATH}/summary_perf.json /${SCRIPT_PATH}/smoke-test.js
-        - docker run --user ${ID_USER_GITLAB_RUNNER}:${ID_GROUP_GITLAB_RUNNER} --rm -v $(pwd)/${SCRIPT_PATH}:/${SCRIPT_PATH} grafana/k6 run -e FE_HOST=${FE_HOST} /${SCRIPT_PATH}/smoke-test.js
+        - docker run --user ${ID_USER_GITLAB_RUNNER}:${ID_GROUP_GITLAB_RUNNER} --rm -v $(pwd)/${SCRIPT_PATH}:/${SCRIPT_PATH} grafana/k6 run -e FE_HOST=${FE_HOST} --summary-export=/${SCRIPT_PATH}/summary_perf.json /${SCRIPT_PATH}/smoke_test.js
+        - docker run --user ${ID_USER_GITLAB_RUNNER}:${ID_GROUP_GITLAB_RUNNER} --rm -v $(pwd)/${SCRIPT_PATH}:/${SCRIPT_PATH} grafana/k6 run -e FE_HOST=${FE_HOST} /${SCRIPT_PATH}/smoke_test.js
         - mv ./${SCRIPT_PATH}/summary.html $(pwd)/${K6_PERFORMANCE_TEST_REPORT}.html
         - cat ./${SCRIPT_PATH}/summary_perf.json | jq -r '["metric", "avg", "min", "med", "max", "p(90)", "p(95)"], (.metrics | to_entries[] | [.key, .value.avg, .value.min, .value.med, .value.max, .value["p(90)"], .value["p(95)"]]) | @csv' > ${K6_PERFORMANCE_TEST_REPORT}.csv
     after_script:
         - sudo chown -R gitlab-runner $(pwd)
     tags:
         - wineapp-dev-shell
-    only:
-        - tags
     artifacts:
         paths:
             - ${K6_PERFORMANCE_TEST_REPORT}.html
             - ${K6_PERFORMANCE_TEST_REPORT}.csv
         expire_in: 1 day
+    only:
+        - tags
 ```
 
-Các lệnh bên trong `script`: bao gồm việc thay đổi quyền truy cập tệp trong thư mục kịch bản, chạy Docker container với Grafana k6 dưới quyền của người dùng GitLab Runner để thực hiện kiểm tra hiệu suất, xuất kết quả tóm tắt dưới dạng JSON và CSV, sau đó di chuyển và đổi tên tệp kết quả HTML. 
+Job **performance testing** trong GitLab CI/CD được thiết kế để thực hiện kiểm thử hiệu suất cho dự án bằng cách sử dụng công cụ k6.
 
-Các lệnh trong `after_script`: sẽ thay đổi quyền sở hữu của các tệp về người dùng gitlab-runner sau khi công việc hoàn thành. Job chỉ chạy khi có tag trên commit hoặc merge request, và kết quả kiểm tra được lưu trữ như artifacts, có hiệu lực trong 1 ngày.
+Docker container dưới quyền user GitLab Runner thông qua các biến `ID_USER_GITLAB_RUNNER` và `ID_GROUP_GITLAB_RUNNER`.
 
-Job này trong CI/CD pipeline của GitLab thực hiện việc kiểm tra hiệu suất bằng Docker và Grafana k6, sử dụng các biến để điều chỉnh đường dẫn và thông số môi trường, đảm bảo các quyền truy cập phù hợp bằng cách chạy container với người dùng GitLab Runner, xuất kết quả kiểm tra hiệu suất dưới dạng HTML và CSV, và lưu trữ chúng làm artifacts. 
-
-Sau khi hoàn tất, job thay đổi quyền sở hữu của các tệp để đảm bảo quyền truy cập chính xác, chỉ chạy khi có các commit hoặc merge request được gắn tag cụ thể, và các artifacts sẽ tự động bị xóa sau 1 ngày.
+Docker container với k6 được khởi chạy để thực hiện kiểm thử dựa trên kịch bản **smoke_test.js**. Kết quả test được xuất ra dưới dạng tệp JSON **summary_perf.json**. Sau đó kết quả được di chuyển và chuyển đổi thành tệp HTML và CSV và lưu trữ vào **artifacts**.
 
 Sau khi Pipeline chạy thành công chúng ta sẽ có file Report dưới dạng HTML.
+
+![alt text](/images/3-pipeline/3.3-security-performance/3-3-19.png)
 
 ![alt text](/images/3-pipeline/3.3-security-performance/3-3-17.png)
 ```

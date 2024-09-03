@@ -49,15 +49,34 @@ curl -X POST "https://api.telegram.org/bot7538065344:AAEpk4atmTnmbl7knIbdQohOxrA
 
 Chúng ta sẽ thêm một Stage để có thể gửi Report ngay sau khi cúng ta Test hoàn tất.
 
+Stage này chúng ta sẽ có 2 Job.
+
+Job `send report from build server` nó sẽ thực hiện gửi 2 tệp báo cáo **Code Security Scan** và **Image Scan** được thực hiện trước khi chúng ta thực hiện triển khai dự án.
+
+Job `send report from dev server` tương tự như job trên, nó cũng thực hiện gửi các file Report sau khi chúng ta triển khai dự án.
+
 ```yml
-send report:
+send report from build server:
     stage: send report
     variables:
         GIT_STRATEGY: none
     script:
-        - curl -F "chat_id=${CHAT_ID}" -F 'media=[{"type": "document", "media": "attach://file1"}, {"type": "document", "media": "attach://file2"}, {"type": "document", "media": "attach://file3"}, {"type": "document", "media": "attach://file4"}]' -F "file1=@$(pwd)/${CODECLIMATE_REPORT}" -F "file2=@$(pwd)/${SNYKSCAN_REPORT}" -F "file3=@$(pwd)/${TRIVY_IMAGE_REPORT}" -F "file4=@$(pwd)/${ARACHNI_WEBSITE_REPORT}" "https://api.telegram.org/bot${TOKEN}/sendMediaGroup"
+        - curl -F "chat_id=${TELE_GROUP_CHAT_ID}" -F 'media=[{"type":"document","media":"attach://file1"}, {"type":"document","media":"attach://file2"}]' -F "file1=@$(pwd)/${SNYK_SECURITY_SCAN_REPORT}.html" -F "file2=@$(pwd)/${TRIVYFS_SCAN_IMAGE_REPORT}.html" "https://api.telegram.org/bot${API_BOT}/sendMediaGroup"
     tags:
         - wineapp-build-shell
+    only:
+        - tags
+```
+
+```yml
+send report from dev server:
+    stage: send report
+    variables:
+        GIT_STRATEGY: none
+    script:
+        - curl -F "chat_id=${TELE_GROUP_CHAT_ID}" -F 'media=[{"type":"document","media":"attach://file1"}, {"type":"document","media":"attach://file2"}, {"type":"document","media":"attach://file3"}]' -F "file1=@$(pwd)/${ARACHNI_WEBSITE_REPORT}.html.zip" -F "file2=@$(pwd)/${K6_PERFORMANCE_TEST_REPORT}.html" -F "file3=@$(pwd)/${K6_PERFORMANCE_TEST_REPORT}.csv" "https://api.telegram.org/bot${API_BOT}/sendMediaGroup"
+    tags:
+        - wineapp-dev-shell
     only:
         - tags
 ```

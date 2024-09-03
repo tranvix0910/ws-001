@@ -12,21 +12,21 @@
     <title>Security Scan và Performance Test :: AWS System Manager</title>
 
     
-    <link href="/css/nucleus.css?1725374354" rel="stylesheet">
-    <link href="/css/fontawesome-all.min.css?1725374354" rel="stylesheet">
-    <link href="/css/hybrid.css?1725374354" rel="stylesheet">
-    <link href="/css/featherlight.min.css?1725374354" rel="stylesheet">
-    <link href="/css/perfect-scrollbar.min.css?1725374354" rel="stylesheet">
-    <link href="/css/auto-complete.css?1725374354" rel="stylesheet">
-    <link href="/css/atom-one-dark-reasonable.css?1725374354" rel="stylesheet">
-    <link href="/css/theme.css?1725374354" rel="stylesheet">
-    <link href="/css/hugo-theme.css?1725374354" rel="stylesheet">
+    <link href="/css/nucleus.css?1725376271" rel="stylesheet">
+    <link href="/css/fontawesome-all.min.css?1725376271" rel="stylesheet">
+    <link href="/css/hybrid.css?1725376271" rel="stylesheet">
+    <link href="/css/featherlight.min.css?1725376271" rel="stylesheet">
+    <link href="/css/perfect-scrollbar.min.css?1725376271" rel="stylesheet">
+    <link href="/css/auto-complete.css?1725376271" rel="stylesheet">
+    <link href="/css/atom-one-dark-reasonable.css?1725376271" rel="stylesheet">
+    <link href="/css/theme.css?1725376271" rel="stylesheet">
+    <link href="/css/hugo-theme.css?1725376271" rel="stylesheet">
     
-    <link href="/css/theme-workshop.css?1725374354" rel="stylesheet">
+    <link href="/css/theme-workshop.css?1725376271" rel="stylesheet">
     
     
 
-    <script src="/js/jquery-3.3.1.min.js?1725374354"></script>
+    <script src="/js/jquery-3.3.1.min.js?1725376271"></script>
 
     <style>
       :root #header + #content > #left > #rlblock_left{
@@ -57,14 +57,14 @@
     <span data-search-clear=""><i class="fas fa-times"></i></span>
 </div>
 
-<script type="text/javascript" src="/js/lunr.min.js?1725374354"></script>
-<script type="text/javascript" src="/js/auto-complete.js?1725374354"></script>
+<script type="text/javascript" src="/js/lunr.min.js?1725376271"></script>
+<script type="text/javascript" src="/js/auto-complete.js?1725376271"></script>
 <script type="text/javascript">
     
         var baseurl = "\/\/localhost:1313\/";
     
 </script>
-<script type="text/javascript" src="/js/search.js?1725374354"></script>
+<script type="text/javascript" src="/js/search.js?1725376271"></script>
 
     
   </div>
@@ -994,30 +994,36 @@
 </code></pre><p><img alt="alt text" src="/images/3-pipeline/3.3-security-performance/3-3-14.png"></p>
 <h4 id="security-scan-website---arachni">Security Scan Website - Arachni</h4>
 <p>Sau bước Deploy chúng ta sẽ tiến hành test bảo mật của trang Web chúng ta vừa triển khai.</p>
-<p>Chúng ta đã thực hiện tạo một Docker Image Arachni ở mục 2.7 nên ở bước này chúng ta chỉ cần Pull Image về là có thể dùng Arachni.</p>
+<p>Chúng ta sẽ thiết lập Arachni như ở <strong>Mục 2.7</strong>.</p>
+<ul>
+<li><a href="https://ws-001.tranvix.online/2-preparation/2.7-arachni/">Web Application Security Scan</a></li>
+</ul>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yml" data-lang="yml"><span style="display:flex;"><span><span style="color:#f92672">security scan website</span>:
 </span></span><span style="display:flex;"><span>    <span style="color:#f92672">stage</span>: <span style="color:#ae81ff">security scan website</span>
 </span></span><span style="display:flex;"><span>    <span style="color:#f92672">variables</span>:
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">ARACHNI_USER</span>: <span style="color:#e6db74">&#34;arachni&#34;</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">PATH_TO_ARACHNI_VERSION</span>: <span style="color:#e6db74">&#34;/home/arachni/arachni-1.6.1.3-0.6.1.1/&#34;</span>
 </span></span><span style="display:flex;"><span>        <span style="color:#f92672">GIT_STRATEGY</span>: <span style="color:#ae81ff">none</span>
 </span></span><span style="display:flex;"><span>    <span style="color:#f92672">script</span>:
-</span></span><span style="display:flex;"><span>        - <span style="color:#ae81ff">docker run --rm -v /tmp/:/tmp/ tranvix0910/arachni:v1.5.1-0.5.12 bin/arachni --output-verbose --scope-include-subdomains ${ADDRESS_FRONTEND} --report-save-path=/tmp/${ARACHNI_WEBSITE_REPORT}.afr &gt; /dev/null 2&gt;&amp;1</span>
-</span></span><span style="display:flex;"><span>        - <span style="color:#ae81ff">docker run --rm -v /tmp/:/tmp/ tranvix0910/arachni:v1.5.1-0.5.12 bin/arachni_reporter /tmp/${ARACHNI_WEBSITE_REPORT}.afr --reporter=html:outfile=/tmp/${ARACHNI_WEBSITE_REPORT}.html.zip</span>
+</span></span><span style="display:flex;"><span>        - <span style="color:#ae81ff">sudo su ${ARACHNI_USER} -c &#34;cd ${PATH_TO_ARACHNI_VERSION}; bin/arachni --output-verbose --scope-include-subdomains ${ADDRESS_FRONTEND} --report-save-path=/tmp/${ARACHNI_WEBSITE_REPORT}.afr &gt; /dev/null 2&gt;&amp;1&#34;</span>
+</span></span><span style="display:flex;"><span>        - <span style="color:#ae81ff">sudo su ${ARACHNI_USER} -c &#34;cd ${PATH_TO_ARACHNI_VERSION}; bin/arachni_reporter /tmp/${ARACHNI_WEBSITE_REPORT}.afr --reporter=html:outfile=/tmp/${ARACHNI_WEBSITE_REPORT}.html.zip&#34;</span>
 </span></span><span style="display:flex;"><span>        - <span style="color:#ae81ff">sudo chmod 777 /tmp/${ARACHNI_WEBSITE_REPORT}.html.zip</span>
 </span></span><span style="display:flex;"><span>        - <span style="color:#ae81ff">cp /tmp/${ARACHNI_WEBSITE_REPORT}.html.zip .</span>
 </span></span><span style="display:flex;"><span>    <span style="color:#f92672">tags</span>:
 </span></span><span style="display:flex;"><span>        - <span style="color:#ae81ff">wineapp-dev-shell</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#f92672">only</span>:
-</span></span><span style="display:flex;"><span>        - <span style="color:#ae81ff">tags</span>
 </span></span><span style="display:flex;"><span>    <span style="color:#f92672">artifacts</span>:
 </span></span><span style="display:flex;"><span>        <span style="color:#f92672">paths</span>:
 </span></span><span style="display:flex;"><span>            - <span style="color:#ae81ff">${ARACHNI_WEBSITE_REPORT}.html.zip</span>
 </span></span><span style="display:flex;"><span>        <span style="color:#f92672">expire_in</span>: <span style="color:#ae81ff">1</span> <span style="color:#ae81ff">day</span>
-</span></span></code></pre></div><p>Job <code>security scan website</code> này thực hiện quét bảo mật trên một website, tạo ra báo cáo bảo mật và lưu báo cáo đó dưới dạng một file .zip để bạn có thể tải về sau khi pipeline hoàn tất.</p>
-<p><code>ADDRESS_FRONTEND</code> là địa chỉ của web chúng ta <code>192.168.181.102:3000</code>.</p>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">only</span>:
+</span></span><span style="display:flex;"><span>        - <span style="color:#ae81ff">tags</span>
+</span></span></code></pre></div><p>Job <strong>security scan website</strong> này thực hiện quét bảo mật trên một website, tạo ra báo cáo bảo mật và lưu báo cáo đó dưới dạng một file .zip để bạn có thể tải về sau khi pipeline hoàn tất.</p>
+<p><code>ADDRESS_FRONTEND</code> là địa chỉ của web chúng ta <strong>192.168.181.102:3000</strong>.</p>
 <p><code>ARACHNI_WEBSITE_REPORT</code> là tên của file report.</p>
 <p>Khi thực hiện lệnh <code>sudo chmod</code> cũng yêu cầu nhập mật khẩu nên chúng ta cũng cần cấu hình như ở trên.</p>
 <pre tabindex="0"><code>gitlab-runner ALL=(ALL) NOPASSWD: /bin/chmod
 </code></pre><p>Tiến hành thêm Stage vào Pipeline và tạo các Variable cần thiết, sau đó tạo tag và kiểm tra Pipeline.</p>
+<p><img alt="alt text" src="/images/3-pipeline/3.3-security-performance/3-3-18.png"></p>
 <p>Chúng ta sẽ có Report như sau:
 <img alt="alt text" src="/images/3-pipeline/3.3-security-performance/3-3-15.png"></p>
 <h4 id="performance-test---k6">Performance Test - k6</h4>
@@ -1048,26 +1054,26 @@
 </span></span><span style="display:flex;"><span>        <span style="color:#f92672">SCRIPT_PATH</span>: <span style="color:#ae81ff">performance_testing_script</span>
 </span></span><span style="display:flex;"><span>    <span style="color:#f92672">script</span>:
 </span></span><span style="display:flex;"><span>        - <span style="color:#ae81ff">sudo chmod -R 754 ./${SCRIPT_PATH}</span>
-</span></span><span style="display:flex;"><span>        - <span style="color:#ae81ff">docker run --user ${ID_USER_GITLAB_RUNNER}:${ID_GROUP_GITLAB_RUNNER} --rm -v $(pwd)/${SCRIPT_PATH}:/${SCRIPT_PATH} grafana/k6 run -e RESULTS_PATH=/${SCRIPT_PATH} -e FE_HOST=${FE_HOST} --summary-export=/${SCRIPT_PATH}/summary_perf.json /${SCRIPT_PATH}/smoke-test.js</span>
-</span></span><span style="display:flex;"><span>        - <span style="color:#ae81ff">docker run --user ${ID_USER_GITLAB_RUNNER}:${ID_GROUP_GITLAB_RUNNER} --rm -v $(pwd)/${SCRIPT_PATH}:/${SCRIPT_PATH} grafana/k6 run -e FE_HOST=${FE_HOST} /${SCRIPT_PATH}/smoke-test.js</span>
+</span></span><span style="display:flex;"><span>        - <span style="color:#ae81ff">docker run --user ${ID_USER_GITLAB_RUNNER}:${ID_GROUP_GITLAB_RUNNER} --rm -v $(pwd)/${SCRIPT_PATH}:/${SCRIPT_PATH} grafana/k6 run -e FE_HOST=${FE_HOST} --summary-export=/${SCRIPT_PATH}/summary_perf.json /${SCRIPT_PATH}/smoke_test.js</span>
+</span></span><span style="display:flex;"><span>        - <span style="color:#ae81ff">docker run --user ${ID_USER_GITLAB_RUNNER}:${ID_GROUP_GITLAB_RUNNER} --rm -v $(pwd)/${SCRIPT_PATH}:/${SCRIPT_PATH} grafana/k6 run -e FE_HOST=${FE_HOST} /${SCRIPT_PATH}/smoke_test.js</span>
 </span></span><span style="display:flex;"><span>        - <span style="color:#ae81ff">mv ./${SCRIPT_PATH}/summary.html $(pwd)/${K6_PERFORMANCE_TEST_REPORT}.html</span>
 </span></span><span style="display:flex;"><span>        - <span style="color:#ae81ff">cat ./${SCRIPT_PATH}/summary_perf.json | jq -r &#39;[&#34;metric&#34;, &#34;avg&#34;, &#34;min&#34;, &#34;med&#34;, &#34;max&#34;, &#34;p(90)&#34;, &#34;p(95)&#34;], (.metrics | to_entries[] | [.key, .value.avg, .value.min, .value.med, .value.max, .value[&#34;p(90)&#34;], .value[&#34;p(95)&#34;]]) | @csv&#39; &gt; ${K6_PERFORMANCE_TEST_REPORT}.csv</span>
 </span></span><span style="display:flex;"><span>    <span style="color:#f92672">after_script</span>:
 </span></span><span style="display:flex;"><span>        - <span style="color:#ae81ff">sudo chown -R gitlab-runner $(pwd)</span>
 </span></span><span style="display:flex;"><span>    <span style="color:#f92672">tags</span>:
 </span></span><span style="display:flex;"><span>        - <span style="color:#ae81ff">wineapp-dev-shell</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#f92672">only</span>:
-</span></span><span style="display:flex;"><span>        - <span style="color:#ae81ff">tags</span>
 </span></span><span style="display:flex;"><span>    <span style="color:#f92672">artifacts</span>:
 </span></span><span style="display:flex;"><span>        <span style="color:#f92672">paths</span>:
 </span></span><span style="display:flex;"><span>            - <span style="color:#ae81ff">${K6_PERFORMANCE_TEST_REPORT}.html</span>
 </span></span><span style="display:flex;"><span>            - <span style="color:#ae81ff">${K6_PERFORMANCE_TEST_REPORT}.csv</span>
 </span></span><span style="display:flex;"><span>        <span style="color:#f92672">expire_in</span>: <span style="color:#ae81ff">1</span> <span style="color:#ae81ff">day</span>
-</span></span></code></pre></div><p>Các lệnh bên trong <code>script</code>: bao gồm việc thay đổi quyền truy cập tệp trong thư mục kịch bản, chạy Docker container với Grafana k6 dưới quyền của người dùng GitLab Runner để thực hiện kiểm tra hiệu suất, xuất kết quả tóm tắt dưới dạng JSON và CSV, sau đó di chuyển và đổi tên tệp kết quả HTML.</p>
-<p>Các lệnh trong <code>after_script</code>: sẽ thay đổi quyền sở hữu của các tệp về người dùng gitlab-runner sau khi công việc hoàn thành. Job chỉ chạy khi có tag trên commit hoặc merge request, và kết quả kiểm tra được lưu trữ như artifacts, có hiệu lực trong 1 ngày.</p>
-<p>Job này trong CI/CD pipeline của GitLab thực hiện việc kiểm tra hiệu suất bằng Docker và Grafana k6, sử dụng các biến để điều chỉnh đường dẫn và thông số môi trường, đảm bảo các quyền truy cập phù hợp bằng cách chạy container với người dùng GitLab Runner, xuất kết quả kiểm tra hiệu suất dưới dạng HTML và CSV, và lưu trữ chúng làm artifacts.</p>
-<p>Sau khi hoàn tất, job thay đổi quyền sở hữu của các tệp để đảm bảo quyền truy cập chính xác, chỉ chạy khi có các commit hoặc merge request được gắn tag cụ thể, và các artifacts sẽ tự động bị xóa sau 1 ngày.</p>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">only</span>:
+</span></span><span style="display:flex;"><span>        - <span style="color:#ae81ff">tags</span>
+</span></span></code></pre></div><p>Job <strong>performance testing</strong> trong GitLab CI/CD được thiết kế để thực hiện kiểm thử hiệu suất cho dự án bằng cách sử dụng công cụ k6.</p>
+<p>Docker container dưới quyền user GitLab Runner thông qua các biến <code>ID_USER_GITLAB_RUNNER</code> và <code>ID_GROUP_GITLAB_RUNNER</code>.</p>
+<p>Docker container với k6 được khởi chạy để thực hiện kiểm thử dựa trên kịch bản <strong>smoke_test.js</strong>. Kết quả test được xuất ra dưới dạng tệp JSON <strong>summary_perf.json</strong>. Sau đó kết quả được di chuyển và chuyển đổi thành tệp HTML và CSV và lưu trữ vào <strong>artifacts</strong>.</p>
 <p>Sau khi Pipeline chạy thành công chúng ta sẽ có file Report dưới dạng HTML.</p>
+<p><img alt="alt text" src="/images/3-pipeline/3.3-security-performance/3-3-19.png"></p>
 <p><img alt="alt text" src="/images/3-pipeline/3.3-security-performance/3-3-17.png"></p>
 <pre tabindex="0"><code>
           /\      |‾‾| /‾‾/   /‾‾/
@@ -1501,19 +1507,19 @@ default ✓ [======================================] 1 VUs  10s
     <div style="left: -1000px; overflow: scroll; position: absolute; top: -1000px; border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;">
       <div style="border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;"></div>
     </div>
-    <script src="/js/clipboard.min.js?1725374355"></script>
-    <script src="/js/perfect-scrollbar.min.js?1725374355"></script>
-    <script src="/js/perfect-scrollbar.jquery.min.js?1725374355"></script>
-    <script src="/js/jquery.sticky.js?1725374355"></script>
-    <script src="/js/featherlight.min.js?1725374355"></script>
-    <script src="/js/highlight.pack.js?1725374355"></script>
+    <script src="/js/clipboard.min.js?1725376271"></script>
+    <script src="/js/perfect-scrollbar.min.js?1725376271"></script>
+    <script src="/js/perfect-scrollbar.jquery.min.js?1725376271"></script>
+    <script src="/js/jquery.sticky.js?1725376271"></script>
+    <script src="/js/featherlight.min.js?1725376271"></script>
+    <script src="/js/highlight.pack.js?1725376271"></script>
     <script>hljs.initHighlightingOnLoad();</script>
-    <script src="/js/modernizr.custom-3.6.0.js?1725374355"></script>
-    <script src="/js/learn.js?1725374355"></script>
-    <script src="/js/hugo-learn.js?1725374355"></script>
+    <script src="/js/modernizr.custom-3.6.0.js?1725376271"></script>
+    <script src="/js/learn.js?1725376271"></script>
+    <script src="/js/hugo-learn.js?1725376271"></script>
 
-    <link href="/mermaid/mermaid.css?1725374355" rel="stylesheet" />
-    <script src="/mermaid/mermaid.js?1725374355"></script>
+    <link href="/mermaid/mermaid.css?1725376271" rel="stylesheet" />
+    <script src="/mermaid/mermaid.js?1725376271"></script>
     <script>
         mermaid.initialize({ startOnLoad: true });
     </script>

@@ -12,21 +12,21 @@
     <title>Gửi Report vào Telegram :: AWS System Manager</title>
 
     
-    <link href="/css/nucleus.css?1725374354" rel="stylesheet">
-    <link href="/css/fontawesome-all.min.css?1725374354" rel="stylesheet">
-    <link href="/css/hybrid.css?1725374354" rel="stylesheet">
-    <link href="/css/featherlight.min.css?1725374354" rel="stylesheet">
-    <link href="/css/perfect-scrollbar.min.css?1725374354" rel="stylesheet">
-    <link href="/css/auto-complete.css?1725374354" rel="stylesheet">
-    <link href="/css/atom-one-dark-reasonable.css?1725374354" rel="stylesheet">
-    <link href="/css/theme.css?1725374354" rel="stylesheet">
-    <link href="/css/hugo-theme.css?1725374354" rel="stylesheet">
+    <link href="/css/nucleus.css?1725376271" rel="stylesheet">
+    <link href="/css/fontawesome-all.min.css?1725376271" rel="stylesheet">
+    <link href="/css/hybrid.css?1725376271" rel="stylesheet">
+    <link href="/css/featherlight.min.css?1725376271" rel="stylesheet">
+    <link href="/css/perfect-scrollbar.min.css?1725376271" rel="stylesheet">
+    <link href="/css/auto-complete.css?1725376271" rel="stylesheet">
+    <link href="/css/atom-one-dark-reasonable.css?1725376271" rel="stylesheet">
+    <link href="/css/theme.css?1725376271" rel="stylesheet">
+    <link href="/css/hugo-theme.css?1725376271" rel="stylesheet">
     
-    <link href="/css/theme-workshop.css?1725374354" rel="stylesheet">
+    <link href="/css/theme-workshop.css?1725376271" rel="stylesheet">
     
     
 
-    <script src="/js/jquery-3.3.1.min.js?1725374354"></script>
+    <script src="/js/jquery-3.3.1.min.js?1725376271"></script>
 
     <style>
       :root #header + #content > #left > #rlblock_left{
@@ -57,14 +57,14 @@
     <span data-search-clear=""><i class="fas fa-times"></i></span>
 </div>
 
-<script type="text/javascript" src="/js/lunr.min.js?1725374354"></script>
-<script type="text/javascript" src="/js/auto-complete.js?1725374354"></script>
+<script type="text/javascript" src="/js/lunr.min.js?1725376271"></script>
+<script type="text/javascript" src="/js/auto-complete.js?1725376271"></script>
 <script type="text/javascript">
     
         var baseurl = "\/\/localhost:1313\/";
     
 </script>
-<script type="text/javascript" src="/js/search.js?1725374354"></script>
+<script type="text/javascript" src="/js/search.js?1725376271"></script>
 
     
   </div>
@@ -851,14 +851,27 @@
 </code></pre><p><img alt="alt text" src="/images/3-pipeline/3.4-send-report/3-4-8.png"></p>
 <h4 id="send-report-stage">Send Report Stage</h4>
 <p>Chúng ta sẽ thêm một Stage để có thể gửi Report ngay sau khi cúng ta Test hoàn tất.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yml" data-lang="yml"><span style="display:flex;"><span><span style="color:#f92672">send report</span>:
+<p>Stage này chúng ta sẽ có 2 Job.</p>
+<p>Job <code>send report from build server</code> nó sẽ thực hiện gửi 2 tệp báo cáo <strong>Code Security Scan</strong> và <strong>Image Scan</strong> được thực hiện trước khi chúng ta thực hiện triển khai dự án.</p>
+<p>Job <code>send report from dev server</code> tương tự như job trên, nó cũng thực hiện gửi các file Report sau khi chúng ta triển khai dự án.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yml" data-lang="yml"><span style="display:flex;"><span><span style="color:#f92672">send report from build server</span>:
 </span></span><span style="display:flex;"><span>    <span style="color:#f92672">stage</span>: <span style="color:#ae81ff">send report</span>
 </span></span><span style="display:flex;"><span>    <span style="color:#f92672">variables</span>:
 </span></span><span style="display:flex;"><span>        <span style="color:#f92672">GIT_STRATEGY</span>: <span style="color:#ae81ff">none</span>
 </span></span><span style="display:flex;"><span>    <span style="color:#f92672">script</span>:
-</span></span><span style="display:flex;"><span>        - <span style="color:#ae81ff">curl -F &#34;chat_id=${CHAT_ID}&#34; -F &#39;media=[{&#34;type&#34;: &#34;document&#34;, &#34;media&#34;: &#34;attach://file1&#34;}, {&#34;type&#34;: &#34;document&#34;, &#34;media&#34;: &#34;attach://file2&#34;}, {&#34;type&#34;: &#34;document&#34;, &#34;media&#34;: &#34;attach://file3&#34;}, {&#34;type&#34;: &#34;document&#34;, &#34;media&#34;: &#34;attach://file4&#34;}]&#39; -F &#34;file1=@$(pwd)/${CODECLIMATE_REPORT}&#34; -F &#34;file2=@$(pwd)/${SNYKSCAN_REPORT}&#34; -F &#34;file3=@$(pwd)/${TRIVY_IMAGE_REPORT}&#34; -F &#34;file4=@$(pwd)/${ARACHNI_WEBSITE_REPORT}&#34; &#34;https://api.telegram.org/bot${TOKEN}/sendMediaGroup&#34;</span>
+</span></span><span style="display:flex;"><span>        - <span style="color:#ae81ff">curl -F &#34;chat_id=${TELE_GROUP_CHAT_ID}&#34; -F &#39;media=[{&#34;type&#34;:&#34;document&#34;,&#34;media&#34;:&#34;attach://file1&#34;}, {&#34;type&#34;:&#34;document&#34;,&#34;media&#34;:&#34;attach://file2&#34;}]&#39; -F &#34;file1=@$(pwd)/${SNYK_SECURITY_SCAN_REPORT}.html&#34; -F &#34;file2=@$(pwd)/${TRIVYFS_SCAN_IMAGE_REPORT}.html&#34; &#34;https://api.telegram.org/bot${API_BOT}/sendMediaGroup&#34;</span>
 </span></span><span style="display:flex;"><span>    <span style="color:#f92672">tags</span>:
 </span></span><span style="display:flex;"><span>        - <span style="color:#ae81ff">wineapp-build-shell</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">only</span>:
+</span></span><span style="display:flex;"><span>        - <span style="color:#ae81ff">tags</span>
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yml" data-lang="yml"><span style="display:flex;"><span><span style="color:#f92672">send report from dev server</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">stage</span>: <span style="color:#ae81ff">send report</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">variables</span>:
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">GIT_STRATEGY</span>: <span style="color:#ae81ff">none</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">script</span>:
+</span></span><span style="display:flex;"><span>        - <span style="color:#ae81ff">curl -F &#34;chat_id=${TELE_GROUP_CHAT_ID}&#34; -F &#39;media=[{&#34;type&#34;:&#34;document&#34;,&#34;media&#34;:&#34;attach://file1&#34;}, {&#34;type&#34;:&#34;document&#34;,&#34;media&#34;:&#34;attach://file2&#34;}, {&#34;type&#34;:&#34;document&#34;,&#34;media&#34;:&#34;attach://file3&#34;}]&#39; -F &#34;file1=@$(pwd)/${ARACHNI_WEBSITE_REPORT}.html.zip&#34; -F &#34;file2=@$(pwd)/${K6_PERFORMANCE_TEST_REPORT}.html&#34; -F &#34;file3=@$(pwd)/${K6_PERFORMANCE_TEST_REPORT}.csv&#34; &#34;https://api.telegram.org/bot${API_BOT}/sendMediaGroup&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">tags</span>:
+</span></span><span style="display:flex;"><span>        - <span style="color:#ae81ff">wineapp-dev-shell</span>
 </span></span><span style="display:flex;"><span>    <span style="color:#f92672">only</span>:
 </span></span><span style="display:flex;"><span>        - <span style="color:#ae81ff">tags</span>
 </span></span></code></pre></div><p>Sau khi chạy pipeline Bot sẽ gửi cho chúng ta những file report ở các Stage trước.</p>
@@ -1257,19 +1270,19 @@
     <div style="left: -1000px; overflow: scroll; position: absolute; top: -1000px; border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;">
       <div style="border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;"></div>
     </div>
-    <script src="/js/clipboard.min.js?1725374355"></script>
-    <script src="/js/perfect-scrollbar.min.js?1725374355"></script>
-    <script src="/js/perfect-scrollbar.jquery.min.js?1725374355"></script>
-    <script src="/js/jquery.sticky.js?1725374355"></script>
-    <script src="/js/featherlight.min.js?1725374355"></script>
-    <script src="/js/highlight.pack.js?1725374355"></script>
+    <script src="/js/clipboard.min.js?1725376271"></script>
+    <script src="/js/perfect-scrollbar.min.js?1725376271"></script>
+    <script src="/js/perfect-scrollbar.jquery.min.js?1725376271"></script>
+    <script src="/js/jquery.sticky.js?1725376271"></script>
+    <script src="/js/featherlight.min.js?1725376271"></script>
+    <script src="/js/highlight.pack.js?1725376271"></script>
     <script>hljs.initHighlightingOnLoad();</script>
-    <script src="/js/modernizr.custom-3.6.0.js?1725374355"></script>
-    <script src="/js/learn.js?1725374355"></script>
-    <script src="/js/hugo-learn.js?1725374355"></script>
+    <script src="/js/modernizr.custom-3.6.0.js?1725376271"></script>
+    <script src="/js/learn.js?1725376271"></script>
+    <script src="/js/hugo-learn.js?1725376271"></script>
 
-    <link href="/mermaid/mermaid.css?1725374355" rel="stylesheet" />
-    <script src="/mermaid/mermaid.js?1725374355"></script>
+    <link href="/mermaid/mermaid.css?1725376271" rel="stylesheet" />
+    <script src="/mermaid/mermaid.js?1725376271"></script>
     <script>
         mermaid.initialize({ startOnLoad: true });
     </script>
