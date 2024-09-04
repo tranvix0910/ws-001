@@ -41,7 +41,16 @@ Dưới đây là danh sách các Server cần thiết:
 - **Database Server** :
     - Đây là server chuyên dụng để lưu trữ cơ sở dữ liệu. Các ứng dụng khác, chẳng hạn như GitLab hoặc các ứng dụng trên Development Server, sẽ kết nối đến server này để truy vấn và lưu trữ dữ liệu.
 
-
-
 Việc sử dụng domain name thay vì địa chỉ IP cụ thể trong mục Domain có nhiều lợi ích, đặc biệt là trong bối cảnh truy cập GitLab.
 Domain name như `gitlab.tranvix.vn` dễ nhớ hơn so với một địa chỉ IP như `192.168.181.101`. Điều này giúp người dùng dễ dàng truy cập vào GitLab mà không cần phải ghi nhớ hoặc tra cứu IP mỗi khi cần.
+
+### Nội dung
+
+- [Thiết lập các Server cho dự án](2.1-setupservers)
+- [Private Container Registry - Portus](2.2-containerregistry)
+- [Gitlab Server](2.3-gitlabserver)
+- [Database Server](2.4-database)
+- [Source Code Security - Snyk](2.5-snyk)
+- [Trivy Security Scan Image](2.6-trivy)
+- [Web Application Security Scan](2.7-arachni)
+- [Performance Testing - k6](2.8-k6)

@@ -12,21 +12,21 @@
     <title>Thiết lập dự án :: AWS System Manager</title>
 
     
-    <link href="/css/nucleus.css?1725376271" rel="stylesheet">
-    <link href="/css/fontawesome-all.min.css?1725376271" rel="stylesheet">
-    <link href="/css/hybrid.css?1725376271" rel="stylesheet">
-    <link href="/css/featherlight.min.css?1725376271" rel="stylesheet">
-    <link href="/css/perfect-scrollbar.min.css?1725376271" rel="stylesheet">
-    <link href="/css/auto-complete.css?1725376271" rel="stylesheet">
-    <link href="/css/atom-one-dark-reasonable.css?1725376271" rel="stylesheet">
-    <link href="/css/theme.css?1725376271" rel="stylesheet">
-    <link href="/css/hugo-theme.css?1725376271" rel="stylesheet">
+    <link href="/css/nucleus.css?1725427517" rel="stylesheet">
+    <link href="/css/fontawesome-all.min.css?1725427517" rel="stylesheet">
+    <link href="/css/hybrid.css?1725427517" rel="stylesheet">
+    <link href="/css/featherlight.min.css?1725427517" rel="stylesheet">
+    <link href="/css/perfect-scrollbar.min.css?1725427517" rel="stylesheet">
+    <link href="/css/auto-complete.css?1725427517" rel="stylesheet">
+    <link href="/css/atom-one-dark-reasonable.css?1725427517" rel="stylesheet">
+    <link href="/css/theme.css?1725427517" rel="stylesheet">
+    <link href="/css/hugo-theme.css?1725427517" rel="stylesheet">
     
-    <link href="/css/theme-workshop.css?1725376271" rel="stylesheet">
+    <link href="/css/theme-workshop.css?1725427517" rel="stylesheet">
     
     
 
-    <script src="/js/jquery-3.3.1.min.js?1725376271"></script>
+    <script src="/js/jquery-3.3.1.min.js?1725427517"></script>
 
     <style>
       :root #header + #content > #left > #rlblock_left{
@@ -57,14 +57,14 @@
     <span data-search-clear=""><i class="fas fa-times"></i></span>
 </div>
 
-<script type="text/javascript" src="/js/lunr.min.js?1725376271"></script>
-<script type="text/javascript" src="/js/auto-complete.js?1725376271"></script>
+<script type="text/javascript" src="/js/lunr.min.js?1725427517"></script>
+<script type="text/javascript" src="/js/auto-complete.js?1725427517"></script>
 <script type="text/javascript">
     
         var baseurl = "\/\/localhost:1313\/";
     
 </script>
-<script type="text/javascript" src="/js/search.js?1725376271"></script>
+<script type="text/javascript" src="/js/search.js?1725427517"></script>
 
     
   </div>
@@ -616,13 +616,13 @@
  
   
     
-    <li data-nav-id="/4-deployk8s/" title="" class="dd-item 
+    <li data-nav-id="/4-deployk8s/" title="Triển khai dự án trên Kubernetes" class="dd-item 
         
         
         
         ">
       <a href="/4-deployk8s/">
-          
+           <b> 4. </b> Triển khai dự án trên Kubernetes
           
             <i class="fas fa-check read-icon"></i>
           
@@ -642,13 +642,13 @@
  
   
     
-    <li data-nav-id="/5-gitops/" title="" class="dd-item 
+    <li data-nav-id="/5-gitops/" title="GitOps" class="dd-item 
         
         
         
         ">
       <a href="/5-gitops/">
-          
+           <b> 5. </b> GitOps
           
             <i class="fas fa-check read-icon"></i>
           
@@ -735,7 +735,7 @@
     <br>
     <br>
         <b> Last Updated </b> <br>
-        <i><font color=orange>09-08-2024</font></i>
+        <i><font color=orange>03-09-2024</font></i>
     </left>
     <left>
         <br>
@@ -798,6 +798,7 @@
     <li>
       <ul>
         <li><a href="#tổng-quan">Tổng quan</a></li>
+        <li><a href="#nội-dung">Nội dung</a></li>
       </ul>
     </li>
   </ul>
@@ -937,6 +938,17 @@ Trong buổi Workshop này, chúng ta sẽ cùng nhau triển khai (deploy) mộ
 </ul>
 <p>Việc sử dụng domain name thay vì địa chỉ IP cụ thể trong mục Domain có nhiều lợi ích, đặc biệt là trong bối cảnh truy cập GitLab.
 Domain name như <code>gitlab.tranvix.vn</code> dễ nhớ hơn so với một địa chỉ IP như <code>192.168.181.101</code>. Điều này giúp người dùng dễ dàng truy cập vào GitLab mà không cần phải ghi nhớ hoặc tra cứu IP mỗi khi cần.</p>
+<h3 id="nội-dung">Nội dung</h3>
+<ul>
+<li><a href="/2-preparation/2.1-setupservers/">Thiết lập các Server cho dự án</a></li>
+<li><a href="/2-preparation/2.2-containerregistry/">Private Container Registry - Portus</a></li>
+<li><a href="/2-preparation/2.3-gitlabserver/">Gitlab Server</a></li>
+<li><a href="/2-preparation/2.4-database/">Database Server</a></li>
+<li><a href="/2-preparation/2.5-snyk/">Source Code Security - Snyk</a></li>
+<li><a href="/2-preparation/2.6-trivy/">Trivy Security Scan Image</a></li>
+<li><a href="/2-preparation/2.7-arachni/">Web Application Security Scan</a></li>
+<li><a href="/2-preparation/2.8-k6/">Performance Testing - k6</a></li>
+</ul>
 
 
 
@@ -1327,19 +1339,19 @@ Domain name như <code>gitlab.tranvix.vn</code> dễ nhớ hơn so với một �
     <div style="left: -1000px; overflow: scroll; position: absolute; top: -1000px; border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;">
       <div style="border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;"></div>
     </div>
-    <script src="/js/clipboard.min.js?1725376271"></script>
-    <script src="/js/perfect-scrollbar.min.js?1725376271"></script>
-    <script src="/js/perfect-scrollbar.jquery.min.js?1725376271"></script>
-    <script src="/js/jquery.sticky.js?1725376271"></script>
-    <script src="/js/featherlight.min.js?1725376271"></script>
-    <script src="/js/highlight.pack.js?1725376271"></script>
+    <script src="/js/clipboard.min.js?1725427517"></script>
+    <script src="/js/perfect-scrollbar.min.js?1725427517"></script>
+    <script src="/js/perfect-scrollbar.jquery.min.js?1725427517"></script>
+    <script src="/js/jquery.sticky.js?1725427517"></script>
+    <script src="/js/featherlight.min.js?1725427517"></script>
+    <script src="/js/highlight.pack.js?1725427517"></script>
     <script>hljs.initHighlightingOnLoad();</script>
-    <script src="/js/modernizr.custom-3.6.0.js?1725376271"></script>
-    <script src="/js/learn.js?1725376271"></script>
-    <script src="/js/hugo-learn.js?1725376271"></script>
+    <script src="/js/modernizr.custom-3.6.0.js?1725427517"></script>
+    <script src="/js/learn.js?1725427517"></script>
+    <script src="/js/hugo-learn.js?1725427517"></script>
 
-    <link href="/mermaid/mermaid.css?1725376271" rel="stylesheet" />
-    <script src="/mermaid/mermaid.js?1725376271"></script>
+    <link href="/mermaid/mermaid.css?1725427517" rel="stylesheet" />
+    <script src="/mermaid/mermaid.js?1725427517"></script>
     <script>
         mermaid.initialize({ startOnLoad: true });
     </script>

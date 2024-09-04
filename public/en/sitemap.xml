@@ -42,6 +42,10 @@
   </url><url>
     <loc>//localhost:1313/3-pipeline/3.4-send-report/</loc>
   </url><url>
+    <loc>//localhost:1313/4-deployk8s/</loc>
+  </url><url>
+    <loc>//localhost:1313/5-gitops/</loc>
+  </url><url>
     <loc>//localhost:1313/2-preparation/2.5-snyk/</loc>
   </url><url>
     <loc>//localhost:1313/2-preparation/2.6-trivy/</loc>
@@ -49,10 +53,6 @@
     <loc>//localhost:1313/2-preparation/2.7-arachni/</loc>
   </url><url>
     <loc>//localhost:1313/2-preparation/2.8-k6/</loc>
-  </url><url>
-    <loc>//localhost:1313/4-deployk8s/</loc>
-  </url><url>
-    <loc>//localhost:1313/5-gitops/</loc>
   </url><url>
     <loc>//localhost:1313/categories/</loc>
     <xhtml:link

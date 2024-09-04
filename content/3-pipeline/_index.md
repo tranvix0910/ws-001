@@ -56,3 +56,10 @@ Sơ đồ này mô tả quy trình CI/CD tự động cho một ứng dụng web
 - Sau khi đảm bảo về bảo mật, kiểm thử hiệu năng được thực hiện bằng công cụ k6 để đảm bảo ứng dụng hoạt động tốt dưới tải cao.
 
 - Gửi Báo cáo: Kết quả kiểm thử hiệu năng được gửi qua Telegram để thông báo cho nhóm phát triển và vận hành.
+
+### Nội Dung
+
+- [Thiết lập Gitlab Runner](3.1-gitlab-runner)
+- [Build và Push Docker Image](3.2-build-and-push-image)
+- [Security Scan và Performance Test](3.3-security-performance)
+- [Gửi Report vào Telegram](3.4-send-report)
