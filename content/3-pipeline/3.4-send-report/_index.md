@@ -1,59 +1,61 @@
 ---
-title : "Gửi Report vào Telegram"
-date :  "`r Sys.Date()`" 
-weight : 4 
-chapter : false
-pre : " <b> 3.4 </b> "
+title: "Send Report to Telegram"
+date: "`r Sys.Date()`"
+weight: 4
+chapter: false
+pre: " <b> 3.4 </b> "
 ---
 
-#### Chuẩn Bị
+#### Preparation
 
-Để có thể gửi Report vào Telegram chúng ta cần tạo một tài khoản Telegram.
+To send reports to Telegram, you need to create a Telegram account.
 
-Sau khi tạo thành công chúng ta sẽ tìm kiếm `BotFather` để tiến hành tạo Bot.
+After successfully creating an account, search for `BotFather` to create a Bot.
 
 ![alt text](/images/3-pipeline/3.4-send-report/3-4-1.png)
 
 ![alt text](/images/3-pipeline/3.4-send-report/3-4-2.png)
 
-Sau khi Start chúng ta sẽ tiến hành tạo Bot mới bằng cách nhập `/newbot`.
+After starting, create a new Bot by entering `/newbot`.
 
 ![alt text](/images/3-pipeline/3.4-send-report/3-4-3.png)
 
-Khi thực hiện xong các yêu cầu chúng ta sẽ được cung cấp 1 con Bot có thể truy cập thông qua đường link và một Token.
+Once you complete the requirements, you will receive a Bot that can be accessed via a link and a Token.
 
 ![alt text](/images/3-pipeline/3.4-send-report/3-4-4.png)
 
-Để Bot có thể thông báo, chúng ta sẽ tiến hành tạo Group và thêm Bot vào.
+To allow the Bot to send notifications, create a Group and add the Bot to it.
 
 ![alt text](/images/3-pipeline/3.4-send-report/3-4-5.png)
 
 ![alt text](/images/3-pipeline/3.4-send-report/3-4-6.png)
 
-Chúng ta cần biết ID của Group để có thể gửi tin nhắn vào, nên chúng ta cần thêm Bot `RawDataBot` để cung cập ID.
+You need to know the Group ID to send messages, so add the Bot `RawDataBot` to get the ID.
 
 ![alt text](/images/3-pipeline/3.4-send-report/3-4-7.png)
 
-Chúng ta có thể test gửi một Message thông qua Server bằng lệnh sau:
+You can test sending a message via the server with the following command:
+
 ```
 curl -X POST "https://api.telegram.org/bot<Bot_Token>/sendMessage" -d "chat_id=<chat_id>" -d "text=test"
 ```
 
 ```
-curl -X POST "https://api.telegram.org/bot7538065344:AAEpk4atmTnmbl7knIbdQohOxrAfiG5tKi4/sendMessage" -d "chat_id=-4515541652" -d "text=test"
+curl -X POST "https://api.telegram.org/bot7zxsdfsdf:asskafiscaisdasca/sendMessage" -d "chat_id=-22asdcasd" -d "text=test"
 ```
+
 
 ![alt text](/images/3-pipeline/3.4-send-report/3-4-8.png)
 
 #### Send Report Stage
 
-Chúng ta sẽ thêm một Stage để có thể gửi Report ngay sau khi cúng ta Test hoàn tất.
+We will add a Stage to send the Report immediately after completing the Tests.
 
-Stage này chúng ta sẽ có 2 Job.
+This Stage will have 2 Jobs.
 
-Job `send report from build server` nó sẽ thực hiện gửi 2 tệp báo cáo **Code Security Scan** và **Image Scan** được thực hiện trước khi chúng ta thực hiện triển khai dự án.
+The `send report from build server` job will send 2 report files **Code Security Scan** and **Image Scan** generated before deploying the project.
 
-Job `send report from dev server` tương tự như job trên, nó cũng thực hiện gửi các file Report sau khi chúng ta triển khai dự án.
+The `send report from dev server` job, similar to the previous job, will send report files after deploying the project.
 
 ```yml
 send report from build server:
@@ -81,7 +83,7 @@ send report from dev server:
         - tags
 ```
 
-Sau khi chạy pipeline Bot sẽ gửi cho chúng ta những file report ở các Stage trước.
+After running the pipeline, the Bot will send the report files from the previous Stages.
 
 ![alt text](/images/3-pipeline/3.4-send-report/3-4-9.png)
 

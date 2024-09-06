@@ -6,56 +6,54 @@ chapter : false
 pre : " <b> 2.3 </b> "
 ---
 
-#### Cài đặt Gitlab
-Tại **Gitlab Server** chúng ta đã tạo, tiến hành cài đặt và thiết lập các Dependency cần thiết.
+#### Install GitLab
+On the GitLab Server we have created, proceed to install the necessary dependencies.
 
 ```sh
 sudo apt-get update
 sudo apt-get install -y curl openssh-server ca-certificates tzdata perl
 ```
 
-Thêm GitLab package repository và cài đặt package.
+Add the GitLab package repository and install the package.
 ```sh
 curl https://packages.gitlab.com/install/repositories/gitlab/gitlab-ee/script.deb.sh | sudo bash
 
 ```
 
-Ở đây chúng ta cài đặt **Gitlab Self-host** có nghĩa là bạn thiết lập và chạy GitLab trên máy chủ của riêng mình, thay vì sử dụng dịch vụ lưu trữ của GitLab.
+Here we are installing **GitLab Self-hosted**, which means setting up and running GitLab on your own server instead of using GitLab’s hosted service.
+This allows you full control over the GitLab environment, including where it’s hosted, how it's configured, and who has access to it.
 
-Điều này giúp bạn có toàn quyền kiểm soát môi trường GitLab, bao gồm việc quyết định nơi lưu trữ, cách cấu hình và ai có quyền truy cập.
-
-Tiếp theo, cài đặt gói GitLab. Theo DNS mà bạn muốn dùng để truy cập vào Gitlab Server.
+Next, install the GitLab package. Use the DNS you want to access the GitLab server.
 
 ```sh
 sudo EXTERNAL_URL="http://gitlab.tranvix.vn" apt-get install gitlab-ee
 ```
 ![alt text](/images/2-preparation/2.3-gitlabserver/2-3-1.png)
 
-Như vậy Gitlab đã cài đặt thành công.
+GitLab has been successfully installed.
 
-#### Cấu hình Gitlab
+#### Configure GitLab
+Add a host on Windows.
 
-Tiến hành Add Host ở máy Windows.
+Open Notepad as an administrator.
 
-Mở Notepad với quyền quản trị viên.
+Open the **hosts** file located at **C:\Windows\System32\drivers\etc**
 
-Mở tệp `hosts` ở địa chỉ `C:\Windows\System32\drivers\etc`
-
-Ở cuối tệp hosts, thêm một dòng mới với định dạng sau:
+At the end of the hosts file, add a new line in the following format:
 ```
 <IP address>   <domain name>
 ```
-Chúng ta sẽ thêm vào file địa chỉ IP máy ảo Gitlab Server và Domain chúng ta dùng truy cập vào Gitlab.
+We will add the IP address of the GitLab Server VM and the domain we are using to access GitLab.
 ```
 192.168.181.101   gitlab.tranvix.vn
 ```
 ![alt text](/images/2-preparation/2.3-gitlabserver/2-3-2.png)
 
-Tiến hành truy cập vào Gitlab thông qua Domain `http://gitlab.tranvix.vn`
+Now, access GitLab through the domain **http://gitlab.tranvix.vn**.
 
 ![alt text](/images/2-preparation/2.3-gitlabserver/2-3-3.png)
 
-Lấy Password bằng cách thực hiện câu lệnh sau và tiến hành đăng nhập với Username `root` và Password vừa lấy:
+Retrieve the password by running the following command and log in with the Username root and the retrieved password:
 ```sh
 cat /etc/gitlab/initial_root_password
 ```
@@ -72,65 +70,69 @@ Password: frA2Y0Aquj3AS3hLvKowNvUkMyfHD6mU4IdhDnOaSGU=
 # NOTE: This file will be automatically deleted in the first reconfigure run after 24 hours.
 ```
 ![alt text](/images/2-preparation/2.3-gitlabserver/2-3-4.png)
-Như vậy đã đăng nhập thành công.
+Successfully logged in.
 
-#### Tạo Group, User và Project.
-Đầu tiên chúng ta tiến hành tạo Group để chứa dự án.
+#### Creating a Group, User, and Project.
+First, create a Group to house the project.
 ![alt text](/images/2-preparation/2.3-gitlabserver/2-3-5.png)
 ![alt text](/images/2-preparation/2.3-gitlabserver/2-3-6.png)
 ![alt text](/images/2-preparation/2.3-gitlabserver/2-3-7.png)
-Tiếp theo chúng ta sẽ tiến hành tạo User và thêm User và Group.
+Next, create a User and add the User to the Group.
 
-Truy cập `Admin` và chọn `New User`
+Go to **Admin** and select **New User**.
 ![alt text](/images/2-preparation/2.3-gitlabserver/2-3-8.png)
 ![alt text](/images/2-preparation/2.3-gitlabserver/2-3-9.png)
-Sau khi tạo User thành công tiến hành tạo Password.
+After successfully creating the User, set a password.
 ![alt text](/images/2-preparation/2.3-gitlabserver/2-3-10.png)
 ![alt text](/images/2-preparation/2.3-gitlabserver/2-3-11.png)
-Thêm User vào Group.
+Add the User to the Group.
 ![alt text](/images/2-preparation/2.3-gitlabserver/2-3-12.png)
 ![alt text](/images/2-preparation/2.3-gitlabserver/2-3-13.png)
 
-Truy cập vào Group, Tiến hành tạo Project.
+Access the Group and create a Project.
 ![alt text](/images/2-preparation/2.3-gitlabserver/2-3-14.png)
-Chọn `Create blank project`.
+Select **Create blank project**.
 ![alt text](/images/2-preparation/2.3-gitlabserver/2-3-15.png)
-Đặt tên cho Project và chú ý bỏ chọn `Initialize repository with a README` phù hợp nếu bạn muốn đẩy một kho lưu trữ hiện có lên hoặc tự tạo các tệp sau.
+Name the Project and make sure to uncheck **Initialize repository with a README** if you plan to push an existing repository or create files manually later.
 ![alt text](/images/2-preparation/2.3-gitlabserver/2-3-16.png)
-Tạo Project thành công.
+Project successfully created.
 ![alt text](/images/2-preparation/2.3-gitlabserver/2-3-17.png)
-Thực hiện theo hướng dẫn có trên ảnh và tiến hành Push code dự án hiện có lên Gitlab.
+Follow the on-screen instructions to push an existing project to GitLab.
 
-Tải về dự án tại link bên dưới và di chuyển đến Server Development để có thể push code vào Gitlab.
+Download the project from the links below and move it to the **Server Development** to push the code to GitLab.
 
-Tại thư mục lưu trữ dự án ở Windows của bạn ấn chuột phải, tiến hành mở Terminal và chạy lệnh sau:
+- [WineApp Frontend](https://github.com/tranvix0910/wineapp-frontend.git)
+
+- [WineApp Backend](https://github.com/tranvix0910/wineapp-backend.git)
+
+In the folder where the project is stored on your Windows machine, right-click and open Terminal. Run the following command:
 
 ![alt text](/images/2-preparation/2.3-gitlabserver/2-3-18.png)
 
 ```
 scp .\* tranvi0910@192.168.181.102:/home/tranvi0910
 ```
-Lệnh dùng để sao chép tất cả tệp `./*` và thư mục từ thư mục hiện tại trên máy cục bộ sang thư mục `/home/tranvi0910` trên máy chủ từ xa có địa chỉ IP `192.168.181.102`, với tài khoản người dùng `tranvi0910`.
+This command copies all files **./*** and directories from the current folder on the local machine to the folder **/home/tranvi0910** on the remote server at IP **192.168.181.102**, using the **tranvi0910** user account.
 
 ![alt text](/images/2-preparation/2.3-gitlabserver/2-3-19.png)
 
-Tiến hành kiểm tra ở Server Development.
+Check the files on the Server Development.
 
 ![alt text](/images/2-preparation/2.3-gitlabserver/2-3-20.png)
 
-Tạo thư mục mới để clone project về, sau đó giải nén source code chúng ta vừa di chuyển từ máy Windows qua Server và đẩy code lên Gitlab.
+Create a new directory to clone the project, then extract the source code we transferred from Windows to the server, and push the code to GitLab.
 
 ```
 mkdir -p /projects/wineapp && cd /projects/wineapp
 ```
 
-Tiến hành Add Host ở Server Development để có thể clone dự án từ Gitlab.
+Add a host on the Server Development to clone the project from GitLab.
 ```
 vi /etc/hosts
 ```
 ![alt text](/images/2-preparation/2.3-gitlabserver/2-3-21.png)
 
-Clone Project.
+Clone the project.
 ```
 git clone http://gitlab.tranvix.vn/wineapp/wineapp-frontend.git
 ```
@@ -141,27 +143,27 @@ Username for 'http://gitlab.tranvix.vn': wineappdev
 Password for 'http://wineappdev@gitlab.tranvix.vn':
 warning: You appear to have cloned an empty repository.
 ```
-Cài đặt package **Unzip**.
+Install the **Unzip** package.
 ```
 sudo apt install unzip
 ```
 
-Giải nén file zip source code Frontend.
+Unzip the source code for the frontend.
 ```
 unzip wine-website-FE.zip
 unzip wine-website-BE.zip
 ```
 
-Sau khi giải nén xong chúng ta có 2 thư mục.
+After unzipping, you will have two folders.
 ![alt text](/images/2-preparation/2.3-gitlabserver/2-3-22.png)
 
-Di chuyển Source Code từ thư mục chúng ta vừa giải nén vào Project Frontend vừa Clone về.
+Move the source code from the unzipped folder to the Frontend project we cloned earlier.
 ```sh
 cp -rf wine-website-FE-main/* /projects/wineapp/wineapp-frontend/
 ```
 ![alt text](/images/2-preparation/2.3-gitlabserver/2-3-23.png)
 
-Push Code.
+Push the code.
 
 ```sh
 git add .
@@ -171,7 +173,7 @@ git commit -m 'project(base): add base project'
 git push
 ```
 
-Kiểm tra dự án tại Gitlab.
+Check the project on GitLab.
 ![alt text](/images/2-preparation/2.3-gitlabserver/2-3-24.png)
 
-Như vậy dự án đã được đẩy lên Gitlab thành công, thực hiện tương tự với **Project Backend**
+The project has been successfully pushed to GitLab. Follow similar steps for the **Backend Project**.

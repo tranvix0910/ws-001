@@ -8,7 +8,7 @@ pre : " <b> 1.3 </b> "
 
 ### Table of Content
 
-1. [Gitlab Runner](#gitlab-runner)
+1. [GitLab Runner](#gitlab-runner)
 2. [Docker](#docker)
 3. [Snyk](#snyk)
 4. [Trivy Scan Image](#trivy-scan-image)
@@ -17,107 +17,116 @@ pre : " <b> 1.3 </b> "
 7. [k6](#k6)
 
 
-### Gitlab Runner
+### GitLab Runner
 
-**Gitlab Runner** là một công cụ mã nguồn mở, được viết bằng ngôn ngữ Go và do chính Gitlab tạo ra để phục vụ cho việc CI/CD cho các dự án được tạo trên Gitlab. Người dùng có thể tự cài đặt cho mình một runner trên server của mình hoặc sử dụng những runner do Gitlab cung cấp. Người dùng chỉ cần tạo 1 file `.gitlab-ci.yml` ở thư mục gốc của dự án, để khởi tạo CI/CD pipeline và chỉ định Gitlab runner nào sẽ được sử dụng.
+**GitLab Runner** is an open-source tool, written in Go, developed by GitLab for the CI/CD of projects created on GitLab. Users can install their own runners on their server or use the runners provided by GitLab. You just need to create a `.gitlab-ci.yml` file in the root directory of the project to initialize a CI/CD pipeline and specify which GitLab runner will be used.
 
-#### Các loại Gitlab Runner
+#### Types of GitLab Runner
+
 **Shared Runner**
 
-- Shared runners được chia sẻ giữa tất cả các dự án trong một instance GitLab. Chúng có thể được sử dụng bởi bất kỳ dự án nào mà không cần cấu hình đặc biệt.
+- Shared runners are shared among all projects within a GitLab instance and can be used by any project without special configuration.
 
-- **Ưu điểm**: Tiết kiệm tài nguyên và dễ dàng quản lý, đặc biệt hữu ích cho các dự án nhỏ hoặc các dự án không đòi hỏi tài nguyên đặc biệt.
+- **Advantages**: Resource-efficient and easy to manage, especially useful for small projects or those not requiring specific resources.
 
-- **Cách triển khai**: Quản trị viên của instance GitLab sẽ cấu hình và đăng ký shared runners.
+- **Deployment**: The GitLab instance administrator configures and registers shared runners.
 
 **Group Runner**
 
-- Group runners chỉ được sử dụng bởi các dự án nằm trong cùng một nhóm GitLab. Điều này giúp kiểm soát và phân phối tài nguyên cho các dự án liên quan.
+- Group runners are only used by projects within the same GitLab group, allowing control and distribution of resources for related projects.
 
-- **Ưu điểm**: Cung cấp sự kiểm soát tốt hơn về việc sử dụng tài nguyên giữa các dự án trong cùng một nhóm, đồng thời dễ dàng quản lý và theo dõi.
+- **Advantages**: Provides better resource usage control across projects within the same group, and is easy to manage and monitor.
 
-- **Cách triển khai**: Chủ sở hữu của nhóm sẽ cấu hình và đăng ký group runners thông qua phần cài đặt của nhóm.
+- **Deployment**: The group owner configures and registers group runners via the group settings.
 
 **Specific Runner**
 
-- Specific runners được gán trực tiếp cho một dự án cụ thể và chỉ phục vụ cho dự án đó. Điều này giúp đảm bảo rằng tài nguyên được dành riêng cho dự án này.
+- Specific runners are assigned to a specific project and only serve that project. This ensures dedicated resources for the project.
 
-- **Ưu điểm**: Đảm bảo tài nguyên được tối ưu và bảo mật hơn cho các dự án yêu cầu cấu hình đặc biệt hoặc có nhu cầu tài nguyên cao.
+- **Advantages**: Ensures resources are optimized and more secure for projects requiring specific configurations or high-resource needs.
 
-- **Cách triển khai**: Chủ sở hữu của dự án sẽ cấu hình và đăng ký specific runners thông qua phần cài đặt CI/CD của dự án.
+- **Deployment**: The project owner configures and registers specific runners via the CI/CD settings of the project.
 
-Mỗi loại runner đều có những ưu điểm và hạn chế riêng, tùy thuộc vào nhu cầu và quy mô của dự án mà bạn có thể chọn loại runner phù hợp để triển khai.
+Each type of runner has its own advantages and limitations, depending on the needs and scale of the project.
 
 ### Docker
-**Docker** là một nền tảng mã nguồn mở cho phép tạo, triển khai và quản lý các ứng dụng trong môi trường **container** hóa. Với Docker, các ứng dụng và các thành phần phụ thuộc của chúng được đóng gói vào các container, giúp đảm bảo tính nhất quán khi chạy trên mọi môi trường từ phát triển đến sản xuất. 
 
-**Docker** cung cấp tính di động cao, hiệu suất tối ưu, và đơn giản hóa quy trình DevOps, giúp các nhóm phát triển và vận hành làm việc hiệu quả hơn. Các container nhẹ hơn so với máy ảo, khởi động nhanh hơn và có thể được chia sẻ qua Docker Hub, nơi chứa hàng ngàn hình ảnh container có sẵn.
-#### Quy trình tạo một container với Docker
-1. **Viết Dockerfile**: Tạo một tệp `Dockerfile` chứa các chỉ thị để Docker biết cách xây dựng hình ảnh (image) cho ứng dụng, bao gồm việc chọn base image, cài đặt các phụ thuộc, và thiết lập cấu hình.
+**Docker** is an open-source platform that allows the creation, deployment, and management of applications in a **containerized** environment. With Docker, applications and their dependencies are packaged into containers, ensuring consistency when running across different environments from development to production.
 
-2. **Xây dựng hình ảnh Docker**: Sử dụng lệnh docker build để tạo ra một hình ảnh Docker từ Dockerfile.
+**Docker** offers high portability, optimal performance, and simplifies the DevOps process, enabling development and operations teams to work more efficiently. Containers are lighter than virtual machines, start up faster, and can be shared through Docker Hub, which hosts thousands of pre-built container images.
 
-3. **Chạy container**: Sau khi tạo xong hình ảnh, sử dụng lệnh `docker run` để tạo và chạy một container từ hình ảnh đó.
+#### Steps to Create a Container with Docker
 
-4. **Kiểm tra và quản lý container**: Sử dụng các lệnh như `docker ps`, `docker logs`, và `docker exec` để kiểm tra và quản lý container đang chạy.
+1. **Write Dockerfile**: Create a `Dockerfile` that contains the instructions for Docker to know how to build an image for the application, including choosing a base image, installing dependencies, and setting up configurations.
 
-Docker giúp đơn giản hóa việc phát triển, triển khai và vận hành các ứng dụng bằng cách sử dụng công nghệ container hóa. Điều này giúp đảm bảo tính nhất quán giữa các môi trường khác nhau và tối ưu hóa tài nguyên hệ thống.
+2. **Build Docker Image**: Use the `docker build` command to create a Docker image from the Dockerfile.
+
+3. **Run Container**: After creating the image, use the `docker run` command to create and run a container from that image.
+
+4. **Check and Manage Containers**: Use commands like `docker ps`, `docker logs`, and `docker exec` to check and manage running containers.
+
+Docker simplifies the process of developing, deploying, and operating applications using containerization technology. It ensures consistency across different environments and optimizes system resources.
 
 ### Snyk
-**Snyk** là một nền tảng bảo mật dành cho nhà phát triển, giúp **phát hiện và khắc phục các lỗ hổng bảo mật trong mã nguồn**, các thư viện mã nguồn mở, container, và cơ sở hạ tầng dưới dạng mã (Infrastructure as Code - IaC). Snyk tích hợp sâu vào quy trình phát triển phần mềm, cho phép các nhà phát triển kiểm tra và sửa chữa các lỗ hổng bảo mật ngay từ giai đoạn phát triển, trước khi phần mềm được triển khai.
 
-#### Các tính năng chính của Snyk:
-1. **Quét mã nguồn mở (Open Source Security)**: Snyk có thể quét các dự án mã nguồn mở và phát hiện các lỗ hổng bảo mật trong các thư viện và phụ thuộc mà dự án sử dụng. Nó cung cấp các giải pháp cụ thể để sửa chữa các lỗ hổng này.
+**Snyk** is a security platform for developers that helps **detect and fix security vulnerabilities in source code**, open-source libraries, containers, and Infrastructure as Code (IaC). Snyk integrates deeply into the software development process, allowing developers to check and repair security issues early during development, before the software is deployed.
 
-2. **Quét container (Container Security)**: Snyk kiểm tra các hình ảnh Docker để tìm ra các lỗ hổng bảo mật và đề xuất các giải pháp tối ưu, giúp giảm thiểu rủi ro khi triển khai ứng dụng trong container.
+#### Key Features of Snyk:
 
-3. **Quét mã nguồn (Code Security)**: Snyk có khả năng quét mã nguồn của bạn để tìm các lỗ hổng bảo mật tiềm ẩn và giúp phát hiện các vấn đề ngay từ giai đoạn viết mã.
+1. **Open Source Security Scanning**: Snyk can scan open-source projects and detect security vulnerabilities in libraries and dependencies used by the project. It provides specific solutions to fix these vulnerabilities.
 
-4. **Quét IaC (Infrastructure as Code Security)**: Snyk có thể kiểm tra các tệp cấu hình cơ sở hạ tầng (như Terraform, AWS CloudFormation) để đảm bảo chúng không chứa các lỗi cấu hình bảo mật.
+2. **Container Security Scanning**: Snyk checks Docker images for security vulnerabilities and suggests optimal fixes, reducing risks when deploying containerized applications.
 
-5. **Tích hợp DevOps**: Snyk dễ dàng tích hợp vào các công cụ CI/CD như Jenkins, GitLab CI, CircleCI, cũng như các IDE và hệ thống quản lý mã nguồn như GitHub, GitLab, Bitbucket.
+3. **Source Code Security Scanning**: Snyk can scan your source code to identify potential security vulnerabilities, helping to detect issues early during the coding phase.
 
-Snyk giúp các nhà phát triển và đội ngũ DevOps chủ động bảo vệ phần mềm và hệ thống của mình bằng cách phát hiện sớm và sửa chữa các lỗ hổng bảo mật trong suốt quá trình phát triển và triển khai.
+4. **Infrastructure as Code Security Scanning**: Snyk can check infrastructure configuration files (such as Terraform, AWS CloudFormation) to ensure they don’t contain security misconfigurations.
+
+5. **DevOps Integration**: Snyk easily integrates with CI/CD tools like Jenkins, GitLab CI, CircleCI, and with IDEs and version control systems like GitHub, GitLab, and Bitbucket.
+
+Snyk helps developers and DevOps teams proactively secure their software and systems by identifying and fixing security vulnerabilities early throughout the development and deployment process.
 
 ### Trivy Scan Image
-**Trivy** là một công cụ mã nguồn mở dùng để **quét các lỗ hổng bảo mật và các vấn đề cấu hình trong các container**, mã nguồn mở, và cơ sở hạ tầng dưới dạng mã (Infrastructure as Code - IaC). Trivy có khả năng quét các hình ảnh container để phát hiện các lỗ hổng bảo mật, giúp bảo vệ ứng dụng trước các rủi ro an ninh tiềm ẩn.
 
-#### Các tính năng chính của Trivy:
-1. **Quét hình ảnh Docker**: Trivy có thể quét các lớp trong hình ảnh Docker để phát hiện các lỗ hổng bảo mật đã biết. Điều này giúp đảm bảo rằng các hình ảnh container mà bạn triển khai không chứa các vấn đề bảo mật nghiêm trọng.
+**Trivy** is an open-source tool for **scanning security vulnerabilities and configuration issues in containers**, open-source code, and Infrastructure as Code (IaC). Trivy can scan container images to detect security vulnerabilities, protecting applications from potential security risks.
 
-2. **Tích hợp dễ dàng**: Trivy có thể tích hợp vào quy trình CI/CD để tự động quét các hình ảnh container trước khi chúng được triển khai, giúp phát hiện các vấn đề bảo mật sớm trong quá trình phát triển.
+#### Key Features of Trivy:
 
-3. **Hỗ trợ nhiều ngôn ngữ và hệ thống**: Ngoài container, Trivy còn hỗ trợ quét các kho mã nguồn mở và cơ sở hạ tầng dưới dạng mã, bao gồm Terraform, CloudFormation và Kubernetes.
+1. **Docker Image Scanning**: Trivy can scan the layers in Docker images to detect known security vulnerabilities. This ensures that the container images you deploy do not contain serious security issues.
 
-4. **Kết quả chi tiết và dễ hiểu**: Trivy cung cấp các báo cáo chi tiết về các lỗ hổng, bao gồm mức độ nghiêm trọng (Critical, High, Medium, Low), phiên bản bị ảnh hưởng, và nếu có, cách khắc phục lỗ hổng.
+2. **Easy Integration**: Trivy can integrate into the CI/CD process to automatically scan container images before they are deployed, detecting security issues early in the development process.
 
-Trivy là một công cụ bảo mật mạnh mẽ và dễ sử dụng, giúp các nhà phát triển và nhóm DevOps bảo vệ ứng dụng của mình bằng cách phát hiện sớm các lỗ hổng bảo mật trong các hình ảnh container, mã nguồn mở, và cơ sở hạ tầng dưới dạng mã.
+3. **Supports Multiple Languages and Systems**: Besides containers, Trivy also supports scanning open-source repositories and Infrastructure as Code, including Terraform, CloudFormation, and Kubernetes.
+
+4. **Detailed and Understandable Results**: Trivy provides detailed reports on vulnerabilities, including severity levels (Critical, High, Medium, Low), affected versions, and if available, how to fix the vulnerabilities.
+
+Trivy is a powerful and easy-to-use security tool that helps developers and DevOps teams protect their applications by detecting security vulnerabilities in container images, open-source code, and Infrastructure as Code.
 
 ### Portus
-**Portus** là một giao diện quản lý và **dịch vụ bảo mật cho các registry Docker** có thể self-host, giúp quản lý và kiểm soát các hình ảnh Docker trong một tổ chức. Được phát triển bởi SUSE, Portus cung cấp các tính năng bổ sung mà Docker Registry không có, như kiểm soát truy cập, giám sát, và quản lý người dùng. Điều này giúp đảm bảo rằng chỉ những người hoặc dịch vụ được ủy quyền mới có thể truy cập và quản lý các hình ảnh container.
 
-#### Các tính năng chính của Portus:
-1. **Quản lý người dùng và nhóm**: Portus cho phép quản lý người dùng và nhóm trong tổ chức, giúp thiết lập quyền truy cập khác nhau dựa trên vai trò của từng người dùng.
+**Portus** is a management interface and **security service for self-hosted Docker registries**, helping manage and control Docker images within an organization. Developed by SUSE, Portus offers additional features that Docker Registry lacks, such as access control, monitoring, and user management. This ensures that only authorized individuals or services can access and manage container images.
 
-2. **Kiểm soát truy cập**: Với Portus, bạn có thể thiết lập các chính sách truy cập cho các dự án hoặc kho chứa (repositories) riêng biệt. Điều này giúp bảo vệ các hình ảnh quan trọng bằng cách hạn chế quyền truy cập.
+#### Key Features of Portus:
 
-3. **Tích hợp Docker Registry**: Portus tích hợp trực tiếp với Docker Registry, cung cấp một giao diện thân thiện và dễ sử dụng để quản lý các hình ảnh Docker. 
+1. **User and Group Management**: Portus allows user and group management within an organization, enabling different access rights based on user roles.
 
-4. **Thông báo và giám sát**: Portus cung cấp khả năng giám sát và gửi thông báo về các hoạt động trong Docker Registry. Điều này giúp các quản trị viên dễ dàng theo dõi các sự kiện quan trọng, như việc đẩy hoặc kéo hình ảnh.
+2. **Access Control**: With Portus, you can set access policies for individual projects or repositories. This protects important images by restricting access.
 
-Portus là một giải pháp quản lý và bảo mật cho Docker Registry, cung cấp các tính năng mở rộng như kiểm soát truy cập, quản lý người dùng và giám sát, giúp các tổ chức quản lý hình ảnh Docker một cách an toàn và hiệu quả.
+3. **Docker Registry Integration**: Portus integrates directly with Docker Registry, providing a user-friendly interface to manage Docker images.
+
+4. **Monitoring and Notifications**: Portus provides monitoring capabilities and sends notifications about activities within Docker Registry, making it easy for administrators to track important events, such as image pushes or pulls.
+
+Portus is a Docker Registry management and security solution that offers extended features like access control, user management, and monitoring, helping organizations manage Docker images safely and efficiently.
 
 ### Arachni
-**Arachni** là một công cụ mã nguồn mở dùng để **quét và phát hiện các lỗ hổng bảo mật trong ứng dụng web**. Nó có khả năng phát hiện nhiều lỗ hổng phổ biến như **SQL Injection, XSS, và CSRF**. 
 
-Arachni cung cấp cả giao diện dòng lệnh (CLI) và giao diện web, giúp người dùng dễ dàng tích hợp vào các quy trình bảo mật. 
+**Arachni** is an open-source tool used to **scan and detect security vulnerabilities in web applications**. It can detect many common vulnerabilities such as **SQL Injection, XSS, and CSRF**.
 
-Công cụ này cũng hỗ trợ mở rộng thông qua các plugin hoặc module tùy chỉnh và cung cấp các báo cáo chi tiết ở nhiều định dạng như HTML, JSON, và XML.
+Arachni offers both a command-line interface (CLI) and a web interface, making it easy to integrate into security workflows.
+
+This tool also supports extensions via custom plugins or modules and provides detailed reports in various formats such as HTML, JSON, and XML.
 
 ### k6
-**k6** là một công cụ **kiểm thử tải và đo hiệu suất mã nguồn mở**, được phát triển bởi Grafana Labs. Với k6, người dùng có thể viết các kịch bản kiểm thử bằng JavaScript và thực hiện các bài kiểm thử hiệu suất với khả năng tạo ra hàng ngàn yêu cầu mỗi giây. 
 
-**k6** không yêu cầu giao diện đồ họa, phù hợp cho việc tự động hóa và tích hợp vào các hệ thống CI/CD. Công cụ này cũng hỗ trợ tích hợp với các dịch vụ giám sát hiệu suất như Grafana và Prometheus để theo dõi và phân tích kết quả kiểm thử.
+**k6** is an open-source **load and performance testing tool**, developed by Grafana Labs. With k6, users can write testing scripts in JavaScript and perform performance tests capable of generating thousands of requests per second.
 
-
-
+**k6** doesn’t require a graphical user interface, making it ideal for automation and integration into CI/CD systems. It also supports integration with performance monitoring services like Grafana and Prometheus to monitor and analyze test results.

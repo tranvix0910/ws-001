@@ -1,65 +1,65 @@
 ---
-title : "Thiết lập CI/CD Pipeline"
-date :  "`r Sys.Date()`" 
-weight : 3 
-chapter : false
-pre : " <b> 3. </b> "
+title: "Setting Up the CI/CD Pipeline"
+date: "`r Sys.Date()`"
+weight: 3
+chapter: false
+pre: " <b> 3. </b> "
 ---
 
 ### Diagram
 
-![DevsecopsPipeline](/images/devsecops-pipeline.png) 
+![DevsecopsPipeline](/images/devsecops-pipeline.png)
 
-Sơ đồ này mô tả quy trình CI/CD tự động cho một ứng dụng web sử dụng MERN stack (MongoDB, Express.js, React.js, Node.js). Quy trình này giúp đảm bảo rằng mã nguồn được xây dựng, kiểm thử, quét bảo mật và triển khai một cách liên tục và hiệu quả.
+This diagram illustrates the automated CI/CD process for a web application using the MERN stack (MongoDB, Express.js, React.js, Node.js). This process ensures that the source code is continuously and efficiently built, tested, scanned for security, and deployed.
 
-**Push Code (Người dùng đến GitLab):**
+**Push Code (User to GitLab):**
 
-- Developer push source code của ứng dụng MERN stack lên kho lưu trữ GitLab. Hành động này sẽ kích hoạt quy trình CI/CD.
+- Developer pushes the source code of the MERN stack application to the GitLab repository. This action triggers the CI/CD process.
 
-**Quy trình CI/CD (GitLab CI/CD):**
+**CI/CD Process (GitLab CI/CD):**
 
-- **Commit**: Khi mã nguồn được đẩy lên, một commit được tạo trong kho lưu trữ GitLab.
+- **Commit**: When the source code is pushed, a commit is created in the GitLab repository.
 
-- GitLab CI/CD pipeline bắt đầu và bao gồm nhiều công việc (jobs) được thực hiện bởi các runner.
+- The GitLab CI/CD pipeline starts and includes several jobs performed by runners.
 
 **Build Job (GitLab Runner):**
 
-- **Build Frontend** (React.js): GitLab Runner thực hiện việc build ứng dụng frontend bằng React.js, bao gồm cài đặt các dependencies và tạo các tệp tĩnh cần thiết.
+- **Build Frontend (React.js)**: GitLab Runner builds the frontend application using React.js, including installing dependencies and generating the necessary static files.
 
-- **Build Backend** (Node.js và Express.js): Tương tự, backend được build bằng Node.js và Express.js, đảm bảo tất cả các dependencies được cài đặt và mã nguồn được biên dịch nếu cần.
+- **Build Backend (Node.js and Express.js)**: Similarly, the backend is built using Node.js and Express.js, ensuring all dependencies are installed and the source code is compiled if needed.
 
-- **Build Image Docker**: Toàn bộ ứng dụng MERN stack được đóng gói vào một Docker image để dễ dàng triển khai và quản lý.
+- **Build Docker Image**: The entire MERN stack application is packaged into a Docker image for easy deployment and management.
 
-**Quét Image (Docker và Snyk):**
+**Image Scanning (Docker and Snyk):**
 
-- Docker image được quét để phát hiện các lỗ hổng bảo mật sử dụng công cụ như Snyk.
+- The Docker image is scanned for security vulnerabilities using tools like Snyk.
 
-- **Gửi Báo cáo (đến Telegram)**: Kết quả quét bảo mật được gửi qua Telegram để thông báo cho nhóm phát triển về tình trạng bảo mật của image.
+- **Send Report (to Telegram)**: The security scan results are sent via Telegram to notify the development team of the security status of the image.
 
-**Công việc Deploy (GitLab Runner):**
+**Deploy Jobs (GitLab Runner):**
 
-- Nếu quá trình build và quét bảo mật thành công, bước tiếp theo là triển khai ứng dụng.
-- Triển khai Frontend và Backend: GitLab Runner triển khai frontend (React.js) và backend (Node.js và Express.js) lên môi trường sản xuất hoặc staging.
+- If the build and security scan processes are successful, the next step is deploying the application.
+- Deploy Frontend and Backend: GitLab Runner deploys the frontend (React.js) and backend (Node.js and Express.js) to the production or staging environment.
 
-**Quản lý Image (Portus):**
+**Image Management (Portus):**
 
-- **Pull Image (Portus)**: Docker image được quản lý thông qua Portus, nơi image được kéo từ registry này.
+- **Pull Image (Portus)**: Docker image is managed through Portus, where the image is pulled from this registry.
 
-- **Push Image (Portus)**: Sau khi quản lý, image được đẩy lên Harbor để lưu trữ và quét thêm các lỗ hổng bảo mật nếu cần.
+- **Push Image (Portus)**: After management, the image is pushed to Harbor for storage and additional security scans if needed.
 
-**Quét Bảo mật (arachni):**
+**Security Scanning (Arachni):**
 
-- Ứng dụng đã triển khai được quét bảo mật bằng công cụ arachni để phát hiện các lỗ hổng trong ứng dụng web.
+- The deployed application is scanned for security vulnerabilities using Arachni to detect flaws in the web application.
 
-**Kiểm thử Hiệu năng (k6):**
+**Performance Testing (k6):**
 
-- Sau khi đảm bảo về bảo mật, kiểm thử hiệu năng được thực hiện bằng công cụ k6 để đảm bảo ứng dụng hoạt động tốt dưới tải cao.
+- After ensuring security, performance testing is conducted using k6 to ensure the application performs well under high load.
 
-- Gửi Báo cáo: Kết quả kiểm thử hiệu năng được gửi qua Telegram để thông báo cho nhóm phát triển và vận hành.
+- **Send Report**: The performance testing results are sent via Telegram to notify the development and operations teams.
 
-### Nội Dung
+### Contents
 
-- [Thiết lập Gitlab Runner](3.1-gitlab-runner)
-- [Build và Push Docker Image](3.2-build-and-push-image)
-- [Security Scan và Performance Test](3.3-security-performance)
-- [Gửi Report vào Telegram](3.4-send-report)
+1. [Setting Up GitLab Runner](3.1-gitlab-runner)
+2. [Build and Push Docker Image](3.2-build-and-push-image)
+3. [Security Scan and Performance Test](3.3-security-performance)
+4. [Send Report to Telegram](3.4-send-report)

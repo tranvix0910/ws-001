@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Thiết lập các Server cho dự án on AWS System Manager</title>
+    <title>Server Setup for the Project on AWS System Manager</title>
     <link>//localhost:1313/2-preparation/2.1-setupservers/</link>
-    <description>Recent content in Thiết lập các Server cho dự án on AWS System Manager</description>
+    <description>Recent content in Server Setup for the Project on AWS System Manager</description>
     <generator>Hugo</generator>
     <language>en</language>
     <atom:link href="//localhost:1313/2-preparation/2.1-setupservers/index.xml" rel="self" type="application/rss+xml" />

@@ -6,8 +6,8 @@ chapter : false
 pre : " <b> 2.8 </b> "
 ---
 
-#### Cài đặt k6
-Tạo file shell script để cài đặt k6 ở Server **Build**.
+#### Installing k6
+Create a shell script to install k6 on the **Build Server**.
 ```bash
 #!/bin/bash
 sudo gpg -k
@@ -16,44 +16,49 @@ echo "deb [signed-by=/usr/share/keyrings/k6-archive-keyring.gpg] https://dl.k6.i
 sudo apt-get update
 sudo apt-get install k6
 ```
-Tiến hành cài đặt.
+Run the script:
 ```
 sh install-k6.sh
 ```
 
-#### Các loại Performance Testing
-Trước khi sử dụng k6, trước tiên chúng ta hãy hiểu định nghĩa và sự khác biệt của các loại Performance Testing này.
-![alt text](/images/2-preparation/2.8-k6/2-8-1.png)
-1. **Load Testing (Kiểm thử tải)**:
+#### Types of Performance Testing
 
-    - Đây là quá trình kiểm tra phần mềm bằng cách áp dụng tải lớn mục đích đo lường và đánh giá các yếu tố như thời gian đáp ứng, tài nguyên tiêu tốn của hệ thống, sự ổn định của hệ thống dưới tải cao.
+Before using k6, let’s understand the definitions and differences between these types of performance testing.
+
+![alt text](/images/2-preparation/2.8-k6/2-8-1.png)
+
+1. **Load Testing**:
+
+- This process tests software by applying a high load to measure and evaluate factors such as response time, system resource consumption, and system stability under high load.
 
 2. **Smoke Testing**:
 
-    - Kiểm thử này nhằm xác định liệu phiên bản phần mềm có thể khởi chạy và hoạt động bình thường với các chức năng cơ bản nhất hay không. 
-    
-    - Đây là bước kiểm thử ban đầu để quyết định xem phần mềm có đủ ổn định để thực hiện các kiểm thử chi tiết hơn.
+- This testing determines whether the software version can launch and operate normally with the most basic functions.
+
+- It is an initial test to decide if the software is stable enough for more detailed testing.
 
 3. **Load Testing (for Performance)**:
 
-    - Tập trung vào việc đánh giá hiệu suất của hệ thống dưới tải trọng cụ thể để đảm bảo hệ thống đáp ứng yêu cầu về hiệu suất như thời gian phản hồi và xử lý yêu cầu trong giới hạn cho phép.
+- Focuses on evaluating system performance under specific load conditions to ensure it meets performance requirements such as response time and request handling within acceptable limits.
 
 4. **Stress Testing**:
 
-    - Kiểm thử này nhằm xác định giới hạn của hệ thống bằng cách áp dụng tải cao hơn so với tải dự kiến, tăng dần và giảm dần số lượng người dùng qua các mức để kiểm tra.
-    
-    - Mục đích là để tìm ra điểm gãy của hệ thống, từ đó có thể tối ưu hóa và chuẩn bị cho các tình huống tải cao đột ngột.
+- This testing identifies the limits of the system by applying a higher load than expected, increasing and decreasing the number of users to test.
+
+- The goal is to find the breaking point of the system, allowing for optimization and preparation for sudden high loads.
 
 5. **Spike Testing**:
 
-    - Một dạng cụ thể của Stress Testing, kiểm thử này mô phỏng các tình huống tải tăng đột ngột trong một khoảng thời gian ngắn để đánh giá khả năng của hệ thống trong việc xử lý các biến động tải đột ngột.
+- A specific type of Stress Testing, this test simulates sudden load increases over a short period to assess the system’s ability to handle sudden load fluctuations.
 
 6. **Soak/Endurance Testing**:
 
-    - Kiểm thử này đánh giá hiệu suất của hệ thống dưới tải trọng trong một khoảng thời gian dài để xác định các vấn đề tiềm ẩn liên quan đến hiệu suất dài hạn như rò rỉ bộ nhớ hoặc suy giảm hiệu suất theo thời gian.
+- This testing evaluates system performance under a load over a long period to identify potential long-term performance issues like memory leaks or performance degradation over time.
 
-#### Thiết lập k6 Test
-Ví dụ chúng ta sẽ tạo một file `load-test.js` và tiến hành test.
+#### Setting Up k6 Test
+
+For example, create a `load-test.js` file and perform the test.
+
 ```js
 import http from 'k6/http';
 import { check, sleep } from 'k6';
@@ -75,7 +80,7 @@ export default function () {
         sleep(1);
 }
 ```
-Output
+Output:
 ```
 root@build-server:/tools/k6# k6 run load-test.js
 
@@ -118,68 +123,68 @@ running (11.0s), 000/100 VUs, 811 complete and 0 interrupted iterations
 default ✓ [======================================] 100 VUs  10s
 ```
 
-**data_received**:
+**data_received:**
 
-- Tổng số dữ liệu nhận được từ máy chủ qua các yêu cầu HTTP trong suốt quá trình kiểm thử.
+- The total amount of data received from the server through HTTP requests during the test.
 
-**data_sent**:
+**data_sent:**
 
-- Tổng số dữ liệu đã gửi đi từ client đến máy chủ qua các yêu cầu HTTP trong suốt quá trình kiểm thử.
+- The total amount of data sent from the client to the server through HTTP requests during the test.
 
-**http_req_blocked**:
+**http_req_blocked:**
 
-- Thời gian bị chặn trước khi yêu cầu HTTP được gửi đi (có thể do giới hạn băng thông, hạn chế tài nguyên...).
+- The time blocked before the HTTP request is sent (possibly due to bandwidth limits, resource constraints, etc.).
 
-- Cho biết thời gian request phải chờ đợi trước khi được xử lý.
+- Indicates how long the request had to wait before being processed.
 
-**http_req_connecting**:
+**http_req_connecting:**
 
-- Thời gian kết nối với máy chủ sau khi gửi request.
+- The time to connect to the server after sending the request.
 
-**http_req_duration**:
+**http_req_duration:**
 
-- Thời gian hoàn thành toàn bộ yêu cầu HTTP, từ lúc bắt đầu đến khi hoàn thành toàn bộ phản hồi.
+- The total time to complete the HTTP request, from start to finish, including the response.
 
-**http_req_failed**:
+**http_req_failed:**
 
-- Số lượng yêu cầu HTTP thất bại (có thể do lỗi mạng, lỗi máy chủ...).
+- The number of failed HTTP requests (could be due to network errors, server errors, etc.).
 
-**http_req_receiving**:
-    
-- Thời gian nhận dữ liệu từ máy chủ sau khi yêu cầu HTTP đã được gửi đi.
+**http_req_receiving:**
 
-**http_req_sending**:
-    
-- Thời gian gửi dữ liệu yêu cầu đến máy chủ ( client -> server ).
+- The time to receive data from the server after the HTTP request has been sent.
 
-**http_req_tls_handshaking**:
+**http_req_sending:**
 
-- Thời gian thiết lập kết nối an toàn (SSL)
-    
-- Thời gian thực hiện bắt tay (handshake) TLS cho kết nối HTTPS.
+- The time to send data to the server (client -> server).
 
-**http_req_waiting**:
-    
-- Thời gian chờ đợi phản hồi từ máy chủ sau khi gửi yêu cầu HTTP.
+**http_req_tls_handshaking:**
 
-**http_reqs**:
+- The time to establish a secure connection (SSL)
 
-- Tổng số lượng yêu cầu HTTP đã được thực hiện.
+- Time taken for TLS handshake for HTTPS connections.
 
-**iteration_duration**:
+**http_req_waiting:**
 
-- Thời gian thực hiện một vòng lặp (iteration) của kịch bản kiểm thử.
+- The time to wait for a response from the server after sending the HTTP request.
 
-**iterations**:
-    
-- Tổng số vòng lặp (iterations) đã được thực hiện trong kịch bản kiểm thử.
+**http_reqs:**
 
-**vus**:
+- The total number of HTTP requests made.
 
-- Số lượng người dùng ảo (Virtual Users) hiện tại đang thực hiện kiểm thử.
+**iteration_duration:**
 
-**vus_max**:
+- The time to perform one iteration of the test script.
 
-- Số lượng người dùng ảo tối đa trong quá trình kiểm thử.
+**iterations:**
 
-Như vậy chúng ta đã cài đặt thành công k6 và thực hiện test cơ bản.
+- The total number of iterations performed in the test script.
+
+**vus:**
+
+- The number of virtual users currently performing the test.
+
+**vus_max:**
+
+- The maximum number of virtual users during the test.
+
+Thus, we have successfully installed k6 and performed a basic test.

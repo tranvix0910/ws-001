@@ -1,56 +1,60 @@
 ---
-title : "Thiết lập dự án"
+title : "Setting Up the Project"
 date :  "`r Sys.Date()`" 
 weight : 2 
 chapter : false
 pre : " <b> 2. </b> "
 ---
 
-### Tổng quan
-![alt text](/images/2-preparation/2-0-0.png)
-Trong buổi Workshop này, chúng ta sẽ cùng nhau triển khai (deploy) một ứng dụng web sử dụng MERN Stack. 
+### Overview
 
-MERN Stack bao gồm bốn thành phần chính: MongoDB, Express.js, React, và Node.js.
+![alt text](/images/2-preparation/2-0-0.png)
+
+In this workshop, we will deploy a web application using the MERN Stack.
+
+The MERN Stack consists of four main components: MongoDB, Express.js, React, and Node.js.
 
 - **MongoDB** – NoSQL database.
-- **ExpressJS** – Backend web-application framework cho NodeJS.
-- **ReactJS** – JavaScript library dùng cho phát triển UIs từ UI components. 
-- **NodeJS** – Môi trường runtime cho JavaScript, cho phép chạy mã JavaScript bên ngoài trình duyệt, cùng với các tính năng khác.
 
-Chúng ta sẽ triển khai dự án trong môi trường On-premise bằng cách tạo các máy chủ Ubuntu thông qua nền tảng ảo hóa VMware.
+- **ExpressJS** – Backend web-application framework for NodeJS.
 
-Dưới đây là danh sách các Server cần thiết:
+- **ReactJS** – JavaScript library for building UIs from UI components.
+
+- **NodeJS** – JavaScript runtime environment, allowing JavaScript to run outside the browser, along with other features.
+
+We will deploy the project in an on-premise environment by creating Ubuntu servers through the VMware virtualization platform.
+
+Below is the list of necessary servers:
 
 | #   | OS     | Version | Server            | Ram  | CPU | Disk | IP              | Username   | Domain             | Description |
 | --- | ------ | ------- | ----------------- | ---- | --- | ---- | --------------- | ---------- | ------------------ | ----------- |
 | 1   | Ubuntu | 24.04   | Gitlab-Server      | 3Gb  | 2   | 20Gb | 192.168.181.101 | tranvi0910 | gitlab.tranvix.vn  |             |
 | 2   | Ubuntu | 24.04   | Development Server | 2Gb  | 1   | 20Gb | 192.168.181.102 | tranvi0910 |                    |             |
 | 3   | Ubuntu | 24.04   | Build Server       | 2Gb  | 1   | 20Gb | 192.168.181.103 | tranvi0910 |                    |             |
-| 4   | Ubuntu | 24.04   | Database Server    | 2Gb  | 1   | 20Gb | 192.168.181.104 | tranvi0910 |                    |             |
 
-- **Gitlab Server** : 
-    - Đây là server chính dùng để chạy GitLab, một nền tảng quản lý mã nguồn và DevOps. GitLab cung cấp các tính năng như quản lý dự án, kho lưu trữ mã nguồn, CI/CD (Continuous Integration/Continuous Deployment).
-    - **IP & Domain**: 192.168.181.100, gitlab.tranvix.vn - Cho phép truy cập GitLab qua địa chỉ IP cục bộ hoặc domain `gitlab.tranvix.vn`.
+**GitLab Server**:
 
-- **Development Server** :
-    - Server này được sử dụng cho môi trường phát triển. Các nhà phát triển có thể triển khai và kiểm thử mã nguồn tại đây trước khi đưa lên GitLab hoặc các môi trường khác.
+- This is the main server used to run GitLab, a platform for source code management and DevOps. GitLab provides features such as project management, source code repository, CI/CD (Continuous Integration/Continuous Deployment).
 
-- **Build Server** :
-    - Server này dành riêng cho việc xây dựng (build) mã nguồn từ các dự án. Nó có thể tích hợp với GitLab để tự động hóa quá trình build khi có mã mới được đẩy lên.
+- IP & Domain: 192.168.181.100, gitlab.tranvix.vn - Allows access to GitLab via the local IP or domain `gitlab.tranvix.vn`.
 
-- **Database Server** :
-    - Đây là server chuyên dụng để lưu trữ cơ sở dữ liệu. Các ứng dụng khác, chẳng hạn như GitLab hoặc các ứng dụng trên Development Server, sẽ kết nối đến server này để truy vấn và lưu trữ dữ liệu.
+**Development Server:**
 
-Việc sử dụng domain name thay vì địa chỉ IP cụ thể trong mục Domain có nhiều lợi ích, đặc biệt là trong bối cảnh truy cập GitLab.
-Domain name như `gitlab.tranvix.vn` dễ nhớ hơn so với một địa chỉ IP như `192.168.181.101`. Điều này giúp người dùng dễ dàng truy cập vào GitLab mà không cần phải ghi nhớ hoặc tra cứu IP mỗi khi cần.
+- This server is used for development environments. Developers can deploy and test code here before pushing it to GitLab or other environments.
 
-### Nội dung
+**Build Server:**
 
-- [Thiết lập các Server cho dự án](2.1-setupservers)
-- [Private Container Registry - Portus](2.2-containerregistry)
-- [Gitlab Server](2.3-gitlabserver)
-- [Database Server](2.4-database)
-- [Source Code Security - Snyk](2.5-snyk)
-- [Trivy Security Scan Image](2.6-trivy)
-- [Web Application Security Scan](2.7-arachni)
-- [Performance Testing - k6](2.8-k6)
+- This server is dedicated to building source code from projects. It can be integrated with GitLab to automate the build process when new code is pushed.
+
+Using a domain name instead of a specific IP address in the Domain field offers several benefits, particularly in accessing GitLab. A domain name like gitlab.tranvix.vn is easier to remember than an IP address like 192.168.181.101. This makes it easier for users to access GitLab without having to memorize or look up the IP each time.
+
+### Content
+
+1. [Thiết lập các Server cho dự án](2.1-setupservers)
+2. [Private Container Registry - Portus](2.2-containerregistry)
+3. [Gitlab Server](2.3-gitlabserver)
+4. [Database Server](2.4-database)
+5. [Source Code Security - Snyk](2.5-snyk)
+6. [Trivy Security Scan Image](2.6-trivy)
+7. [Web Application Security Scan](2.7-arachni)
+8. [Performance Testing - k6](2.8-k6)

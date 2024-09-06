@@ -1,16 +1,17 @@
 ---
-title : "Thiết lập Gitlab Runner"
+title : "Setting up GitLab Runner"
 date :  "`r Sys.Date()`" 
 weight : 1 
 chapter : false
 pre : " <b> 3.1 </b> "
 ---
 
-#### Cài đặt Gitlab Runner
+#### Installing GitLab Runner
 
-Để đảm bảo mỗi server có thể thực hiện nhiệm vụ build và triển khai một cách hiệu quả, chúng ta sẽ tiến hành cài đặt GitLab Runner trên cả Server **Development** và Server **Build**.
+To ensure that each server can efficiently perform build and deployment tasks, we will install GitLab Runner on both the **Development Server** and **Build Server**.
 
-Cài đặt Gitlab Runner theo các lệnh sau:
+Install GitLab Runner using the following commands:
+
 ```
 apt update -y
 
@@ -19,33 +20,34 @@ curl -L "https://packages.gitlab.com/install/repositories/runner/gitlab-runner/s
 apt install gitlab-runner
 ```
 
-Trước đây, chúng ta đã thảo luận về các loại GitLab Runner khác nhau và cách chúng phù hợp với các nhu cầu dự án ( mục 1.3 ). Khi triển khai, bạn có thể chọn chiến lược phù hợp nhất với đặc thù dự án của bạn.
 
-Trong buổi Workshop này, chúng ta sẽ tập trung vào việc triển khai **Group Runner**, một lựa chọn linh hoạt và mạnh mẽ cho phép tất cả các dự án trong nhóm được xử lý bởi cùng một Runner. Điều này giúp tối ưu hóa tài nguyên và đảm bảo tính nhất quán trong quá trình CI/CD.
+Previously, we discussed the different types of GitLab Runners and how they fit into the project’s needs in [Section 1.3](https://ws-001.tranvix.online/1-introduce/1.3-tools/#gitlab-runner). When deploying, you can choose the strategy that best suits your project's characteristics.
+
+In this workshop, we will focus on deploying a **Group Runner**, a flexible and powerful option that allows all projects within the group to be handled by the same Runner. This helps optimize resources and ensures consistency in the CI/CD process.
 
 ![alt text](/images/3-pipeline/3.1-gitlab-runner/3-1-1.png)
 
-Gitlab Runner đã cài đặt thành công ở 2 Server.
+GitLab Runner has been successfully installed on both servers.
 
-#### Cấu hình Gitlab Runner
+#### Configuring GitLab Runner
 
-Truy cập `Groups` -> `Build` -> `Runners`.
+Navigate to **Groups** -> **Build** -> **Runners**.
 
 ![alt text](/images/3-pipeline/3.1-gitlab-runner/3-1-2.png)
 
-Chọn `New group runner`.
+Select **New group runner**.
 
 ![alt text](/images/3-pipeline/3.1-gitlab-runner/3-1-3.png)
 
-Đặt Tags và Tạo Runner, chú ý tick chọn `Run untagged jobs`.
+Set Tags and Create the Runner, ensuring to tick the **Run untagged jobs** option.
 
 ![alt text](/images/3-pipeline/3.1-gitlab-runner/3-1-4.png)
 
-Sau đó, Gitlab sẽ hướng dấn chúng ta cách để đăng ký Gitlab-Runner với máy ảo:
+GitLab will then guide us on how to register the GitLab-Runner with the virtual machine:
 
 ![alt text](/images/3-pipeline/3.1-gitlab-runner/3-1-5.png)
 
-Thực hiện Step 1:
+Execute Step 1:
 
 ```
 gitlab-runner register  --url http://gitlab.tranvix.vn  --token glrt-DneB3yejRa5zd3F5xLKs
@@ -53,9 +55,10 @@ gitlab-runner register  --url http://gitlab.tranvix.vn  --token glrt-DneB3yejRa5
 
 ![alt text](/images/3-pipeline/3.1-gitlab-runner/3-1-6.png)
 
-Sau khi thực hiện thành công ở cả 2 Server tiến hành kiểm tra tại Gitlab.
+After successfully registering on both servers, check in GitLab.
 
 ![alt text](/images/3-pipeline/3.1-gitlab-runner/3-1-7.png)
 
-Như vậy đã thiết lập Gitlab thành công.
+GitLab has now been successfully set up.
+
 

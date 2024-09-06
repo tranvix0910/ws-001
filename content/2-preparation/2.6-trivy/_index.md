@@ -6,8 +6,8 @@ chapter : false
 pre : " <b> 2.6 </b> "
 ---
 
-#### Cài đặt Docker và Docker Compose
-Tạo file script `.sh` để cài đặt Docker và Docker Compose.
+#### Installing Docker and Docker Compose
+Create a Bash Script file to install Docker and Docker Compose.
 ```bash
 #!/bin/bash
 sudo apt install -y apt-transport-https ca-certificates curl software-properties-common
@@ -22,45 +22,48 @@ sudo chmod +x /usr/local/bin/docker-compose
 docker -v
 docker-compose -v
 ```
-Chạy script trên bằng cách thực hiện lệnh sau:
+Run the script with the following command:
 ```
 sh <name-file>.sh
 ```
 ![alt text](/images/2-preparation/2.6-trivy/2-6-1.png)
-Như vậy đã cài đặt thành công Docker và Docker Compose.
 
-#### Cài đặt Trivy thông qua Docker Image
-Trivy có các cách sử dụng sau:
+Docker and Docker Compose are successfully installed.
+
+#### Installing Trivy via Docker Image
+
+Trivy can be used in the following ways:
 
 ```
-# Cài đặt Trivy
+# Install Trivy
 brew install aquasecurity/trivy/trivy
 
-# Quét một Docker image
+# Scan a Docker image
 trivy image your-docker-image
 
-# Quét file hệ thống
+# Scan a filesystem
 trivy fs /path/to/your/filesystem
 
-# Quét mã nguồn
+# Scan source code
 trivy repo https://github.com/your/repo
 ```
 
-Trong bài Workshop này chúng ta sẽ cài đặt Trivy thông qua Docker Image.
+In this workshop, we will install Trivy via Docker Image.
 
-Chúng ta có thể thực hiện việc test mã nguồn kết hợp với việc kéo Image Trivy từ Docker Hub.
+You can perform a source code scan while pulling the Trivy Image from Docker Hub:
 ```
 docker run aquasec/trivy fs .
 ```
 ![alt text](/images/2-preparation/2.6-trivy/2-6-2.png)
 
-Có thể tạo báo cáo quét Security bằng Trivy.
+You can generate security scan reports with Trivy.
 
 - [Trivy Report Formats](https://aquasecurity.github.io/trivy/v0.28.1/docs/vulnerability/examples/report/)
 
 ```
 $ trivy image --format template --template "@contrib/html.tpl" -o report.html golang:1.12-alpine
 ```
+
 
 
 

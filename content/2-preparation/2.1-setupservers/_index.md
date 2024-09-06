@@ -1,77 +1,81 @@
 ---
-title : "Thiết lập các Server cho dự án"
-date :  "`r Sys.Date()`" 
-weight : 1 
-chapter : false
-pre : " <b> 2.1 </b> "
+title: "Server Setup for the Project"
+date:  "`r Sys.Date()`" 
+weight: 1 
+chapter: false
+pre: " <b> 2.1 </b> "
 ---
 
-#### Gitlab Server
-Chúng ta sẽ tiến hành thiết lập GitLab EE (Enterprise Edition) trên máy chủ nhằm lưu trữ mã nguồn và cấu hình quá trình CI/CD.
+#### Install Ubuntu Server
 
-Để thực hiện, chúng ta sẽ sử dụng hệ điều hành Ubuntu phiên bản 24.04 để cài đặt trên máy ảo.
+First, we will use the Ubuntu version 24.04 operating system to install on a virtual machine.
 
-- [Link file ISO Ubuntu Server 24.04](https://ubuntu.com/download/server/thank-you?version=24.04&architecture=amd64&lts=true)
+- [Link to Ubuntu Server 24.04 ISO file](https://ubuntu.com/download/server/thank-you?version=24.04&architecture=amd64&lts=true)
 
-Tiến hành tạo máy ảo theo các bước sau:
+We will create a virtual machine using **VMware Workstation**, to install the application you can refer to the following link:
+
+- [Set up VMware Workstation Pro 17 on Windows 10/11](https://thelinuxforum.com/articles/960-how-to-install-free-vmware-workstation-pro-17-on-windows-10-11)
+
+Proceed to create the virtual machine on **VMware Workstation** by following these steps:
 
 ![alt text](/images/2-preparation/2.1-setupservers/2-1-1.png)
 ![alt text](/images/2-preparation/2.1-setupservers/2-1-2.png)
 ![alt text](/images/2-preparation/2.1-setupservers/2-1-3.png)
 
-Chú ý chọn file ISO vừa tải về.
+Select the Ubuntu Server ISO file we just downloaded.
 
 ![alt text](/images/2-preparation/2.1-setupservers/2-1-4.png)
 
-Đặt tên và chọn thư mục lưu trữ Server nhầm mục đích dễ quản lý.
+Name the virtual machine and choose a folder that you manage.
 
 ![alt text](/images/2-preparation/2.1-setupservers/2-1-5.png)
 
-Tùy theo cấu hình của máy bạn mà có thể chọn **Processors** và **Cores** phù hợp, tuy nhiên Gitlab cần tối thiểu **2 CPU (Processor Cores)**.
+Depending on your machine's configuration, you can select the appropriate **Processors** and **Cores**, but GitLab requires at least **2 CPU (Processor Cores)**.
 
 ![alt text](/images/2-preparation/2.1-setupservers/2-1-6.png)
 ![alt text](/images/2-preparation/2.1-setupservers/2-1-7.png)
 ![alt text](/images/2-preparation/2.1-setupservers/2-1-8.png)
 
-Tiếp theo chọn theo các cấu hình mặc định.
+Next, choose the default configurations.
 
 ![alt text](/images/2-preparation/2.1-setupservers/2-1-9.png)
 ![alt text](/images/2-preparation/2.1-setupservers/2-1-10.png)
 
-Tiếp theo thiết lập Ubuntu Server 
+After the virtual machine is installed successfully, we will boot the virtual machine and configure the Ubuntu Server.
 
 ![alt text](/images/2-preparation/2.1-setupservers/2-1-11.png)
 
-Tiếp tục chọn theo cấu hình mặc định.
-Ở mục **Storage Configuration** thiết lập phân vùng **Root ( / )** bằng toàn bộ dung lượng còn lại.
+Continue to choose the default configurations.
+
+In the **Storage Configuration** section, configure the **Root ( / )** partition with the remaining available space.
 
 ![alt text](/images/2-preparation/2.1-setupservers/2-1-12.png)
 ![alt text](/images/2-preparation/2.1-setupservers/2-1-13.png)
 
-Cài đặt OpenSSH.
+Tick the option to install OpenSSH.
 
 ![alt text](/images/2-preparation/2.1-setupservers/2-1-14.png)
 
-Đợi Ubuntu thiết lập thành công và tiến hành Reboot.
+Wait for Ubuntu to be successfully set up and proceed with Reboot.
 
 ![alt text](/images/2-preparation/2.1-setupservers/2-1-15.png)
 
-Sau khi Reboot, đăng nhập vào Server vào username và pass vừa tạo. Chú ý IPv4 khi vừa đăng nhập, dùng để **SSH** vào Server.
+After the reboot, log in to the server with the username and password you just created. **Note the IPv4 upon login, used for SSH into the server**.
 ![alt text](/images/2-preparation/2.1-setupservers/2-1-16.png)
 
 {{% notice tip %}}
-Có thể sử dụng lệnh `ip a` để xem IPv4 và các thông tin khác của Server.
+You can use the `ip a` command to view IPv4 and other server information.
 {{% /notice %}}
 
-Mở **CMD** trên Windows để SSH vào Server thông qua IPv4 và Username.
+Open **CMD** on Windows to SSH into the server using the IPv4 and Username.
 
 ![alt text](/images/2-preparation/2.1-setupservers/2-1-17.png)
 
-Tuy nhiên khi tắt Server và bật lại IPv4 có thể thay đổi, chúng ta tiến hành thiết lập IP tĩnh cho Server.
+However, when the server is turned off and back on, the IPv4 may change, so we need to set up a static IP for the server. When rebooting, the IP will remain unchanged, making it easier for us to configure.
 
-Chuyển sang quyền Root bằng lệnh `sudo -i` cho quá trình thiết lập dễ thao tác.
+Switch to Root privileges using the `sudo -i` command for easier configuration.
 
-Chỉnh sửa cấu hình trong file `50-cloud-init.yaml` bằng lệnh `vi /etc/netplan/50-cloud-init.yaml` và viết theo cấu hình sau:
+Edit the configuration in the `50-cloud-init.yaml` file with the command `vi /etc/netplan/50-cloud-init.yaml` and write the following configuration:
 ``` yaml
 # This is the network config written by 'subiquity'
 network:
@@ -84,35 +88,43 @@ network:
               addresses: [8.8.8.8, 8.8.4.4]
   version: 2
 ```
-Tiến hành lưu file bằng tổ hợp phím sau: `ESC + :wq` và tiến hành chạy lệnh:
+
+Save the file and run the following commands:
+
 ```shell
 $ netplan apply
 
 $ reboot
 ```
 
-
 {{% notice info %}}
-Ở dòng `gateway4` là IP Gateway của NAT có thể lấy ở VMware bằng cách truy cập vào **Edit -> Virtual Network Editor -> NAT Setting**
+The **gateway4** line is the NAT Gateway IP. We can get it in VMware Workstation by accessing **Edit** -> **Virtual Network Editor** -> **NAT Setting**.
 {{% /notice %}}
 
 ![alt text](/images/2-preparation/2.1-setupservers/2-1-18.png)
 
-Sau khi chỉnh sửa IP tĩnh thành công tiến hành tạo Snapshot và Clone ra các Server khác.
+After successfully configuring the static IP, we will proceed to create a Snapshot and Clone to other servers.
 
 ![alt text](/images/2-preparation/2.1-setupservers/2-1-19.png)
 
-Click phải vào **Gitlab Server** -> **Snapshot** -> **Take Snapshot** và điền các thông tin.
+Right-click on **Gitlab Server** -> **Snapshot** -> **Take Snapshot** and fill in the information.
 
-Sau đó chọn theo ảnh và Clone ra các Server khác.
+![alt text](/images/2-preparation/2.1-setupservers/2-1-21.png)
+
+![alt text](/images/2-preparation/2.1-setupservers/2-1-22.png)
+
+Thus, we have successfully created a Snapshot, after that, we will proceed to clone the server.
+
+Access Snapshot Manager and perform the following steps:
+
+![alt text](/images/2-preparation/2.1-setupservers/2-1-23.png)
 
 ![alt text](/images/2-preparation/2.1-setupservers/2-1-20.png)
 
-Clone Server và thay đổi IP tĩnh, Hostname của các Server theo bảng sau:
+After that, we will configure the servers according to the following table:
 
-| Server             | Hostname           | IP              |
+| Server             | Hostname           | IP Tĩnh         |
 |--------------------|--------------------|-----------------|
-| Gitlab Server      | gitlab-server      | 192.168.181.100 |
-| Development Server | development-server | 192.168.181.101 |
-| Build Server       | build-server       | 192.168.181.102 |
-| Database Server    | database-server    | 192.168.181.103 |
+| Gitlab Server      | gitlab-server      | 192.168.181.101 |
+| Development Server | development-server | 192.168.181.102 |
+| Build Server       | build-server       | 192.168.181.103 |

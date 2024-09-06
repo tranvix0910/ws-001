@@ -5,11 +5,11 @@ weight : 5
 chapter : false
 pre : " <b> 2.5 </b> "
 ---
-#### Cài đặt NodeJS và npm
+#### Installing NodeJS and npm
 ```shell
 sudo apt install npm -y
 ```
-Kiểm tra Version.
+Check the version:
 ```shell
 tranvi0910@deployment-server:~$ node -v
 v18.20.4
@@ -19,8 +19,8 @@ tranvi0910@deployment-server:~$ npm -v
 v10.7.0
 ```
 
-#### Cài đặt Snyk với npm
-Cài đặt Snyk ở Server **Build**.
+#### Installing Snyk with npm
+Install Snyk on the **Build Server**:
 ```sh
 npm install snyk -g
 
@@ -43,17 +43,19 @@ added 23 packages in 5s
   run `npm fund` for details
 ```
 
-Đăng nhập vào trang web chính thức của Snyk và tiến hành xác thực.
+Log in to the official Snyk website and proceed with authentication.
 
 - [Link Snyk](https://app.snyk.io/)
 
 ![alt text](/images/2-preparation/2.5-snyk/2-5-1.png)
 ![alt text](/images/2-preparation/2.5-snyk/2-5-2.png)
 
-Lấy **API Token** từ Account:
+Get your **API Token** from your account:
+
 ![alt text](/images/2-preparation/2.5-snyk/2-5-3.png)
 
-Thực hiện câu lệnh sau ở Server Development để tiến hành xác thực.
+Run the following command on the **Development Server** to authenticate Snyk:
+
 ```sh
 snyk auth ab089484-2b45-4f10-b991-xxxxxxxxxxx
 ```
@@ -69,7 +71,8 @@ Downloaded successfull!
 Your account has been authenticated. Snyk is now ready to be used.
 ```
 
-Di chuyển vào thư mục chứa dự án và tiến hành test:
+Navigate to the project directory and proceed with testing:
+
 ```
 cd /projects/wineapp/wineapp-frontend
 
@@ -78,7 +81,8 @@ snyk test
 
 ![alt text](/images/2-preparation/2.5-snyk/2-5-4.png)
 
-Có thể xem chi tiết các vấn đề bằng cách sử dụng lệnh sau:
+You can view detailed issues using the following command:
+
 ```
 snyk monit
 ```
@@ -86,10 +90,12 @@ snyk monit
 
 ![alt text](/images/2-preparation/2.5-snyk/2-5-6.png)
 
-Có thể test và lưu ra 1 file HTML.
+You can test and save the results to an HTML file:
+
 ```sh
 snyk test --json | snyk-to-html -o <name_file>.html
 ```
 ![alt text](/images/2-preparation/2.5-snyk/2-5-7.png)
 
-Như vậy đã cài đặt và thiết lập Snyk thành công.
+Thus, Snyk has been installed and configured successfully.
+

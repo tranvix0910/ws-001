@@ -6,17 +6,20 @@ chapter : false
 pre : " <b> 2.7 </b> "
 ---
 
-#### Web Application Security Scan với Arachni
+#### Web Application Security Scan with Arachni
 
-Sau khi dự án được Deploy thành công chúng ta có thể tiến hành quét bảo mật của Web.
+Once the project is successfully deployed, you can proceed with a web security scan.
 
-Cài đặt **Arachni** ở **Server Development**, dự án được Deploy ở Server Development nên chúng ta sẽ thực hiện test trên server này.
+Install Arachni on the Development Server. Since the project is deployed on this server, we will perform the test on this server.
 
-Tạo User cho Arachni.
+Create a user for Arachni:
+
 ```
 adduser arachni
 ```
-Tải và giải nén file cài đặt Arachni.
+
+Download and extract the Arachni installation file:
+
 ```
 wget https://github.com/Arachni/arachni/releases/download/v1.5.1/arachni-1.5.1-0.5.12-linux-x86_64.tar.gz
 
@@ -24,23 +27,25 @@ tar -xvf arachni-1.5.1-0.5.12-linux-x86_64.tar.gz
 ```
 ![alt text](/images/2-preparation/2.7-arachni/2-7-1.png)
 
-Di chuyển vào thư mục vừa giải nén.
+Navigate to the extracted directory.
 
 ![alt text](/images/2-preparation/2.7-arachni/2-7-2.png)
 
-Thư mục `bin` là thư mục chứa các câu lệnh, có thể chạy lệnh thông qua thư mục `bin`.
+The **bin** directory contains the executable commands, which you can run through this directory.
 
-Có thể chạy lệnh sau để quét một trang Web bạn đã Deploy.
+You can run the following command to scan a deployed web page:
+
 ```
 bin/arachni --output-verbose --scope-include-subdomains http://<your-ip>:<port> --report-save-path=/tmp/<name-file>.afr
 ```
-- `http://<your-ip>:<port>` : Là địa chỉ của Web.
+- `http://<your-ip>:<port>`: This is the address of the web application.
 
-- Kết quả quét sẽ được lưu trong tệp `<name-file>.afr`.
+- The scan results will be saved in the `<name-file>.afr` file.
 
-- `Arachni Framework Report (.afr)` là định dạng của file Report.
+- `Arachni Framework Report (.afr)` is the format of the report file.
 
-Có thể chuyển thành file HTML bằng lệnh:
+You can convert it to an HTML file using the command:
+
 ```
 bin/arachni_reporter /tmp/wineapp-frontend.afr --reporter=html:outfile=<name-file>.html.zip
 ```
@@ -69,7 +74,7 @@ drwxrwxr-x 7 arachni arachni   4096 Mar 29  2017 system
 -rw-rw-r-- 1 arachni arachni     13 Mar 29  2017 VERSION
 ```
 
-#### Tạo Docker Image Arachni
+#### Creating a Docker Image for Arachni
 
 ```Dockerfile
 ## Tools: Arachni
@@ -89,13 +94,13 @@ WORKDIR /arachni-1.5.1-0.5.12
 CMD ["bin/arachni"]
 ```
 
-Build Image.
+Build the image:
 
 ```shell
 docker build -t tranvi0910/arachni:v1.5.1-0.5.12 .
 ```
 
-Tiếp theo tiến hành đang nhập và push vào Dockerhub, khi chúng ta thực hiện quá trình CI/CD chỉ cần kéo Image về và thực hiện việc Test.
+Next, log in and push the image to Dockerhub. During the CI/CD process, you can pull the image and perform the test.
 ```
 docker login
 
@@ -103,7 +108,7 @@ docker push tranvi0910/arachni:v1.5.1-0.5.12
 ```
 ![alt text](/images/2-preparation/2.7-arachni/2-7-3.png)
 
-Việc thiết lập và cài đặt Arachni đã hoàn thành.
+The setup and installation of Arachni are complete.
 
 
 

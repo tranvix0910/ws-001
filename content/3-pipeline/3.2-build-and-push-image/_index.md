@@ -1,76 +1,70 @@
 ---
-title : "Build và Push Docker Image"
+title : "Build and Push Docker Image"
 date :  "`r Sys.Date()`" 
 weight : 2 
 chapter : false
 pre : " <b> 3.2 </b> "
 ---
 
-#### Thiết lập các cấu hình cần thiết.
+#### Setting Up Necessary Configurations
 
-Trước khi tạo Dockerfile, bạn cần cập nhật giá trị BASE_URL trong frontend để trỏ đến địa chỉ server backend mà bạn sẽ deploy. Cụ thể, bạn cần thay đổi thông số này trong file cấu hình của frontend.
+Before creating the Dockerfile, you need to update the `BASE_URL` in the frontend configuration to point to the backend server where you will deploy. Specifically, you need to change this value in the frontend configuration file.
 
-Để thực hiện điều này trên GitLab, hãy làm theo các bước sau:
+To do this on GitLab, follow these steps:
 
-Truy cập file cấu hình:
+1. Navigate to the configuration file:
 
-- Trong dự án frontend của bạn trên GitLab, điều hướng đến file cấu hình `src/config/utils.js`.
+- In your frontend project on GitLab, go to `src/config/utils.js`.
 
-- Thay đổi giá trị `BASE_URL` để trỏ tới server deploy backend hiện tại. 
+- Change the value of `BASE_URL` to point to the current backend server.
 
 ![alt text](/images/3-pipeline/3.2-build-and-push-image/3-2-1.png)
 
-Tiếp theo chúng ta sẽ thực hiện tạo một nhánh ( branch ) mới.
+Next, we will create a new branch.
 
-Để đảm bảo tính ổn định của nhánh chính (Main), hãy tạo một nhánh mới để thực hiện các thay đổi. Điều này giúp giữ cho nhánh Main không bị ảnh hưởng trong quá trình phát triển.
+To ensure the stability of the Main branch, create a new branch for making changes. This keeps the Main branch unaffected during development.
 
-Truy cập vào dấu `+` và chọn `New Branch`.
+2. Go to the **+** icon and select **New Branch**.
+
 ![alt text](/images/3-pipeline/3.2-build-and-push-image/3-2-2.png)
 
-Chúng ta sẽ đặt tên và tạo Branch.
+We will name and create the branch.
 
 ![alt text](/images/3-pipeline/3.2-build-and-push-image/3-2-3.png)
 
-Chúng ta sẽ thực hiện thêm một số cấu hình sau để đảm bảo tính bảo mật.
+We will also adjust some settings to enhance security.
 
-Truy cập vào `Settings` -> `Repository`
+3. Navigate to **Settings** -> **Repository**.
 
 ![alt text](/images/3-pipeline/3.2-build-and-push-image/3-2-4.png)
 
-Thay đổi nhánh mặc định thành nhánh vừa tạo, việc này nhầm mục địch khi chúng ta truy cập vào Project, Source code của nhánh Develop sẽ xuất hiện đầu tiên.
+Change the default branch to the newly created one so that when you access the project, the source code of the Develop branch appears first.
 
 ![alt text](/images/3-pipeline/3.2-build-and-push-image/3-2-5.png)
 
-Tiếp theo chúng ta sẽ thực hiện Protect Branch, khi bảo vệ nhánh có thể giữ an toàn cho nhánh tránh các tình huống Push và Merge.
+Next, we will protect the branch. Protecting a branch helps safeguard it from unauthorized Push and Merge actions.
 
 ![alt text](/images/3-pipeline/3.2-build-and-push-image/3-2-6.png)
 
-#### Thêm User Gitlab-Runner vào Group Docker
+#### Add GitLab-Runner User to Docker Group
 
-Trong quá trình chạy Pipeline, User gitlab-runner sẽ được dùng để chạy dự án. 
+During the pipeline execution, the `gitlab-runner` user will be used to run the project.
 
-Việc thêm gitlab-runner vào Group Docker giúp cho User có thể thực hiện các câu lệnh Docker như : Login, Logout Build và Push Image.
+Adding `gitlab-runner` to the Docker group allows the user to execute Docker commands like **Login**, **Logout**, **Build**, and **Push Image**.
 
 ```
 sudo usermod -aG docker gitlab-runner
 ```
 
-- `sudo`: Chạy lệnh với quyền quản trị.
+#### Create Dockerfile
 
-- `usermod`: Công cụ để sửa đổi tài khoản người dùng.
-
-- `-aG docker`: Tùy chọn `-aG` thêm người dùng vào nhóm chỉ định mà không loại họ khỏi các nhóm khác.
-
-- `gitlab-runner`: Tên của người dùng cần thêm vào nhóm docker.
-
-#### Tạo Dockerfile
-
-Truy cập vào Web IDE để tiện cho việc thao tác.
+Access the Web IDE for easier interaction.
 
 ![alt text](/images/3-pipeline/3.2-build-and-push-image/3-2-7.png)
 ![alt text](/images/3-pipeline/3.2-build-and-push-image/3-2-8.png)
 
-Tạo Dockerfile cho Frontend:
+Create the Dockerfile for the Frontend:
+
 ```Dockerfile
 ##### Dockerfile #####
 ## build stage ##
@@ -89,12 +83,12 @@ COPY --from=build /app/build /usr/share/nginx/html
 EXPOSE 80
 CMD ["nginx", "-g", "daemon off;"]
 ```
-#### Tạo Gitlab CI/CD
+#### Create GitLab CI/CD
 
-Tiến hành tạo file `.gitlab-ci.yml`.
+We will create a `.gitlab-ci.yml` file.
 
 {{% notice note %}}
-Tệp `.gitlab-ci.yml` là một tệp cấu hình được sử dụng trong GitLab CI/CD. Nó định nghĩa các pipeline, các job, và các stage để tự động hóa các tác vụ như xây dựng, kiểm thử và triển khai mã nguồn khi có sự thay đổi trong kho lưu trữ (repository).
+The `.gitlab-ci.yml` file is a configuration file used in GitLab CI/CD. It defines pipelines, jobs, and stages to automate tasks like building, testing, and deploying code when changes are made in the repository.
 {{% /notice %}}
 
 ```yml
@@ -137,130 +131,133 @@ push:
         - tags
 ```
 
-Tệp cấu hình GitLab CI/CD được viết bằng YAML.
+The GitLab CI/CD configuration file is written in YAML.
 
-Trước khi giải thích chi tiết về file cấu hình trên, chúng ta sẽ tìm hiểu về **Biến (Variables)** trong Gitlab CI/CD.
+Before explaining the configuration file in detail, let’s explore **Variables** in GitLab CI/CD.
 
-Variables có 2 loại chính:
+There are two main types of variables:
 
-**Biến mặc định (Predefined Variables)**:
-- Được GitLab cung cấp tự động trong mỗi pipeline.
-- Ví dụ:
-    - **CI_COMMIT_SHA**: SHA của commit hiện tại.
-    - **CI_JOB_ID**: ID của công việc (job) hiện tại.
-    - **CI_PROJECT_NAME**: Tên của dự án.
-    - **CI_COMMIT_REF_NAME**: Tên nhánh (branch) hoặc tag của commit hiện tại.
-    - **CI_PIPELINE_ID**: ID của pipeline.
+**Predefined Variables**:
 
-**Biến do người dùng định nghĩa (User-defined Variables)**:
+- Automatically provided by GitLab in each pipeline.
 
-- Được người dùng tự định nghĩa trong tệp `.gitlab-ci.yml` hoặc trong phần cài đặt của dự án trên GitLab. 
-- Định nghĩa trong `.gitlab-ci.yml`:
+- Examples:
+    - **CI_COMMIT_SHA**: SHA of the current commit.
+    - **CI_JOB_ID**: ID of the current job.
+    - **CI_PROJECT_NAME**: Name of the project.
+    - **CI_COMMIT_REF_NAME**: Branch or tag name of the current commit.
+    - **CI_PIPELINE_ID**: ID of the pipeline.
+
+**User-defined Variables**:
+
+- These are defined by the user in the `.gitlab-ci.yml` file or in the project's settings on GitLab.
+
+- Defined in `.gitlab-ci.yml`:
+
 ```yaml
 variables:
     PROJECT_USER: "wineapp"
     PORTUS_URL: "https://registry.example.com"
 ```
-- Định nghĩa trong cài đặt dự án `Project Settings > CI/CD > Variables`:
 
-    - Có thể được thiết lập ở mức dự án, nhóm, hoặc pipeline cụ thể.
+- Defined in the project settings under `Project Settings > CI/CD > Variables`:
 
-    - Hỗ trợ tính năng protected, masked, và scoped (cho phép giới hạn biến chỉ trong một số môi trường hoặc nhánh cụ thể).
+    - Can be set at the project, group, or specific pipeline level.
 
-Trong dự án, Đầu tiên sẽ khai báo các biến (Variables):
+    - Supports features such as protected, masked, and scoped (allowing variables to be limited to certain environments or branches).
 
-- **PROJECT_USER**: Được dùng để định nghĩa User để triển khai dự án.
+In the project, the following variables are defined first:
 
-- **IMAGE_VERSION**: Tạo tag cho Docker image sử dụng một số biến:
+- **PROJECT_USER**: Used to define the user for deploying the project.
 
-    - `${PORTUS_URL}`: URL của Docker registry (có thể là Portus).
+- **IMAGE_VERSION**: Creates a tag for the Docker image using the following variables:
 
-    - `${PROJECT_USER}`: Người dùng dưới đó image sẽ được lưu trữ.
+    - `${PORTUS_URL}`: The URL of the Docker registry (could be Portus).
 
-    - `${CI_PROJECT_NAME}`: Tên dự án.
+    - `${PROJECT_USER}`: The user under which the image will be stored.
 
-    - `${CI_COMMIT_TAG}`: Tag gắn với commit (có thể là số phiên bản).
+    - `${CI_PROJECT_NAME}`: The name of the project.
 
-    - `${CI_COMMIT_SHORT_SHA}`: Phiên bản rút gọn của SHA commit.
+    - `${CI_COMMIT_TAG}`: The tag associated with the commit (could be a version number).
 
-{{% notice note %}}
-Chúng ta có thể lấy giá trị của biến bằng cách `${<Variable>}`
-{{% /notice %}}
-
-Tiếp theo chúng ta sẽ tạo các **Stage** cho Pipeline:
-
-Chúng ta sẽ định nghĩa pipeline chúng ta có 2 giai đoạn chính là **build** và **push**.
-
-- **build**: Giai đoạn mà Docker image được xây dựng.
-
-- **push**: Giai đoạn mà Docker image đã xây dựng được đẩy lên Docker registry.
-
-**Stage Build** chúng ta sẽ thực hiện những bước sau:
-
-- `GIT_STRATEGY: clone` : Chỉ định rằng kho mã nguồn sẽ được clone (hành vi mặc định).
-
-- `before_script` : Các lệnh được thực hiện trước khi chạy script chính. Đăng nhập vào Docker registry sử dụng thông tin đăng nhập được lưu trong các biến môi trường `${PORTUS_USER}` và `${PORTUS_PASSWORD}`.
-
-- `script` : Phần chính của giai đoạn này, xây dựng Docker image với tag `IMAGE_VERSION` đã được chỉ định.
-
-- `after_script` : Đăng xuất khỏi Docker registry sau khi quá trình build hoàn thành.
-
-- `tags` : Chỉ định runner (wineapp-build-shell) sẽ được sử dụng cho công việc này.
-
-- `only` : Đảm bảo công việc này chỉ chạy khi một **Git Tag** được đẩy lên.
+    - `${CI_COMMIT_SHORT_SHA}`: The short version of the commit SHA.
 
 {{% notice note %}}
-Thông thường khi code chúng ta có thay đổi Gitlab CI/CD sẽ tiến hành khởi động Pipeline, Tuy nhiên khi chúng ta khai báo `only: -tags`, việc chạy Pipeline sẽ được tiến hành khi chúng ta tạo Tag.
+You can retrieve the value of a variable using `${<Variable>}`.
 {{% /notice %}}
 
-**Stage Push** tương tự như Stage Build tuy nhiên chúng ta sẽ khai báo khác một tí:
+Next, we will create the **Stages** for the Pipeline:
 
-- `GIT_STRATEGY : none` : chúng ta sẽ không cần clone mã nguồn về ở giai đoạn này, vì mã nguồn đã được clone ở Stage trước.
+The pipeline will be defined with two main stages: **build** and **push**.
 
-- `script`: Đẩy Docker image đã được xây dựng lên Docker registry.
+- **build**: The stage where the Docker image is built.
 
-#### Tạo Variables
+- **push**: The stage where the built Docker image is pushed to the Docker registry.
 
-Sau khi tạo file thành công chúng ta sẽ Commit và tạo các Variables.
+For the **Build Stage**, the following steps will be executed:
 
-Truy cập `Project Settings > CI/CD > Variables`:
+- `GIT_STRATEGY: clone`: Specifies that the repository will be cloned (this is the default behavior).
+
+- `before_script`: Commands executed before the main script. This logs into the Docker registry using credentials stored in the `${PORTUS_USER}` and `${PORTUS_PASSWORD}` environment variables.
+
+- `script`: The main part of this stage, building the Docker image with the `IMAGE_VERSION` tag.
+
+- `after_script`: Logs out from the Docker registry after the build process is completed.
+
+- `tags`: Specifies the runner (wineapp-build-shell) to be used for this job.
+
+- `only`: Ensures this job only runs when a **Git Tag** is pushed.
+
+{{% notice note %}}
+Normally, when the code changes, GitLab CI/CD will start the pipeline. However, when specifying `only: -tags`, the pipeline will run only when a Tag is created.
+{{% /notice %}}
+
+For the **Push Stage**, it is similar to the Build Stage with a few differences:
+
+- `GIT_STRATEGY : none`: No need to clone the source code again at this stage, as it was cloned in the previous stage.
+
+- `script`: Pushes the built Docker image to the Docker registry.
+
+#### Create Variables
+
+After creating the `.gitlab-ci.yml` file, commit it and add variables by accessing `Project Settings > CI/CD > Variables`:
 
 ![alt text](/images/3-pipeline/3.2-build-and-push-image/3-2-9.png)
 
 ![alt text](/images/3-pipeline/3.2-build-and-push-image/3-2-10.png)
 
-Tiến hành tạo một số biến chúng ta đã định nghĩa tại Pipeline ( trừ một số biến mặc định của Gitlab CI/CD ).
+Proceed to add the necessary variables defined in the pipeline, except for GitLab's predefined ones.
 
 ![alt text](/images/3-pipeline/3.2-build-and-push-image/3-2-11.png)
 
-**Protect variable** : Các biến chỉ chạy trên các Branch và Tag được Protect.
+**Protect variable**: Variables will only run on protected branches and tags.
 
-**Expand variable reference**: Bất kỳ ký tự $ nào trong giá trị của biến sẽ được xử lý như một tham chiếu đến một biến khác.
+**Expand variable reference**: Any `$` character in the variable's value will be treated as a reference to another variable.
 
-- Ví dụ :
-    - `PROJECT_NAME` có giá trị là `myapp`.
+- Example:
+    - `PROJECT_NAME` is set to `myapp`.
     
-    - `PORTUS_URL` có giá trị là `https://registry.example.com/$PROJECT_NAME`.
+    - `PORTUS_URL` is set to `https://registry.example.com/$PROJECT_NAME`.
 
 ![alt text](/images/3-pipeline/3.2-build-and-push-image/3-2-12.png)
 
 ![alt text](/images/3-pipeline/3.2-build-and-push-image/3-2-13.png)
 
-Như vậy đã thêm các biến thành công.
+The variables have been added successfully.
 
-#### Khởi tạo Pipeline
+#### Initialize Pipeline
 
-Chúng ta sẽ tiến hành tạo Tag:
+We will proceed to create a Tag:
 
 ![alt text](/images/3-pipeline/3.2-build-and-push-image/3-2-14.png)
 
 ![alt text](/images/3-pipeline/3.2-build-and-push-image/3-2-15.png)
 
-Đặt tên Tag và chú ý chọn đúng Branch.
+Set the Tag name and make sure to select the correct Branch.
 
 ![alt text](/images/3-pipeline/3.2-build-and-push-image/3-2-16.png)
 
-Sau khi tạo Tag, Pipeline sẽ được khởi động.
+Once the Tag is created, the pipeline will start.
 
 ![alt text](/images/3-pipeline/3.2-build-and-push-image/3-2-17.png)
 
@@ -268,15 +265,15 @@ Sau khi tạo Tag, Pipeline sẽ được khởi động.
 
 ![alt text](/images/3-pipeline/3.2-build-and-push-image/3-2-19.png)
 
-**Job Build** Thành công.
+**Job Build** succeeded.
 
 ![alt text](/images/3-pipeline/3.2-build-and-push-image/3-2-20.png)
 
-**Job Push** Thành công.
+**Job Push** succeeded.
 
 ![alt text](/images/3-pipeline/3.2-build-and-push-image/3-2-21.png)
 
-Khi truy cập vào Portus, Repository đã được Push thành công.
+When accessing Portus, the repository has been pushed successfully.
 
 ![alt text](/images/3-pipeline/3.2-build-and-push-image/3-2-22.png)
 

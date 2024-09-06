@@ -6,12 +6,14 @@ chapter : false
 pre : " <b> 2.4 </b> "
 ---
 
-#### Cài đặt MongoDB
-Tạo một EC2 Instance với cấu hình sau:
-![alt text](image.png)
-Quá trình tạo EC2 xem lại phần 2.2.
+#### Install MongoDB
+Create an EC2 Instance with the following configuration:
 
-Sau khi tạo thành công tiến hành Connect vào EC2 và tạo file bash script cài đặt MongoDB.
+![alt text](/images/2-preparation/2.4-database/2-4-1.png)
+
+Refer to section 2.2 for the process of creating an EC2 instance.
+
+After successful creation, connect to the EC2 instance and create a **Bash Script** file to install MongoDB.
 
 ```
 #!/bin/bash
@@ -29,104 +31,98 @@ echo "mongodb-mongosh hold" | sudo dpkg --set-selections
 echo "mongodb-org-mongos hold" | sudo dpkg --set-selections
 echo "mongodb-org-tools hold" | sudo dpkg --set-selections
 ```
-Chạy script trên bằng cách thực hiện lệnh sau:
+Run the **Bash Script** by executing the following command:
 ```
 sh <name-file>.sh
 ```
-![alt text](image-1.png)
-Sau khi cài đặt thành công, tiến hành khởi động MongoDB Community Edition.
+![alt text](/images/2-preparation/2.4-database/2-4-2.png)
+After a successful installation, start MongoDB Community Edition with:
 ```
 sudo systemctl start mongod
 ```
-Kiểm tra xem MongoDB đã khởi động thành công chưa bằng lệnh:
+Check if MongoDB has started successfully with:
 ```
 sudo systemctl status mongod
 ```
-![alt text](image-2.png)
+![alt text](/images/2-preparation/2.4-database/2-4-3.png)
 
-Có thể sử dụng tùy chọn để đảm bảo rằng MongoDB sẽ khởi động sau khi khởi động lại hệ thống bằng lệnh:
+You can use the option to ensure MongoDB starts after system reboot with:
 ```
 sudo systemctl enable mongod
 ```
 
-#### Cấu hình MongoDB
-Truy cập vào file `/etc/mongod.conf` để thay đổi phạm vi địa chỉ IP mà MongoDB lắng nghe và chấp nhận kết nối.
+#### Configuring MongoDB
+Access the file **/etc/mongod.conf** to change the IP address range that MongoDB listens to and accepts connections.
 
-Chuyển từ `bindIp: 127.0.0.1` thành `bindIp: 0.0.0.0`
+Change from bindIp: **127.0.0.1** to bindIp: **0.0.0.0**
 
-- `127.0.0.1 (localhost)`: Đây là địa chỉ loopback của máy cục bộ (localhost). Nếu bindIp được đặt là 127.0.0.1, MongoDB sẽ chỉ chấp nhận kết nối từ chính máy tính nơi MongoDB đang chạy. Các kết nối từ bên ngoài (từ máy tính khác hoặc mạng khác) sẽ bị từ chối.
+- **127.0.0.1 (localhost)**: This is the loopback address of the local machine (localhost). If bindIp is set to 127.0.0.1, MongoDB will only accept connections from the machine where MongoDB is running. Connections from outside (from other computers or networks) will be denied.
 
-- `0.0.0.0`: Khi bindIp được đặt là 0.0.0.0, MongoDB sẽ lắng nghe trên tất cả các địa chỉ IP của máy chủ. Điều này có nghĩa là MongoDB sẽ chấp nhận kết nối từ bất kỳ IP nào, bao gồm cả máy tính cục bộ và các máy tính khác trong mạng.
+- **0.0.0.0**: When bindIp is set to 0.0.0.0, MongoDB will listen on all IP addresses of the server. This means MongoDB will accept connections from any IP, including local and external machines on the network.
 
-Điều này giúp chúng ta có thể truy cập từ máy cục bộ đến máy ảo cài đặt MongoDB.
+This allows us to access MongoDB from a local machine to the virtual machine where MongoDB is installed.
 
-![alt text](image-3.png)
+![alt text](/images/2-preparation/2.4-database/2-4-4.png)
 
-Sau khi thay đổi, tiến hành khởi động lại MongoDB.
+After making the changes, restart MongoDB with:
 ```
 sudo systemctl restart mongod
 ```
-![alt text](image-4.png)
+![alt text](/images/2-preparation/2.4-database/2-4-5.png)
 
-Tạo Firewall Rule để mở MongoDB Port ở EC2 Instance.
+Create a Firewall Rule to open the MongoDB Port on the EC2 Instance.
 
-Truy cập vào `Instance` -> `Security`.
-![alt text](image-5.png)
+Go to **Instance** -> **Security**.
+![alt text](/images/2-preparation/2.4-database/2-4-6.png)
 
-Chọn Security Group chứa Instance.
-![alt text](image-6.png)
+Select the Security Group associated with the Instance.
 
-Chọn `Edit Inbound Rules`.
+![alt text](/images/2-preparation/2.4-database/2-4-7.png)
 
-![alt text](image-7.png)
+Select **Edit Inbound Rules**.
 
-Chọn `Add Rule` và chọn theo cấu hình sau:
-![alt text](image-8.png)
+![alt text](/images/2-preparation/2.4-database/2-4-8.png)
 
-`27017` là Port dùng để chạy MongoDB.
+Click **Add Rule** and configure it as follows:
+
+![alt text](/images/2-preparation/2.4-database/2-4-9.png)
+
+**27017** is the port used for MongoDB.
 
 {{% notice warning %}}
-Việc mở port 27017 cho toàn bộ internet (0.0.0.0/0) có thể tạo ra rủi ro bảo mật cao. Nếu có thể, hãy giới hạn truy cập bằng cách chỉ cho phép địa chỉ IP hoặc dải IP đáng tin cậy.
+Opening port 27017 to the entire internet (0.0.0.0/0) can create a high-security risk. If possible, restrict access by allowing only trusted IP addresses or ranges.
 {{% /notice %}}
 
-#### Kết nối MongoDB Compass tới MongoDB trong EC2
+#### Connecting MongoDB Compass to MongoDB on EC2
 
-Bạn có thể cài đặt MongoDB Compass ở link sau:
+You can install MongoDB Compass from the following link:
 
 - [MongoDB Compass](https://downloads.mongodb.com/compass/mongodb-compass-1.43.6-win32-x64.exe)
 
-Đây là giao diện chính của MongoDB Compass.
+This is the main interface of MongoDB Compass.
 
-![alt text](image-9.png)
+![alt text](/images/2-preparation/2.4-database/2-4-10.png)
 
-Ở EC2 Instance chúng ta có `Public IPv4 address` và `Public IPv4 DNS`, chúng ta có thể truy cập đến Database thông qua chúng.
+In the EC2 Instance, we have the Public IPv4 address and Public IPv4 DNS, which we can use to access the database.
 
-![alt text](image-10.png)
+![alt text](/images/2-preparation/2.4-database/2-4-11.png)
 
-Tiến hành truy cập vào Database thông qua MongoDB Compass.
+Proceed to connect to the database via MongoDB Compass.
 
-Thay đổi `localhost` thành địa chỉ IP Public của Instance và kết nối:
+Change **localhost** to the Public IP address of the Instance and connect:
 
-![alt text](image-11.png)
+![alt text](/images/2-preparation/2.4-database/2-4-12.png)
 
-Sau khi kết nối thành công chúng ta đã có Database tương tự như trên Server:
+After a successful connection, you will have a database similar to the one on the server:
 
-![alt text](image-12.png)
+![alt text](/images/2-preparation/2.4-database/2-4-13.png)
 
-Có thể kiểm tra Database ở EC2 bằng lệnh:
+You can check the database on EC2 with the following command:
 ```sh
 mongosh             # Truy cập vào DB
 show dbs            # Show danh sách DB
 ```
 
-![alt text](image-13.png)
+![alt text](/images/2-preparation/2.4-database/2-4-14.png)
 
-
-
-
-
-
-
-
-
-
+Thus, we have successfully installed the Database Server.

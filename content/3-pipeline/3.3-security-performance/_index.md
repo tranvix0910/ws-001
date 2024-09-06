@@ -1,5 +1,5 @@
 ---
-title : "Security Scan và Performance Test"
+title : "Security Scan and Performance Test"
 date :  "`r Sys.Date()`" 
 weight : 3 
 chapter : false
@@ -8,7 +8,7 @@ pre : " <b> 3.3 </b> "
 
 #### Code Security Scan Stage
 
-Sau khi thiết lập build và push image chúng ta sẽ tiến hành thêm một Stage để quét bảo mật Source Code.
+After setting up the build and pushing the image, we will add a Stage to scan the Source Code for security.
 
 ```yml
 snykscan:
@@ -27,48 +27,48 @@ snykscan:
         expire_in: 1 day
 ```
 
-Trong GitLab CI/CD, `artifacts` là các tệp hoặc thư mục được lưu lại từ một job sau khi job đó hoàn tất thực thi. 
+In GitLab CI/CD, `artifacts` are files or directories that are saved from a job after that job has finished executing.
 
-Các artifacts thường được sử dụng để lưu trữ kết quả của quá trình build, kiểm tra, hoặc các thông tin quan trọng khác mà bạn muốn giữ lại và sử dụng trong các job khác trong pipeline.
+Artifacts are often used to store the results of the build, testing processes, or other important information that you want to keep and use in other jobs in the pipeline.
 
 **paths**: 
 - `${SNYKSCAN_FILE}.html`
-- Định nghĩa các file artifact mà job sẽ lưu lại sau khi thực thi. Trong trường hợp này, file HTML chứa kết quả quét bảo mật.
+- Defines the artifact files that the job will save after execution. In this case, the HTML file contains the results of the security scan.
 
 **expire_in: 1 day**
-- Đặt thời gian tồn tại của artifact là 1 ngày. Sau thời gian này, artifact sẽ bị xóa.
+- Sets the lifespan of the artifact to 1 day. After this period, the artifact will be deleted.
 
-Chúng ta sẽ tiến hành thêm Stage này vào `.gitlab-ci.yml`.
+We will proceed to add this Stage to `.gitlab-ci.yml`.
 
 ![alt text](/images/3-pipeline/3.3-security-performance/3-3-1.png)
 
-Chú ý tạo các Variables như SNYKSCAN_FILE và SNYK_API_TOKEN.
+Note to create Variables such as SNYKSCAN_FILE and SNYK_API_TOKEN.
 ```
 SNYKSCAN_FILE: "SNYK_SECURITY_SCAN_${CI_PROJECT_NAME}_${CI_COMMIT_TAG}_${CI_COMMIT_SHORT_SHA}"
 ```
 ![alt text](/images/3-pipeline/3.3-security-performance/3-3-2.png)
 
-Chúng ta sẽ tạo tag và pipeline sẽ được khởi động.
+We will create a tag, and the pipeline will start.
 
 ![alt text](/images/3-pipeline/3.3-security-performance/3-3-3.png)
 
-Sau khi chạy pipeline thành công sẽ có thêm 1 stage là Code Security Scan và có thêm một file chứa báo cáo chi tiết về quá trình Test, có thể tải ở đây:
+After successfully running the pipeline, a new stage called **Code Security Scan** will be added, and there will be a detailed test report file available for download here:
 
 ![alt text](/images/3-pipeline/3.3-security-performance/3-3-4.png)
 
-Hoặc chúng ta có thể truy cập vào mục `Artifacts`:
+Alternatively, you can access the `Artifacts` section:
 
 ![alt text](/images/3-pipeline/3.3-security-performance/3-3-5.png)
 
-Sau khi tải về tiến hành giải nén file và kiểm tra file report dưới dạng HTML.
+After downloading, extract the file and check the report in HTML format.
 
 ![alt text](/images/3-pipeline/3.3-security-performance/3-3-6.png)
 
 #### Scan Image Stage
 
-Việc quét bảo mật của Image chúng ta sẽ thực hiện ngay sau khi chúng ta Build Image thành công.
+The security scan of the image will be performed right after we successfully build the image.
 
-Chúng ta sẽ thêm một stage để quét bảo mật Image:
+We will add a stage to scan the image for vulnerabilities:
 
 ```yml
 trivy scan image:
@@ -88,53 +88,54 @@ trivy scan image:
         expire_in: 1 day
 ```
 
-Tạo một Variable để định nghĩa tên file report.
+Create a variable to define the name of the report file:
+
 ```yml
 TRIVY_IMAGE_REPORT: "TRIVYFS_SCAN_IMAGE_REPORT_${CI_PROJECT_NAME}_${CI_COMMIT_TAG}_${CI_COMMIT_SHORT_SHA}"
 ```
 
-Ở stage này chúng ta có 2 phần , cả hai đều sử dụng công cụ Trivy để quét các lỗ hổng bảo mật trong một Docker Image.
+In this stage, we have two parts, both using the Trivy tool to scan for vulnerabilities in a Docker image.
 
-- **Phần 1**: Xóa tất cả dữ liệu tạm thời của Trivy để chuẩn bị cho lần quét mới.
+- **Part 1**: Clean all Trivy temporary data to prepare for a new scan.
 
-    - `docker run --rm`: Chạy một container Docker và tự động xóa container sau khi hoàn thành công việc.
+    - `docker run --rm`: Runs a Docker container and automatically removes it after the task is completed.
 
-    - `-v $(pwd):/wineapp-frontend`: Gắn thư mục hiện tại ($(pwd)) vào đường dẫn /wineapp-frontend trong container.
+    - `-v $(pwd):/wineapp-frontend`: Mounts the current directory ($(pwd)) to the /wineapp-frontend path inside the container.
 
-    - `-v /var/run/docker.sock:/var/run/docker.sock`: Gắn Docker socket từ máy chủ vào container, cho phép container thực hiện các thao tác liên quan đến Docker.
+    - `-v /var/run/docker.sock:/var/run/docker.sock`: Mounts the Docker socket from the host into the container, allowing the container to perform Docker-related operations.
 
-    - `aquasec/trivy clean --all`: Sử dụng lệnh clean của Trivy để xóa tất cả dữ liệu tạm thời hoặc dữ liệu cũ mà Trivy đã tạo trong quá trình quét trước đó.
+    - `aquasec/trivy clean --all`: Uses Trivy's clean command to remove all temporary or old data created during previous scans.
 
 
-- **Phần 2**: Quét lỗ hổng bảo mật trong một Docker Image, tạo report dưới dạng HTML và lưu nó vào mục Artifacts.
+- **Part 2**: Scan the Docker image for vulnerabilities, generate a report in HTML format, and save it in the artifacts section.
 
-    - `aquasec/trivy image`: Sử dụng lệnh image của Trivy để quét lỗ hổng bảo mật trên Docker Image chúng ta vừa tạo.
+    - `aquasec/trivy image`: Uses Trivy's image command to scan the Docker image we just created for vulnerabilities.
 
-    - `--format template`: Chỉ định định dạng đầu ra là template.
+    - `--format template`: Specifies the output format as a template.
 
-    - `--template "@contrib/html.tpl"`: Sử dụng tệp mẫu HTML (html.tpl) để định dạng kết quả quét.
+    - `--template "@contrib/html.tpl"`: Uses the HTML template file (html.tpl) to format the scan results.
 
-    - `--output /${CI_PROJECT_NAME}/${TRIVY_IMAGE_REPORT}.html`: Chỉ định đường dẫn và tên tệp đầu ra cho báo cáo HTML. Báo cáo này sẽ được lưu trong thư mục của dự án với tên tệp phụ thuộc vào giá trị của biến ${TRIVY_IMAGE_REPORT}.
+    - `--output /${CI_PROJECT_NAME}/${TRIVY_IMAGE_REPORT}.html`: Specifies the path and filename for the HTML report. The report will be saved in the project directory, with the filename depending on the value of ${TRIVY_IMAGE_REPORT}.
 
-Thêm Stage vào file cấu hình và tạo tag, chúng ta sẽ kiểm tra Pipeline:
+Add the stage to the configuration file, create a tag, and check the pipeline:
 
 ![alt text](/images/3-pipeline/3.3-security-performance/3-3-7.png)
 
-Sau khi chạy Pipeline thành công, kiểm tra mục Aritfacts để tải file Report từ Stage quét bảo mật Image.
+After the pipeline runs successfully, check the Artifacts section to download the report file from the image security scan stage.
 
 ![alt text](/images/3-pipeline/3.3-security-performance/3-3-8.png)
 
 ![alt text](/images/3-pipeline/3.3-security-performance/3-3-9.png)
 
-Kiểm tra file Report:
+Check the report file:
 
 ![alt text](/images/3-pipeline/3.3-security-performance/3-3-10.png)
 
-#### Deploy Dự Án
+#### Deploy the Project
 
-Như vậy chúng ta đã thực hiện xong các bước test và kiểm tra trước khi chúng ta Deploy dự án, trong mục này chúng ta sẽ tiến hành Deploy dự án Front-End.
+We have completed the testing and verification steps before deploying the project. In this section, we will deploy the front-end project.
 
-Chúng ta sẽ Deploy dự án ở Server Development.
+We will deploy the project to the development server.
 
 ```yml
 deploy:
@@ -153,23 +154,23 @@ deploy:
         - tags
 ```
 
-Ở phần `tags` chúng ta sẽ để là `wineapp-dev-shell` do đây là tag của Gitlab-Runner được thiết lập ở Server Development.
+In the **tags** section, we will set it to **wineapp-dev-shell** because this is the GitLab-Runner tag configured on the **development server**.
 
-Chúng ta sẽ tạo biến `FE_PORT` với giá trị là `3000:80` có nghĩa là khi bạn truy cập `http://<ip_server_dev>:3000`, yêu cầu này sẽ được chuyển tới cổng 80 của container, nơi ứng dụng bên trong container sẽ xử lý yêu cầu đó.
+We will create the variable **FE_PORT** with the value **3000:80**, meaning that when you access **`http://<ip_server_dev>:3000`**, this request will be forwarded to port 80 of the container, where the application inside the container will handle the request.
 
-Job `deploy` này là một bước triển khai tự động trong pipeline CI/CD của GitLab. 
+The **deploy** job is an automated deployment step in the GitLab CI/CD pipeline.
 
-Nó thực hiện các thao tác liên quan đến Docker để Pull một Docker Image mà chúng ta đã Push lên, dừng container hiện tại, và khởi động lại container với phiên bản mới của ứng dụng. 
+It performs Docker-related operations to pull the Docker image we pushed, stop the current container, and restart the container with the new version of the application.
 
-Mọi việc được thực hiện dưới quyền của một người dùng cụ thể (PROJECT_USER) để đảm bảo bảo mật và phân quyền.
+Everything is done under a specific user's (PROJECT_USER) permissions to ensure security and role management.
 
-**Chú ý**:
+**Note**:
 
-- Trong phần `script`, chúng ta sử dụng lệnh `sudo su` để chuyển đổi người dùng. Thông thường, khi sử dụng lệnh này, bạn sẽ cần nhập mật khẩu. Tuy nhiên, trong quá trình chạy Pipeline, không có cách nào để nhập mật khẩu theo cách thủ công.
+- In the **script** section, we use the `sudo su` command to switch users. Normally, when using this command, you would need to enter a password. However, during the pipeline run, there is no way to manually input a password.
 
-- Do đó, để tránh tình huống này, chúng ta sẽ cấu hình để người dùng GitLab Runner có thể chạy lệnh `sudo su` mà không cần nhập mật khẩu.
+- Therefore, to avoid this, we will configure the GitLab Runner user to run the `sudo su` command without needing to enter a password.
 
-- Trên giao diện dòng lệnh, bạn cần nhập lệnh `sudo visudo` và cung cấp mật khẩu. Sau đó, thêm dòng sau vào tệp cấu hình để hoàn tất việc thiết lập:
+- On the command line interface, you need to enter the `sudo visudo` command and provide your password. Then, add the following line to the configuration file to complete the setup:
 
 ```
 gitlab-runner ALL=(ALL) NOPASSWD: /bin/su
@@ -177,37 +178,37 @@ gitlab-runner ALL=(ALL) NOPASSWD: /bin/su
 
 ![alt text](/images/3-pipeline/3.3-security-performance/3-3-11.png)
 
-Để lưu file chúng ta nhấn `F2 + Y + Enter`.
+To save the file, press `F2 + Y + Enter`.
 
-{{% notice note %}}
-Thực hiện thay đổi ở Server Development.
-{{% /notice %}}
+{{% notice note %}} Make changes on the development server. {{% /notice %}}
 
-Sau khi cấu hình, chúng ta sẽ thêm Stage vào Pipeline và tạo Tag.
+After configuring, we will add the stage to the pipeline and create a tag.
 
 ![alt text](/images/3-pipeline/3.3-security-performance/3-3-12.png)
 
-Như vậy chúng ta đã chạy Pipeline thành công, tiến hành kiểm tra ở địa chỉ sau:
+Now that the pipeline has run successfully, proceed to check at the following address:
+
 ```text
 192.168.181.102:3000
 ```
-- `192.168.181.102` là IP của Server Dev nơi chúng ta Deploy ứng dung.
+- `192.168.181.102` is the IP of the development server where we deployed the application.
 
-- `3000` là Port dùng để chạy ứng dụng được khai báo khi chúng ta Run Container.
+- `3000` is the port used to run the application, which was declared when we ran the container.
 
 ![alt text](/images/3-pipeline/3.3-security-performance/3-3-13.png)
 
-Như vậy Web đã được Deploy thành công, chúng ta có thể kiểm tra Container bằng lệnh:
+The web has been successfully deployed. We can check the container by running the following command:
+
 ```
 docker container ps
 ```
 ![alt text](/images/3-pipeline/3.3-security-performance/3-3-14.png)
 
-#### Security Scan Website - Arachni
+#### Website Security Scan - Arachni
 
-Sau bước Deploy chúng ta sẽ tiến hành test bảo mật của trang Web chúng ta vừa triển khai.
+After the deployment step, we will proceed to perform a security test of the web application we just deployed.
 
-Chúng ta sẽ thiết lập Arachni như ở **Mục 2.7**.
+We will set up Arachni as described in **Section 2.7**.
 
 - [Web Application Security Scan](https://ws-001.tranvix.online/2-preparation/2.7-arachni/)
 
@@ -233,26 +234,28 @@ security scan website:
         - tags
 ```
 
-Job **security scan website** này thực hiện quét bảo mật trên một website, tạo ra báo cáo bảo mật và lưu báo cáo đó dưới dạng một file .zip để bạn có thể tải về sau khi pipeline hoàn tất. 
+The **security scan website** job performs a security scan on a website, generates a security report, and saves it as a .zip file so you can download it after the pipeline completes.
 
-`ADDRESS_FRONTEND` là địa chỉ của web chúng ta **192.168.181.102:3000**.
+`ADDRESS_FRONTEND` is the address of the website we just deployed.
 
-`ARACHNI_WEBSITE_REPORT` là tên của file report.
+`ARACHNI_WEBSITE_REPORT` is the name file report.
 
-Khi thực hiện lệnh `sudo chmod` cũng yêu cầu nhập mật khẩu nên chúng ta cũng cần cấu hình như ở trên.
+When executing the `sudo chmod` command, you are also required to enter a password, so you need to configure it as shown above.
+
 ```
 gitlab-runner ALL=(ALL) NOPASSWD: /bin/chmod
 ```
-Tiến hành thêm Stage vào Pipeline và tạo các Variable cần thiết, sau đó tạo tag và kiểm tra Pipeline.
+Add a Stage to the Pipeline and create the necessary Variables, then create a tag and check the Pipeline.
 
 ![alt text](/images/3-pipeline/3.3-security-performance/3-3-18.png)
 
-Chúng ta sẽ có Report như sau:
+You will get a Report as follows:
 ![alt text](/images/3-pipeline/3.3-security-performance/3-3-15.png)
 
 #### Performance Test - k6
 
-Để kiểm tra hiệu năng của Website bằng k6 chúng ta sẽ tạo ra một file test được viết bằng JavaScript.
+To test the performance of the website with k6, we will create a test file written in JavaScript.
+
 ```js
 import http from 'k6/http';
 import { check, sleep } from 'k6';
@@ -271,11 +274,12 @@ export default function () {
     sleep(1);
 }
 ```
-Sau đó chúng ta sẽ thêm file test vào repository chứa code.
+Then we will add the test file to the repository containing the code.
 
 ![alt text](/images/3-pipeline/3.3-security-performance/3-3-16.png)
 
-Thêm Stage vào Pipeline:
+Add Stage to Pipeline:
+
 ```yml
 performance testing:
     stage: performance testing
@@ -301,13 +305,13 @@ performance testing:
         - tags
 ```
 
-Job **performance testing** trong GitLab CI/CD được thiết kế để thực hiện kiểm thử hiệu suất cho dự án bằng cách sử dụng công cụ k6.
+The **performance testing** job in GitLab CI/CD is designed to perform performance testing for the project using the k6 tool.
 
-Docker container dưới quyền user GitLab Runner thông qua các biến `ID_USER_GITLAB_RUNNER` và `ID_GROUP_GITLAB_RUNNER`.
+The Docker container is run under the GitLab Runner user via the variables `ID_USER_GITLAB_RUNNER` and `ID_GROUP_GITLAB_RUNNER`.
 
-Docker container với k6 được khởi chạy để thực hiện kiểm thử dựa trên kịch bản **smoke_test.js**. Kết quả test được xuất ra dưới dạng tệp JSON **summary_perf.json**. Sau đó kết quả được di chuyển và chuyển đổi thành tệp HTML và CSV và lưu trữ vào **artifacts**.
+A Docker container with k6 is started to perform testing based on the **smoke_test.js** script. The test results are output as a JSON file **summary_perf.json**. The results are then moved and converted into HTML and CSV files and stored in **artifacts**.
 
-Sau khi Pipeline chạy thành công chúng ta sẽ có file Report dưới dạng HTML.
+After the Pipeline runs successfully, you will get a report file in HTML format.
 
 ![alt text](/images/3-pipeline/3.3-security-performance/3-3-19.png)
 

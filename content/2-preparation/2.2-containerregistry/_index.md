@@ -6,52 +6,55 @@ chapter : false
 pre : " <b> 2.2 </b> "
 ---
 
-#### Cài Đặt Portus
-Trước khi tạo Server Portus bạn cần thuê một Domain để có thể truy cập Portus thông qua Domain.
+#### Install Portus
+Before setting up the Portus Server, you need to rent a Domain to access Portus through it.
 ```
 portus.tranvix.online
 ```
-Tạo Server EC2 để tiến hành cài đặt Portus.
+We will create an **EC2 Instance** to install Portus.
 
-Chọn `Launch Instance` để tạo Instance.
+To create an instance, you need to have an AWS account and access the EC2 service.
+
+Click **Launch Instance** to create an instance.
+
 ![alt text](/images/2-preparation/2.2-containerregistry/2-2-1.png)
 
-Thiết lập tên của Server.
+Set the name of the server.
 ![alt text](/images/2-preparation/2.2-containerregistry/2-2-2.png)
 
-Chọn hệ điều hành, ở đây mình chọn Ubuntu 24.04.
+Choose the operating system, here I select Ubuntu 24.04.
 ![alt text](/images/2-preparation/2.2-containerregistry/2-2-3.png)
 
-Chọn cấu hình Instance phù hợp và thiết lập Key Pair.
+Choose a suitable instance type and configure the Key Pair.
 
 {{% notice warning %}}
-Chú ý khi tạo Key Pair, Private Key sẽ được tải về máy, chú ý không để mất và không được chia sẽ cho ai!
+When creating a Key Pair, the Private Key will be downloaded to your machine. Be careful not to lose it and do not share it with anyone.
 {{% /notice %}}
 ![alt text](/images/2-preparation/2.2-containerregistry/2-2-4.png)
 
-Chú ý tick chọn `Allow HTTPS traffic from the internet`. 
+Make sure to tick **Allow HTTPS traffic from the internet**.
 
-Thiết lập này cho phép mọi người truy cập máy chủ web của bạn một cách an toàn từ bất cứ đâu trên thế giới thông qua HTTPS.
+This setting allows anyone to securely access the web server from anywhere through HTTPS.
 ![alt text](/images/2-preparation/2.2-containerregistry/2-2-5.png)
 
-Chọn dung lượng cho Instance.
+Choose the storage size for the instance.
 ![alt text](/images/2-preparation/2.2-containerregistry/2-2-6.png)
 
-Sau khi tạo Instance thành công, Tiến hành truy cập vào Instance.
+After successfully creating the instance, proceed to access it.
 ![alt text](/images/2-preparation/2.2-containerregistry/2-2-7.png)
 ![alt text](/images/2-preparation/2.2-containerregistry/2-2-8.png)
 
-Như vậy là đã truy cập thành công vào Instance.
+Now you have successfully accessed the instance.
 ![alt text](/images/2-preparation/2.2-containerregistry/2-2-9.png)
 
-Cài đặt các công cụ cần thiết.
-``` shell
-apt install -y docker.io docker-compose certbot net-tools
+To install Portus, we need to install some required tools.
 ```
-***Lấy chứng chỉ SSL/TLS***: Certbot tự động hóa quy trình đăng ký chứng chỉ từ Let's Encrypt. Chỉ cần cung cấp thông tin cần thiết và Certbot như domain và email.
+sudo apt install -y docker.io docker-compose certbot net-tools
+```
+***Obtain SSL/TLS certificates with Certbot***: Certbot automates the certificate registration process from Let's Encrypt. Just provide the necessary information like Domain and Email.
 
-Chạy một lệnh Certbot để lấy chứng chỉ SSL cho một domain cụ thể. 
-``` shell
+Run a Certbot command to get an SSL certificate for a specific domain.
+```
 certbot certonly --standalone -d portus.tranvix.online --preferred-challenges http --agree-tos -m your-email@gmail.com --keep-until-expiring
 ```
 ```
@@ -81,17 +84,17 @@ If you like Certbot, please consider supporting our work by:
  * Donating to EFF:                    https://eff.org/donate-le
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ```
-Chú ý path tới Certifiate và Key vừa tạo.
+Take note of the paths to the **Certificate** and **Key**.
 
-Clone Portus.
-```shell
+Clone Portus from Github.
+``` 
 git clone https://github.com/SUSE/Portus.git
 ```
-Di chuyển đến thư mục cài đặt Portus.
-```shell
+Move to the Portus installation directory.
+```
 cd Portus/examples/compose
 ```
-```shell
+```
 root@ip-172-31-44-184:/tools/portus/Portus/examples/compose# ls -l
 total 48
 -rw-r--r-- 1 root root 3715 Jul 18 10:31 README.md
@@ -105,25 +108,30 @@ drwxr-xr-x 2 root root 4096 Jul 18 10:31 nginx
 drwxr-xr-x 2 root root 4096 Jul 18 10:31 registry
 drwxr-xr-x 2 root root 4096 Jul 18 10:31 secrets
 ```
-Tiến hành cấu hình **Nginx**:
-```shell
+
+Proceed to configure Nginx:
+
+```
 vi nginx/nginx.conf
 ```
-```shell
+
+```
 ssl on; ------> Comment dòng này 
 
 # Certificates
 ssl_certificate /secrets/portus.crt;        <-------
 ssl_certificate_key /secrets/portus.key;    <-------
 ```
-Chú ý đường dẫn tới 2 Key: `/secrets/portus.crt`, `/secrets/portus.key`.
 
-Tiến hành copy và đổi tên cặp key SSL mà chúng ta đã tạo ở trên vào 2 thư mục này.
-```shellell
+Make sure the paths to the keys are **/secrets/portus.crt** and **/secrets/portus.key**.
+
+Copy and rename the SSL key pair created earlier into these directories.
+
+```shell
 root@ip-172-31-44-184:/tools/portus/compose# cp /etc/letsencrypt/live/portus.tranvix.online/fullchain.pem secrets/portus.crt
 root@ip-172-31-44-184:/tools/portus/compose# cp /etc/letsencrypt/live/portus.tranvix.online/privkey.pem secrets/portus.key
 ```
-Cấu hình file `.env`
+Configure the **.env** file:
 ```shell
 root@ip-172-31-44-184:/tools/portus/compose# cat .env
 MACHINE_FQDN=172.17.0.1 <--------
@@ -132,7 +140,8 @@ SECRET_KEY_BASE=b494a25faa8d22e430e843e220e424e10ac84d2ce0e64231f5b636d21251eb6d
 PORTUS_PASSWORD=12341234
 DATABASE_PASSWORD=portus
 ```
-Thay đổi Port localhost thành Domain của chúng ta.
+Change the localhost address to your domain.
+
 ```shell
 MACHINE_FQDN=portus.tranvix.online
 
@@ -140,30 +149,32 @@ SECRET_KEY_BASE=b494a25faa8d22e430e843e220e424e10ac84d2ce0e64231f5b636d21251eb6d
 PORTUS_PASSWORD=12341234
 DATABASE_PASSWORD=portus
 ```
-Tiến hành chạy file `docker-compose.clair-ssl.yml`.
+
+Run the **docker-compose.clair-ssl.yml** file.
+
 ```shell
 docker-compose -f docker-compose.clair-ssl.yml up -d
 ```
-![alt text](/images/2-preparation/2.2-containerregistry/2-2-10.png)
-Như vậy Portus đã cài đặt thành công.
 
-#### Cấu Hình Portus
-Thông qua IP Public từ Instance vừa tạo chúng ta có thể tạo Record từ Domain để trỏ tới Server Portus để truy cập Instance thông qua Domain.
+![alt text](/images/2-preparation/2.2-containerregistry/2-2-10.png)
+Portus has been successfully installed.
+
+#### Configure Portus
+Using the Public IP from the instance you just created, you can create a record from the domain to point to the Portus server to access the instance via the domain.
 ![alt text](/images/2-preparation/2.2-containerregistry/2-2-11.png)
-Tiến hành truy cập vào Domain.
+Proceed to access the domain.
 ![alt text](/images/2-preparation/2.2-containerregistry/2-2-12.png)
-Tạp User Admin và đăng nhập.
-Tạo Registry.
+Create an Admin User and log in. Create a Registry.
 ![alt text](/images/2-preparation/2.2-containerregistry/2-2-13.png)
 ![alt text](/images/2-preparation/2.2-containerregistry/2-2-14.png)
-Tạo User và Group cho dự án.
+Create a User and Group for the project.
 ![alt text](/images/2-preparation/2.2-containerregistry/2-2-15.png)
 ![alt text](/images/2-preparation/2.2-containerregistry/2-2-16.png)
-Cấu hình User vừa tạo có quyền Admin.
+Configure the created User with Admin rights.
 ![alt text](/images/2-preparation/2.2-containerregistry/2-2-17.png)
-Tạo Group.
+Create a Group.
 ![alt text](/images/2-preparation/2.2-containerregistry/2-2-18.png)
 ![alt text](/images/2-preparation/2.2-containerregistry/2-2-19.png)
-Như vậy đã tạo User và Group thành công.
+You have successfully created a User and Group.
 
-Vậy chúng ta đã vừa tạo và thiết lập thành công Private Registry với Portus.
+Thus, we have successfully created and set up a Private Registry with Portus.
